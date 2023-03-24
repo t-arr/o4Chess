@@ -16,6 +16,8 @@ import java.io.IOException;
 public class MainMenuController {
     private HostServices hostServices;
 
+    //Teesti123
+
     @FXML
     public void switchScreen(ActionEvent event) throws IOException {
         String btnId = ((Button) event.getSource()).getId();
