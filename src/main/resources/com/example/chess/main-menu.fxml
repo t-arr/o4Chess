@@ -39,35 +39,35 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
     </rowConstraints>
-    <Button fx:id="play" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
+    <Button id="play" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
             prefWidth="200.0" text="Play" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER"
             GridPane.rowIndex="4" GridPane.rowSpan="2" GridPane.valignment="CENTER">
         <font>
             <Font name="Times New Roman Bold" size="22.0"/>
         </font>
     </Button>
-    <Button fx:id="help" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
+    <Button id="help" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
             prefWidth="200.0" text="Help" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER"
             GridPane.rowIndex="10" GridPane.rowSpan="2" GridPane.valignment="CENTER">
         <font>
             <Font name="Times New Roman Bold" size="22.0"/>
         </font>
     </Button>
-    <Button fx:id="rules" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
+    <Button id="rules" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
             prefWidth="200.0" text="Rules" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER"
             GridPane.rowIndex="8" GridPane.rowSpan="2" GridPane.valignment="CENTER">
         <font>
             <Font name="Times New Roman Bold" size="22.0"/>
         </font>
     </Button>
-    <Button fx:id="quit" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
+    <Button id="quit" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
             prefWidth="200.0" text="Quit" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER"
             GridPane.rowIndex="12" GridPane.rowSpan="2" GridPane.valignment="CENTER">
         <font>
             <Font name="Times New Roman Bold" size="22.0"/>
         </font>
     </Button>
-    <Button fx:id="settings" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
+    <Button id="settings" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
             prefWidth="200.0" text="Settings" GridPane.columnIndex="3" GridPane.columnSpan="3"
             GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.rowSpan="2" GridPane.valignment="CENTER">
         <font>
