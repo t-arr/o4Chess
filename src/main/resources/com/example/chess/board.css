@@ -1,0 +1,18 @@
+
+
+
+.white-button{
+    -fx-background-color: #f5f5dd;
+}
+
+.black-button{
+    -fx-background-color: #dab36e;
+}
+
+.status-card{
+    -fx-background-color: #e5cfa7;
+}
+
+.borderpane-container{
+    -fx-background-color: #1e1e1e;
+}
