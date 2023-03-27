@@ -9,11 +9,11 @@ import javafx.scene.layout.GridPane;
 public class chessController {
     @FXML
     private GridPane boardGrid;
-    private Board board = new Board();
+    private final Board BOARD = new Board();
 
     @FXML
     public void initialize() {
-        String[][] state = board.getBoard();
+        String[][] state = BOARD.getBoard();
         boolean isWhite = true;
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
