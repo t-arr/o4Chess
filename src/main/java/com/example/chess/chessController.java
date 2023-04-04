@@ -17,7 +17,6 @@ public class chessController {
         boolean isWhite = true;
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                boardGrid.setGridLinesVisible(true);
                 Button button = new Button();
                 button.setPrefSize(70, 70);
                 if (isWhite) {
@@ -39,6 +38,7 @@ public class chessController {
             }
             isWhite = !isWhite;
         }
+        boardGrid.setGridLinesVisible(true);
     }
     private void printCoordinates(Button button) {
         int row = GridPane.getRowIndex(button);
