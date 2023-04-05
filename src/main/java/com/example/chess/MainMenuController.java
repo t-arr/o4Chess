@@ -27,13 +27,13 @@ public class MainMenuController {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Confirm Exit");
             alert.setHeaderText("Are you sure you want to quit the game?");
-            alert.setContentText("Press OK to exit, or Cancel to go back");
+            alert.setContentText("Press OK to exit, or Cancel to go back.");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK){
                 Platform.exit();
             }
         } else if (btnId.equalsIgnoreCase("rules")) {
-            handleRulesButton();
+            hostServices.showDocument("https://en.wikipedia.org/wiki/Rules_of_chess");
         }else{
             FXMLLoader loader = new FXMLLoader(getClass().getResource(btnId + "-view.fxml"));
             Parent root = loader.load();
@@ -45,9 +45,6 @@ public class MainMenuController {
             stage.show();
             currentStage.close();
         }
-    }
-    private void handleRulesButton() {
-        hostServices.showDocument("https://en.wikipedia.org/wiki/Rules_of_chess");
     }
 
     public void setHostServices(HostServices hostServices) {
