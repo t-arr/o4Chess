@@ -54,7 +54,7 @@
         </font>
     </Button>
     <Button id="rules" focusTraversable="false" mnemonicParsing="false" onAction="#switchScreen" prefHeight="40.0"
-            prefWidth="200.0" text="Rules" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER"
+            prefWidth="200.0" text="Rules of chess" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.halignment="CENTER"
             GridPane.rowIndex="8" GridPane.rowSpan="2" GridPane.valignment="CENTER">
         <font>
             <Font name="Times New Roman Bold" size="22.0"/>

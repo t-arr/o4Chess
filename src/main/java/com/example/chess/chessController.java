@@ -6,12 +6,13 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import java.util.List;
 
 public class chessController {
     private final Board BOARD = new Board();
     @FXML
     private GridPane boardGrid;
-    private String piece = null;
+
     private Button prevButton = null;
     @FXML
     public void initialize() {
@@ -28,7 +29,7 @@ public class chessController {
                 drawImages(button, row, col);
                 boardGrid.add(button, col, row);
                 isWhite = !isWhite;
-                button.setOnAction(e -> printCoordinates(button));
+                button.setOnAction(e -> handleButtonClick(button));
             }
             isWhite = !isWhite;
         }
@@ -38,21 +39,33 @@ public class chessController {
     private void drawImages(Button button, int row, int col) {
         String[][] state = BOARD.getBoard();
 
-        if (!state[row][col].equals("-")) {
+        if (state[row][col].equals("-")) {
+            button.setGraphic(null);
+        }else {
             String imageUrl = System.getProperty("user.dir") + "/src/main/java/com/example/chess/pawns/" + state[row][col] + ".png";
             Image image = new Image(imageUrl);
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(50);
             imageView.setFitHeight(50);
             button.setGraphic(imageView);
-        }else {
-            button.setGraphic(null);
         }
     }
 
-    private void printCoordinates(Button button) {
+    private void handleButtonClick(Button button) {
         int[] to = new int[]{GridPane.getRowIndex(button), GridPane.getColumnIndex(button)};
         if(prevButton == null){
+            System.out.println("row: " + GridPane.getRowIndex(button));
+            System.out.println("Column: " + GridPane.getColumnIndex(button));
+            System.out.println();
+            System.out.println();
+            List<int[]> arrays = BOARD.validMoves(to);
+            for (int[] array : arrays) {
+                System.out.print("[ ");
+                for (int num : array) {
+                    System.out.print(num + " ");
+                }
+                System.out.println("]");
+            }
             prevButton = button;
         }else{
             BOARD.swap(new int[]{GridPane.getRowIndex(prevButton), GridPane.getColumnIndex(prevButton)}, to);
