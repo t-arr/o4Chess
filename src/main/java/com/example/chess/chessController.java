@@ -71,18 +71,20 @@ public class chessController {
         } else {
             int [] previousClick = new int[]{GridPane.getRowIndex(prevButton), GridPane.getColumnIndex(prevButton)};
             List<int[]> validMoves = BOARD.validMoves(previousClick);
+            boolean isValidMove = false;
             for(int [] validCoords : validMoves){
                 if(validCoords[0] == clickedButton[0] && validCoords[1] == clickedButton[1]){
                     BOARD.swap(previousClick, clickedButton);
                     updateBoardGUI();
-                    BOARD.swapTurn();
-                    prevButton = null;
+                    isValidMove = true;
                     break;
-                }else{
-                    updateBoardGUI();
-                    prevButton = null;
                 }
             }
+            if(isValidMove){
+                BOARD.swapTurn();
+            }
+            updateBoardGUI();
+            prevButton = null;
         }
     }
 
