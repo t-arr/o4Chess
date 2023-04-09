@@ -2,10 +2,10 @@ package com.example.chess;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Board {
     private String[][] board;
+    private char turn = 'w';
 
     public Board() {
         this.board = new String[][]{{"brook", "bknight", "bbishop", "bqueen", "bking", "bbishop", "bknight", "brook"},
@@ -30,24 +30,43 @@ public class Board {
     public String getPiece(int[] coords){
         return board[coords[0]][coords[1]];
     }
+
+    public char getTurn(){
+        return turn;
+    }
+    public void swapTurn(){
+        if (turn == 'w'){
+            turn = 'b';
+        }else{
+            turn = 'w';
+        }
+    }
+
     public List<int[]> validMoves(int[] coords){
         String type = getPiece(coords);
         char color = type.charAt(0);
         type = type.substring(1);
         if(type.equals("pawn")){
-            Pawn p = new Pawn(color, board);
+            Pawn pawn = new Pawn(color, board);
+            return pawn.getValidMoves(coords);
         } else if (type.equals("rook")) {
-            Rook rook = new Rook(getPiece(coords).charAt(0), board);
+            Rook rook = new Rook(color, board);
             return rook.getValidMoves(coords);
         } else if (type.equals("knight")) {
-            System.out.println("knight");
+            Knight knight = new Knight(color, board);
+            return knight.getValidMoves(coords);
         } else if (type.equals("bishop")) {
-            System.out.println("bishop");
+            Bishop bishop = new Bishop(color, board);
+            return bishop.getValidMoves(coords);
         } else if (type.equals("queen")) {
-            System.out.println("queen");
+            Queen queen = new Queen(color, board);
+            return queen.getValidMoves(coords);
         } else if (type.equals("king")) {
-            System.out.println("king");
+            King king = new King(color, board);
+            return king.getValidMoves(coords);
         }
         return new ArrayList<>();
     }
+
+
 }
