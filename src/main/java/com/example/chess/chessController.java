@@ -57,21 +57,32 @@ public class chessController {
     }
 
     private void handleButtonClick(Button button) {
-        int[] to = new int[]{GridPane.getRowIndex(button), GridPane.getColumnIndex(button)};
+
+        int[] clickedButton = new int[]{GridPane.getRowIndex(button), GridPane.getColumnIndex(button)};
         if (prevButton == null) {
-            if(BOARD.getPiece(to).equals("-") || BOARD.getTurn() != BOARD.getPiece(to).charAt(0)){
+            if(BOARD.getPiece(clickedButton).equals("-") || BOARD.getTurn() != BOARD.getPiece(clickedButton).charAt(0)){
                 return;
             }
-            List<int[]> validMoves = BOARD.validMoves(to);
+            List<int[]> validMoves = BOARD.validMoves(clickedButton);
             prevButton = button;
             for(int[] validCoords : validMoves){
                 displayValidMoves(validCoords[0], validCoords[1]);
             }
         } else {
-            BOARD.swap(new int[]{GridPane.getRowIndex(prevButton), GridPane.getColumnIndex(prevButton)}, to);
-            updateBoardGUI();
-            BOARD.swapTurn();
-            prevButton = null;
+            int [] previousClick = new int[]{GridPane.getRowIndex(prevButton), GridPane.getColumnIndex(prevButton)};
+            List<int[]> validMoves = BOARD.validMoves(previousClick);
+            for(int [] validCoords : validMoves){
+                if(validCoords[0] == clickedButton[0] && validCoords[1] == clickedButton[1]){
+                    BOARD.swap(previousClick, clickedButton);
+                    updateBoardGUI();
+                    BOARD.swapTurn();
+                    prevButton = null;
+                    break;
+                }else{
+                    updateBoardGUI();
+                    prevButton = null;
+                }
+            }
         }
     }
 
@@ -92,10 +103,10 @@ public class chessController {
                 if(row == validRow && col == validCol){
                     if(button.getGraphic() != null){
                         Group group = new Group();
-                        group.getChildren().addAll(button.getGraphic(), new Circle(15, 15, 15, Color.GREEN));
+                        group.getChildren().addAll(button.getGraphic(), new Circle(10, 10, 10, Color.RED));
                         button.setGraphic(group);
                     }else{
-                        Circle circle = new Circle(15, 15, 15, Color.GREEN);
+                        Circle circle = new Circle(10, 10, 10, Color.RED);
                         button.setGraphic(circle);
                     }
                 }
