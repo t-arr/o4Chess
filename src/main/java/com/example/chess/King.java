@@ -6,6 +6,7 @@ import java.util.List;
 public class King {
     private char color;
     private String [][] board;
+
     private List<int[]> validMoves = new ArrayList<>();
     public King(char color, String [][] board){
         this.color = color;
@@ -16,8 +17,8 @@ public class King {
         int row = coords[0];
         int col = coords[1];
         double correctDistance = calculateDistance(0, 0, 1, 1);
-        for(int i = 0; i < 7; i++){
-            for(int j = 0; j < 7; j++){
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
                 double distance = calculateDistance(row, col, i, j);
                 if(distance == correctDistance || distance == 1){
                     if(board[i][j].equals("-")){
@@ -34,6 +35,7 @@ public class King {
     private double calculateDistance(double firstX, double firstY, double secondX, double secondY) {
         return Math.sqrt(Math.pow((secondX - firstX), 2) + Math.pow((secondY - firstY), 2));
     }
+
     private char getColor(int row, int col){
         if(board[row][col].equals("-")){
             return 'n';

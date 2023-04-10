@@ -10,6 +10,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class chessController {
@@ -18,6 +19,7 @@ public class chessController {
     private GridPane boardGrid;
 
     private Button prevButton = null;
+
 
     @FXML
     public void initialize() {
@@ -38,7 +40,6 @@ public class chessController {
             }
             isWhite = !isWhite;
         }
-        boardGrid.setGridLinesVisible(true);
     }
 
     private void drawImages(Button button, int row, int col) {
@@ -71,6 +72,12 @@ public class chessController {
         } else {
             int [] previousClick = new int[]{GridPane.getRowIndex(prevButton), GridPane.getColumnIndex(prevButton)};
             List<int[]> validMoves = BOARD.validMoves(previousClick);
+            if(BOARD.getPiece(clickedButton).charAt(0) == BOARD.getTurn() && !Arrays.equals(previousClick, clickedButton)){
+                prevButton = null;
+                updateBoardGUI();
+                handleButtonClick(button);
+                return;
+            }
             boolean isValidMove = false;
             for(int [] validCoords : validMoves){
                 if(validCoords[0] == clickedButton[0] && validCoords[1] == clickedButton[1]){

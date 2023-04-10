@@ -7,6 +7,7 @@ public class Board {
     private String[][] board;
     private char turn = 'w';
 
+
     public Board() {
         this.board = new String[][]{{"brook", "bknight", "bbishop", "bqueen", "bking", "bbishop", "bknight", "brook"},
                 {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
@@ -74,6 +75,4 @@ public class Board {
         }
         return new ArrayList<>();
     }
-
-
 }
