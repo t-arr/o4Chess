@@ -89,6 +89,8 @@ public class chessController {
             }
             if(isValidMove){
                 BOARD.swapTurn();
+                BOARD.updateCastlingVariables(previousClick, clickedButton);
+                BOARD.castle(previousClick, clickedButton);
             }
             updateBoardGUI();
             prevButton = null;
