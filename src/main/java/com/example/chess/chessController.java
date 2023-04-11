@@ -82,7 +82,6 @@ public class chessController {
                 if(validCoords[0] == clickedButton[0] && validCoords[1] == clickedButton[1]){
                     BOARD.setEnPassant(previousClick, clickedButton);
                     if(BOARD.isMoveEnPassant(previousClick, clickedButton)){
-                        System.out.println("kukkuu");
                         BOARD.swapEnPassant(previousClick, clickedButton);
                     }else{
                         BOARD.swap(previousClick, clickedButton);
