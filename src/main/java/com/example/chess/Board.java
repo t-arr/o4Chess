@@ -8,6 +8,8 @@ public class Board {
     private String[][] board;
     private char turn = 'w';
     private boolean [] castlingList;
+    private boolean validEnPassant;
+    private int [] enPassantCoordinates = new int[]{0,0};
 
 
     public Board() {
@@ -20,6 +22,7 @@ public class Board {
                 {"wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn"},
                 {"wrook", "wknight", "wbishop", "wqueen", "wking", "wbishop", "wknight", "wrook"}};
         this.castlingList = new boolean[]{true, true, true, true};
+        validEnPassant = false;
     }
 
     public void swap(int[] from, int[] to){
@@ -52,7 +55,7 @@ public class Board {
         type = type.substring(1);
         switch (type) {
             case "pawn" -> {
-                Pawn pawn = new Pawn(color, board);
+                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates);
                 return pawn.getValidMoves(coords);
             }
             case "rook" -> {
@@ -123,5 +126,38 @@ public class Board {
                 }
             }
         }
+    }
+
+    public void setEnPassant(int [] from, int [] to){
+        String type = getPiece(from).substring(1);
+        if(type.equals("pawn") && (Math.abs(from[0]-to[0]) == 2)){
+            validEnPassant = true;
+            enPassantCoordinates = new int[]{to[0], to[1]};
+        }else {
+            validEnPassant = false;
+        }
+    }
+
+    public boolean getEnpassant(){
+        return validEnPassant;
+    }
+
+    public void swapEnPassant(int[] from, int[] to){
+        char color = getPiece(from).charAt(0);
+        if(color == 'b'){
+            String temp = board[from[0]][from[1]];
+            board[from[0]][from[1]] = "-";
+            board[to[0]][to[1]] = temp;
+            board[to[0]-1][to[1]] = "-";
+        }else {
+            String temp = board[from[0]][from[1]];
+            board[from[0]][from[1]] = "-";
+            board[to[0]][to[1]] = temp;
+            board[to[0]+1][to[1]] = "-";
+        }
+    }
+    public boolean isMoveEnPassant(int [] from, int [] to){
+        String type = getPiece(from).substring(1);
+        return type.equals("pawn") && getPiece(to).equals("-") && from[1] != to[1];
     }
 }

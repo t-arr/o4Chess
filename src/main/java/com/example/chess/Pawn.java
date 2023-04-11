@@ -8,16 +8,19 @@ public class Pawn{
     private char color;
     private String [][] board;
     private List<int[]> validMoves = new ArrayList<>();
+    private boolean enPassant;
+    private int [] enPassantCoordinates;
 
-    public Pawn(char color, String [][] board){
+    public Pawn(char color, String [][] board, boolean enPassant, int [] enPassantCoordinates){
         this.color = color;
         this.board = board;
+        this.enPassant = enPassant;
+        this.enPassantCoordinates = new int[]{enPassantCoordinates[0], enPassantCoordinates[1]};
     }
 
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
-
 
         if(color == 'b'){
           if(board[row+1][col].equals("-")){
@@ -46,8 +49,23 @@ public class Pawn{
                 validMoves.add(new int[]{row-1, col+1});
             }
         }
-
+        addValidEnPassant(row, col);
         return validMoves;
+    }
+
+    private void addValidEnPassant(int row, int col){
+        if(!enPassant){
+            return;
+        }
+        if(color == 'b'){
+            if(row == enPassantCoordinates[0] && (col == enPassantCoordinates[1] - 1 || col == enPassantCoordinates[1] + 1)){
+                validMoves.add(new int[]{enPassantCoordinates[0] + 1, enPassantCoordinates[1]});
+            }
+        }else if(color == 'w'){
+            if(row == enPassantCoordinates[0] && (col == enPassantCoordinates[1] - 1 || col == enPassantCoordinates[1] + 1)){
+                validMoves.add(new int[]{enPassantCoordinates[0] - 1, enPassantCoordinates[1]});
+            }
+        }
     }
 
     private char getColor(int row, int col){
@@ -57,16 +75,5 @@ public class Pawn{
         String color = board[row][col];
         return color.charAt(0);
     }
-
-
-
-
-
-
-
-
-
-
-
 
 }

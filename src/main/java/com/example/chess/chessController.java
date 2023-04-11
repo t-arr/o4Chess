@@ -14,10 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class chessController {
+
     private final Board BOARD = new Board();
     @FXML
     private GridPane boardGrid;
-
     private Button prevButton = null;
 
 
@@ -58,7 +58,6 @@ public class chessController {
     }
 
     private void handleButtonClick(Button button) {
-
         int[] clickedButton = new int[]{GridPane.getRowIndex(button), GridPane.getColumnIndex(button)};
         if (prevButton == null) {
             if(BOARD.getPiece(clickedButton).equals("-") || BOARD.getTurn() != BOARD.getPiece(clickedButton).charAt(0)){
@@ -81,7 +80,13 @@ public class chessController {
             boolean isValidMove = false;
             for(int [] validCoords : validMoves){
                 if(validCoords[0] == clickedButton[0] && validCoords[1] == clickedButton[1]){
-                    BOARD.swap(previousClick, clickedButton);
+                    BOARD.setEnPassant(previousClick, clickedButton);
+                    if(BOARD.isMoveEnPassant(previousClick, clickedButton)){
+                        System.out.println("kukkuu");
+                        BOARD.swapEnPassant(previousClick, clickedButton);
+                    }else{
+                        BOARD.swap(previousClick, clickedButton);
+                    }
                     updateBoardGUI();
                     isValidMove = true;
                     break;
