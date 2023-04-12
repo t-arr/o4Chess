@@ -5,15 +5,16 @@
     /*-fx-background-color: #f5f5dd;
     -fx-background-color: #f5f5dd;
     -fx-background-color: #f5f5dd;
-    -fx-background-color: #f5f5dd;*/
-    -fx-background-color: #1bb3d8;
+    -fx-background-color: #f5f5dd;
+    -fx-background-color: #1bb3d8;*/
+    -fx-background-color: #f5f5dd
 }
 
 .black-button{
+    -fx-background-color: #dab36e;
     /*-fx-background-color: #dab36e;
     -fx-background-color: #dab36e;
-    -fx-background-color: #dab36e;*/
-    -fx-background-color: #5c00f1;
+    -fx-background-color: #5c00f1;*/
 }
 
 .valid-move{

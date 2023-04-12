@@ -23,6 +23,7 @@ public class chessController {
     @FXML
     private GridPane boardGrid;
     private Button prevButton = null;
+    private boolean inCheck = false;
 
 
     @FXML
@@ -99,7 +100,9 @@ public class chessController {
             }
             if(isValidMove){
                 BOARD.swapTurn();
-                BOARD.allMoves(BOARD.getOpponentTurn());
+                BOARD.allOpponentMoves(BOARD.getOpponentTurn());
+                inCheck = BOARD.isKingInCheck();
+                System.out.println("is king in check: " + inCheck);
                 BOARD.updateCastlingVariables(previousClick, clickedButton);
                 BOARD.castle(previousClick, clickedButton);
             }

@@ -15,6 +15,7 @@ public class King {
         this.color = color;
         this.board = board;
         this.castlingList = castlingList;
+
         this.validOpponentMoves = validOpponentMoves;
     }
 
@@ -40,6 +41,9 @@ public class King {
         }
     }
     private boolean isNotSteppingToCheck(int row, int col) {
+        if(validOpponentMoves == null){
+            return true;
+        }
         int [] coordinates = new int[]{row, col};
         for (int[] moves : validOpponentMoves) {
             if (Arrays.equals(moves, coordinates)) {
@@ -50,6 +54,9 @@ public class King {
     }
 
     private boolean isNotSteppingToPawnCheck(int row, int col) {
+        if(validOpponentMoves == null){
+            return true;
+        }
         if(color == 'b'){
             return !board[row + 1][col - 1].equals("wpawn") && !board[row + 1][col + 1].equals("wpawn");
         } else if (color == 'w') {
@@ -60,11 +67,6 @@ public class King {
 
     private boolean isValidPosition(int row, int col) {
         return row >= 0 && row < 8 && col >= 0 && col < 8;
-    }
-
-    public void preventFromSteppingToCheck(int row, int col){
-        int [] coordinates = new int[]{row, col};
-
     }
 
     private void appendCastlingMoves(){

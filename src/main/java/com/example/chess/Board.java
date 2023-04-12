@@ -172,7 +172,7 @@ public class Board {
         board[to[0]][to[1]] = color + wantedPiece;
         board[from[0]][from[1]] = "-";
     }
-    public void allMoves(char color){
+    public void allOpponentMoves(char color){
         validOpponentMoves = new ArrayList<>();
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
@@ -181,5 +181,24 @@ public class Board {
                 }
             }
         }
+    }
+    public int [] getKingCoordinates(){
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(board[i][j].equals(getTurn() + "king")){
+                    return new int []{i, j};
+                }
+            }
+        }
+        return null;
+    }
+    public boolean isKingInCheck(){
+        int [] kingCoordinates = getKingCoordinates();
+        for(int [] moves : validOpponentMoves){
+            if (Arrays.equals(moves, kingCoordinates)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
