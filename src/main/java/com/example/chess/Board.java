@@ -10,7 +10,7 @@ public class Board {
     private boolean [] castlingList;
     private boolean validEnPassant;
     private int [] enPassantCoordinates = new int[]{0,0};
-
+    private List<int[]> validOpponentMoves;
 
     public Board() {
         this.board = new String[][]{{"brook", "bknight", "bbishop", "bqueen", "bking", "bbishop", "bknight", "brook"},
@@ -40,6 +40,12 @@ public class Board {
 
     public char getTurn(){
         return turn;
+    }
+    public char getOpponentTurn(){
+        if(getTurn()=='w'){
+            return 'b';
+        }
+        return 'w';
     }
     public void swapTurn(){
         if (turn == 'w'){
@@ -75,7 +81,7 @@ public class Board {
                 return queen.getValidMoves(coords);
             }
             case "king" -> {
-                King king = new King(color, board, castlingList);
+                King king = new King(color, board, castlingList, validOpponentMoves);
                 return king.getValidMoves(coords);
             }
             default -> {
@@ -138,26 +144,42 @@ public class Board {
         }
     }
 
-    public boolean getEnpassant(){
-        return validEnPassant;
-    }
-
     public void swapEnPassant(int[] from, int[] to){
         char color = getPiece(from).charAt(0);
+        String temp = board[from[0]][from[1]];
+        board[from[0]][from[1]] = "-";
+        board[to[0]][to[1]] = temp;
         if(color == 'b'){
-            String temp = board[from[0]][from[1]];
-            board[from[0]][from[1]] = "-";
-            board[to[0]][to[1]] = temp;
             board[to[0]-1][to[1]] = "-";
         }else {
-            String temp = board[from[0]][from[1]];
-            board[from[0]][from[1]] = "-";
-            board[to[0]][to[1]] = temp;
             board[to[0]+1][to[1]] = "-";
         }
     }
     public boolean isMoveEnPassant(int [] from, int [] to){
         String type = getPiece(from).substring(1);
         return type.equals("pawn") && getPiece(to).equals("-") && from[1] != to[1];
+    }
+    public boolean isPromotion(int[] from, int[] to){
+        String piece = getPiece(from).substring(1);
+        char color = getPiece(from).charAt(0);
+        if(piece.equals("pawn") && color == 'b' && to[0] == 7){
+            return true;
+        } else return piece.equals("pawn") && color == 'w' && to[0] == 0;
+    }
+
+    public void swapPromotion(int [] from, int[] to, String wantedPiece){
+        char color = getPiece(from).charAt(0);
+        board[to[0]][to[1]] = color + wantedPiece;
+        board[from[0]][from[1]] = "-";
+    }
+    public void allMoves(char color){
+        validOpponentMoves = new ArrayList<>();
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if (color == board[i][j].charAt(0) && (!getPiece(new int[]{i, j}).substring(1).equals("pawn"))){
+                    validOpponentMoves.addAll(validMoves(new int[]{i,j}));
+                }
+            }
+        }
     }
 }

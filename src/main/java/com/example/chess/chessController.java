@@ -3,15 +3,19 @@ package com.example.chess;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.StageStyle;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class chessController {
 
@@ -81,7 +85,9 @@ public class chessController {
             for(int [] validCoords : validMoves){
                 if(validCoords[0] == clickedButton[0] && validCoords[1] == clickedButton[1]){
                     BOARD.setEnPassant(previousClick, clickedButton);
-                    if(BOARD.isMoveEnPassant(previousClick, clickedButton)){
+                    if(BOARD.isPromotion(previousClick, clickedButton)){
+                        showPromotionOptions(previousClick, clickedButton);
+                    }else if(BOARD.isMoveEnPassant(previousClick, clickedButton)){
                         BOARD.swapEnPassant(previousClick, clickedButton);
                     }else{
                         BOARD.swap(previousClick, clickedButton);
@@ -93,6 +99,7 @@ public class chessController {
             }
             if(isValidMove){
                 BOARD.swapTurn();
+                BOARD.allMoves(BOARD.getOpponentTurn());
                 BOARD.updateCastlingVariables(previousClick, clickedButton);
                 BOARD.castle(previousClick, clickedButton);
             }
@@ -115,17 +122,53 @@ public class chessController {
             if (node instanceof Button button) {
                 int row = GridPane.getRowIndex(button);
                 int col = GridPane.getColumnIndex(button);
-                if(row == validRow && col == validCol){
-                    if(button.getGraphic() != null){
+                if (row == validRow && col == validCol) {
+                    if (button.getGraphic() != null) {
                         Group group = new Group();
                         group.getChildren().addAll(button.getGraphic(), new Circle(10, 10, 10, Color.RED));
                         button.setGraphic(group);
-                    }else{
+                    } else {
                         Circle circle = new Circle(10, 10, 10, Color.RED);
                         button.setGraphic(circle);
                     }
                 }
             }
         }
+    }
+    public void showPromotionOptions(int [] from, int [] to){
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.initStyle(StageStyle.UNDECORATED);
+        alert.setTitle("Promotion");
+        alert.setHeaderText("Promote the pawn to: ");
+
+        // Create buttons for promotion options
+        ButtonType queenButton = new ButtonType("Queen");
+        ButtonType rookButton = new ButtonType("Rook");
+        ButtonType bishopButton = new ButtonType("Bishop");
+        ButtonType knightButton = new ButtonType("Knight");
+
+        alert.getButtonTypes().setAll(queenButton, rookButton, bishopButton, knightButton);
+
+        Node header = alert.getDialogPane().lookup(".header-panel");
+        header.setOnMousePressed(event -> {
+            header.setOnMouseDragged(event1 -> {
+                alert.setX(event1.getScreenX() - event.getSceneX());
+                alert.setY(event1.getScreenY() - event.getSceneY());
+            });
+        });
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        result.ifPresent(buttonType -> {
+            if (buttonType == queenButton) {
+                BOARD.swapPromotion(from, to, "queen");
+            } else if (buttonType == rookButton) {
+                BOARD.swapPromotion(from, to, "rook");
+            } else if (buttonType == bishopButton) {
+                BOARD.swapPromotion(from, to, "bishop");
+            } else if (buttonType == knightButton) {
+                BOARD.swapPromotion(from, to, "knight");
+            }
+        });
     }
 }
