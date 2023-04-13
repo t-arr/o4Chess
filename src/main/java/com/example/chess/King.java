@@ -27,7 +27,7 @@ public class King {
         return validMoves;
     }
 
-    private void addValidMoves(int row, int col) {
+    private void addValidMoves(int row, int col)  throws ArrayIndexOutOfBoundsException{
         int[] dr = {-1, -1, -1, 0, 0, 1, 1, 1};
         int[] dc = {-1, 0, 1, -1, 1, -1, 0, 1};
         for (int i = 0; i < 8; i++) {
@@ -57,10 +57,23 @@ public class King {
         if(validOpponentMoves == null){
             return true;
         }
-        if(color == 'b'){
+        if(color == 'b' && row + 1 < 8 && col - 1 >= 0 && col + 1 < 8){
             return !board[row + 1][col - 1].equals("wpawn") && !board[row + 1][col + 1].equals("wpawn");
-        } else if (color == 'w') {
+        }
+        if (color == 'w' && row - 1 >= 0 && col - 1 >= 0 && col + 1 < 8) {
             return !board[row - 1][col - 1].equals("bpawn") && !board[row - 1][col + 1].equals("bpawn");
+        }
+        if (color == 'b' && row + 1 < 8 && col == 0) {
+            return !board[row + 1][col + 1].equals("wpawn");
+        }
+        if (color == 'b' && row + 1 < 8 && col == 7) {
+            return !board[row + 1][col - 1].equals("wpawn");
+        }
+        if (color == 'w' && row - 1 >= 0 && col == 0) {
+            return !board[row - 1][col + 1].equals("bpawn");
+        }
+        if (color == 'w' && row - 1 >= 0 && col == 7) {
+            return !board[row - 1][col - 1].equals("bpawn");
         }
         return true;
     }
