@@ -7,9 +7,9 @@ import java.util.List;
 public class Board {
     private String[][] board;
     private char turn = 'w';
-    private boolean [] castlingList;
+    private boolean[] castlingList;
     private boolean validEnPassant;
-    private int [] enPassantCoordinates = new int[]{0,0};
+    private int[] enPassantCoordinates = new int[]{0, 0};
     private List<int[]> validOpponentMoves;
 
     public Board() {
@@ -25,37 +25,40 @@ public class Board {
         validEnPassant = false;
     }
 
-    public void swap(int[] from, int[] to){
+    public void swap(int[] from, int[] to) {
         String temp = board[from[0]][from[1]];
         board[from[0]][from[1]] = "-";
         board[to[0]][to[1]] = temp;
     }
-    public String[][] getBoard(){
+
+    public String[][] getBoard() {
         return board;
     }
 
-    public String getPiece(int[] coords){
+    public String getPiece(int[] coords) {
         return board[coords[0]][coords[1]];
     }
 
-    public char getTurn(){
+    public char getTurn() {
         return turn;
     }
-    public char getOpponentTurn(){
-        if(getTurn()=='w'){
+
+    public char getOpponentTurn() {
+        if (getTurn() == 'w') {
             return 'b';
         }
         return 'w';
     }
-    public void swapTurn(){
-        if (turn == 'w'){
+
+    public void swapTurn() {
+        if (turn == 'w') {
             turn = 'b';
-        }else{
+        } else {
             turn = 'w';
         }
     }
 
-    public List<int[]> validMoves(int[] coords){
+    public List<int[]> validMoves(int[] coords) {
         String type = getPiece(coords);
         char color = type.charAt(0);
         type = type.substring(1);
@@ -113,7 +116,7 @@ public class Board {
         }
     }
 
-    public void castle(int[] from, int[] to){
+    public void castle(int[] from, int[] to) {
         int fromRow = from[0];
         int fromCol = from[1];
         int toRow = to[0];
@@ -134,69 +137,113 @@ public class Board {
         }
     }
 
-    public void setEnPassant(int [] from, int [] to){
+    public void setEnPassant(int[] from, int[] to) {
         String type = getPiece(from).substring(1);
-        if(type.equals("pawn") && (Math.abs(from[0]-to[0]) == 2)){
+        if (type.equals("pawn") && (Math.abs(from[0] - to[0]) == 2)) {
             validEnPassant = true;
             enPassantCoordinates = new int[]{to[0], to[1]};
-        }else {
+        } else {
             validEnPassant = false;
         }
     }
 
-    public void swapEnPassant(int[] from, int[] to){
+    public void swapEnPassant(int[] from, int[] to) {
         char color = getPiece(from).charAt(0);
         String temp = board[from[0]][from[1]];
         board[from[0]][from[1]] = "-";
         board[to[0]][to[1]] = temp;
-        if(color == 'b'){
-            board[to[0]-1][to[1]] = "-";
-        }else {
-            board[to[0]+1][to[1]] = "-";
+        if (color == 'b') {
+            board[to[0] - 1][to[1]] = "-";
+        } else {
+            board[to[0] + 1][to[1]] = "-";
         }
     }
-    public boolean isMoveEnPassant(int [] from, int [] to){
+
+    public boolean isMoveEnPassant(int[] from, int[] to) {
         String type = getPiece(from).substring(1);
         return type.equals("pawn") && getPiece(to).equals("-") && from[1] != to[1];
     }
-    public boolean isPromotion(int[] from, int[] to){
+
+    public boolean isPromotion(int[] from, int[] to) {
         String piece = getPiece(from).substring(1);
         char color = getPiece(from).charAt(0);
-        if(piece.equals("pawn") && color == 'b' && to[0] == 7){
+        if (piece.equals("pawn") && color == 'b' && to[0] == 7) {
             return true;
         } else return piece.equals("pawn") && color == 'w' && to[0] == 0;
     }
 
-    public void swapPromotion(int [] from, int[] to, String wantedPiece){
+    public void swapPromotion(int[] from, int[] to, String wantedPiece) {
         char color = getPiece(from).charAt(0);
         board[to[0]][to[1]] = color + wantedPiece;
         board[from[0]][from[1]] = "-";
     }
-    public void allOpponentMoves(char color){
+
+    public void allOpponentMoves(char color) {
         validOpponentMoves = new ArrayList<>();
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if (color == board[i][j].charAt(0) && (!getPiece(new int[]{i, j}).substring(1).equals("pawn"))){
-                    validOpponentMoves.addAll(validMoves(new int[]{i,j}));
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (color == board[i][j].charAt(0) && (!getPiece(new int[]{i, j}).substring(1).equals("pawn"))) {
+                    validOpponentMoves.addAll(validMoves(new int[]{i, j}));
                 }
             }
         }
     }
-    public int [] getKingCoordinates(){
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if(board[i][j].equals(getTurn() + "king")){
-                    return new int []{i, j};
+
+    public int[] getKingCoordinates() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board[i][j].equals(getTurn() + "king")) {
+                    return new int[]{i, j};
                 }
             }
         }
         return null;
     }
-    public boolean isKingInCheck(){
-        int [] kingCoordinates = getKingCoordinates();
-        for(int [] moves : validOpponentMoves){
+
+    public boolean isKingInCheck() {
+        if(isKingInPawnCheck()){
+            return true;
+        }
+        int[] kingCoordinates = getKingCoordinates();
+        for (int[] moves : validOpponentMoves) {
             if (Arrays.equals(moves, kingCoordinates)) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isKingInPawnCheck() {
+        int[] kingCoordinates = getKingCoordinates();
+        int row = kingCoordinates[0];
+        int col = kingCoordinates[1];
+        char color = getTurn();
+        char oppColor = getOpponentTurn();
+        if (color == 'b') {
+            if(row == 7){
+                return false;
+            }
+            if (row + 1 <= 7 && col + 1 < 8 && col - 1 >= 0) {
+                return board[row + 1][col - 1].equals(oppColor + "pawn") || board[row + 1][col + 1].equals(oppColor + "pawn");
+            }
+            if(col == 0){
+                return board[row+1][col+1].equals(oppColor + "pawn");
+            }
+            if(col == 7){
+                return board[row+1][col-1].equals(oppColor + "pawn");
+            }
+        } else if (color == 'w') {
+            if(row == 0){
+                return false;
+            }
+            if (row - 1 >= 0 && col - 1 >= 0 && col + 1 < 8) {
+                return board[row - 1][col - 1].equals(oppColor + "pawn") || board[row - 1][col + 1].equals(oppColor + "pawn");
+            }
+            if(col == 0){
+                return board[row-1][col+1].equals(oppColor + "pawn");
+            }
+            if(col == 7){
+                return board[row-1][col-1].equals(oppColor + "pawn");
             }
         }
         return false;
