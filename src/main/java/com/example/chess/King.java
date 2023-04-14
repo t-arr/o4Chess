@@ -33,7 +33,7 @@ public class King {
         for (int i = 0; i < 8; i++) {
             int newRow = row + dr[i];
             int newCol = col + dc[i];
-            if (isValidPosition(newRow, newCol) && isNotSteppingToCheck(newRow, newCol) && isNotSteppingToPawnCheck(newRow, newCol)) {
+            if (isValidPosition(newRow, newCol) && isNotSteppingToCheck(newRow, newCol) && isNotSteppingToPawnCheck(newRow, newCol) && isNotSteppingToKingCheck(newRow, newCol)) {
                 if (board[newRow][newCol].equals("-") || getColor(newRow, newCol) != color) {
                     validMoves.add(new int[]{newRow, newCol});
                 }
@@ -76,6 +76,25 @@ public class King {
             return !board[row - 1][col - 1].equals("bpawn");
         }
         return true;
+    }
+
+    private boolean isNotSteppingToKingCheck(int row, int col){
+        double firstDistance = calculateDistance(0, 0, 1, 1);
+        double secondDistance = calculateDistance(0, 0, 0, 1);
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(calculateDistance(row, col, i, j) == firstDistance || calculateDistance(row, col, i, j) == secondDistance){
+                    if(board[i][j].substring(1).equals("king") && color != board[i][j].charAt(0)){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private double calculateDistance(double firstX, double firstY, double secondX, double secondY) {
+        return Math.sqrt(Math.pow((secondX - firstX), 2) + Math.pow((secondY - firstY), 2));
     }
 
     private boolean isValidPosition(int row, int col) {
