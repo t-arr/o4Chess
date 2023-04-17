@@ -182,7 +182,7 @@ public class Board {
         validOpponentMoves = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (color == board[i][j].charAt(0) && (!getPiece(new int[]{i, j}).substring(1).equals("pawn"))) {
+                if (color == board[i][j].charAt(0)) {
                     validOpponentMoves.addAll(validMoves(new int[]{i, j}));
                 }
             }
@@ -201,49 +201,10 @@ public class Board {
     }
 
     public boolean isKingInCheck() {
-        if(isKingInPawnCheck()){
-            return true;
-        }
         int[] kingCoordinates = getKingCoordinates();
         for (int[] moves : validOpponentMoves) {
             if (Arrays.equals(moves, kingCoordinates)) {
                 return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isKingInPawnCheck() {
-        int[] kingCoordinates = getKingCoordinates();
-        int row = kingCoordinates[0];
-        int col = kingCoordinates[1];
-        char color = getTurn();
-        char oppColor = getOpponentTurn();
-        if (color == 'b') {
-            if(row == 7){
-                return false;
-            }
-            if (row + 1 <= 7 && col + 1 < 8 && col - 1 >= 0) {
-                return board[row + 1][col - 1].equals(oppColor + "pawn") || board[row + 1][col + 1].equals(oppColor + "pawn");
-            }
-            if(col == 0){
-                return board[row+1][col+1].equals(oppColor + "pawn");
-            }
-            if(col == 7){
-                return board[row+1][col-1].equals(oppColor + "pawn");
-            }
-        } else if (color == 'w') {
-            if(row == 0){
-                return false;
-            }
-            if (row - 1 >= 0 && col - 1 >= 0 && col + 1 < 8) {
-                return board[row - 1][col - 1].equals(oppColor + "pawn") || board[row - 1][col + 1].equals(oppColor + "pawn");
-            }
-            if(col == 0){
-                return board[row-1][col+1].equals(oppColor + "pawn");
-            }
-            if(col == 7){
-                return board[row-1][col-1].equals(oppColor + "pawn");
             }
         }
         return false;

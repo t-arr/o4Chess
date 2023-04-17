@@ -7,6 +7,7 @@ public class Knight {
     private char color;
     private String [][] board;
     private List<int[]> validMoves = new ArrayList<>();
+
     public Knight(char color, String [][] board){
         this.color = color;
         this.board = board;
