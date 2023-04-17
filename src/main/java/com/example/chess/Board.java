@@ -1,8 +1,6 @@
 package com.example.chess;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Board {
     private String[][] board;
@@ -11,6 +9,8 @@ public class Board {
     private boolean validEnPassant;
     private int[] enPassantCoordinates = new int[]{0, 0};
     private List<int[]> validOpponentMoves;
+    private boolean isCheck = false;
+    private Map<int [], String> threatList;
 
     public Board() {
         this.board = new String[][]{{"brook", "bknight", "bbishop", "bqueen", "bking", "bbishop", "bknight", "brook"},
@@ -43,7 +43,7 @@ public class Board {
         return turn;
     }
 
-    public char getOpponentTurn() {
+    public char getOpponentColor() {
         if (getTurn() == 'w') {
             return 'b';
         }
@@ -64,27 +64,62 @@ public class Board {
         type = type.substring(1);
         switch (type) {
             case "pawn" -> {
-                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates);
+                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates, threatList);
                 return pawn.getValidMoves(coords);
             }
             case "rook" -> {
-                Rook rook = new Rook(color, board);
+                Rook rook = new Rook(color, board, threatList);
                 return rook.getValidMoves(coords);
             }
             case "knight" -> {
-                Knight knight = new Knight(color, board);
+                Knight knight = new Knight(color, board, threatList);
                 return knight.getValidMoves(coords);
             }
             case "bishop" -> {
-                Bishop bishop = new Bishop(color, board);
+                Bishop bishop = new Bishop(color, board, threatList);
                 return bishop.getValidMoves(coords);
             }
             case "queen" -> {
-                Queen queen = new Queen(color, board);
+                Queen queen = new Queen(color, board, threatList);
                 return queen.getValidMoves(coords);
             }
             case "king" -> {
-                King king = new King(color, board, castlingList, validOpponentMoves);
+                King king = new King(color, board, castlingList, validOpponentMoves, threatList, getOpponentColor(), isCheck);
+                return king.getValidMoves(coords);
+            }
+            default -> {
+                return new ArrayList<>();
+            }
+        }
+    }
+
+    public List<int[]> validMovesWhenInCheck(int[] coords) {
+        String type = getPiece(coords);
+        char color = type.charAt(0);
+        type = type.substring(1);
+        switch (type) {
+            case "pawn" -> {
+                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates, threatList);
+                return pawn.getValidMovesWhenCheck(coords);
+            }
+            case "rook" -> {
+                Rook rook = new Rook(color, board, threatList);
+                return rook.getValidMovesWhenCheck(coords);
+            }
+            case "knight" -> {
+                Knight knight = new Knight(color, board, threatList);
+                return knight.getValidMovesWhenCheck(coords);
+            }
+            case "bishop" -> {
+                Bishop bishop = new Bishop(color, board, threatList);
+                return bishop.getValidMovesWhenCheck(coords);
+            }
+            case "queen" -> {
+                Queen queen = new Queen(color, board, threatList);
+                return queen.getValidMovesWhenCheck(coords);
+            }
+            case "king" -> {
+                King king = new King(color, board, castlingList, validOpponentMoves, threatList, getOpponentColor(), isCheck);
                 return king.getValidMoves(coords);
             }
             default -> {
@@ -178,17 +213,6 @@ public class Board {
         board[from[0]][from[1]] = "-";
     }
 
-    public void allOpponentMoves(char color) {
-        validOpponentMoves = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (color == board[i][j].charAt(0)) {
-                    validOpponentMoves.addAll(validMoves(new int[]{i, j}));
-                }
-            }
-        }
-    }
-
     public int[] getKingCoordinates() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -200,13 +224,26 @@ public class Board {
         return null;
     }
 
-    public boolean isKingInCheck() {
-        int[] kingCoordinates = getKingCoordinates();
-        for (int[] moves : validOpponentMoves) {
-            if (Arrays.equals(moves, kingCoordinates)) {
-                return true;
+    public boolean lookChecks(){
+        isCheck = false;
+        List<int []> singlePieceMoves = new ArrayList<>();
+        validOpponentMoves = new ArrayList<>();
+        threatList = new HashMap<>();
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                if(!board[i][j].equals("-") && board[i][j].charAt(0) == getOpponentColor()){
+                    singlePieceMoves.clear();
+                    validOpponentMoves.addAll(validMoves(new int[]{i, j}));
+                    singlePieceMoves.addAll(validMoves(new int[]{i, j}));
+                    for(int [] ar : singlePieceMoves){
+                        if(Arrays.equals(ar, getKingCoordinates())){
+                            isCheck = true;
+                            threatList.put(new int[]{i, j}, board[i][j].substring(1));
+                        }
+                    }
+                }
             }
         }
-        return false;
+        return isCheck;
     }
 }

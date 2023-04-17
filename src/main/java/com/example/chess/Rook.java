@@ -2,15 +2,18 @@ package com.example.chess;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Rook {
 
     private char color;
     private String [][] board;
     private List<int[]> validMoves = new ArrayList<>();
-    public Rook(char color, String [][] board){
+    private Map<int[], String> threatList;
+    public Rook(char color, String [][] board, Map<int[], String> threatList){
         this.color = color;
         this.board = board;
+        this.threatList = threatList;
     }
 
     public List<int[]> getValidMoves(int [] coords){
@@ -20,6 +23,16 @@ public class Rook {
         southMovement(row, col);
         eastMovement(row, col);
         westMovement(row, col);
+        return validMoves;
+    }
+
+    public List<int[]> getValidMovesWhenCheck(int [] coords){
+        if(threatList == null){
+            return validMoves;
+        }
+        if(threatList.keySet().size() > 1){
+            return validMoves;
+        }
         return validMoves;
     }
 
@@ -80,5 +93,7 @@ public class Rook {
         String color = board[row][col];
         return color.charAt(0);
     }
+
+
 
 }

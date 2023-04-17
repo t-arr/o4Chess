@@ -2,6 +2,7 @@ package com.example.chess;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Pawn{
 
@@ -10,12 +11,32 @@ public class Pawn{
     private List<int[]> validMoves = new ArrayList<>();
     private boolean enPassant;
     private int [] enPassantCoordinates;
+    private Map<int[], String> threatList;
 
-    public Pawn(char color, String [][] board, boolean enPassant, int [] enPassantCoordinates){
+    public Pawn(char color, String [][] board, boolean enPassant, int [] enPassantCoordinates, Map<int[], String> threatList){
         this.color = color;
         this.board = board;
         this.enPassant = enPassant;
         this.enPassantCoordinates = new int[]{enPassantCoordinates[0], enPassantCoordinates[1]};
+        this.threatList = threatList;
+    }
+
+    public Pawn(char color, String [][] board, Map<int[], String> threatList){
+        this.color = color;
+        this.board = board;
+        this.enPassant = false;
+        this.threatList = threatList;
+    }
+
+
+    public List<int[]> getValidMovesWhenCheck(int [] coords){
+        if(threatList == null){
+            return validMoves;
+        }
+        if(threatList.keySet().size() > 1){
+            return validMoves;
+        }
+        return validMoves;
     }
 
     public List<int[]> getValidMoves(int [] coords){

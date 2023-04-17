@@ -2,14 +2,17 @@ package com.example.chess;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Queen {
     private char color;
     private String [][] board;
     private List<int[]> validMoves = new ArrayList<>();
-    public Queen(char color, String [][] board){
+    private Map<int[], String> threatList;
+    public Queen(char color, String [][] board, Map<int[], String> threatList){
         this.color = color;
         this.board = board;
+        this.threatList = threatList;
     }
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
@@ -22,6 +25,16 @@ public class Queen {
         southeastMovement(row, col);
         northwestMovement(row, col);
         southwestMovement(row, col);
+        return validMoves;
+    }
+
+    public List<int[]> getValidMovesWhenCheck(int [] coords){
+        if(threatList == null){
+            return validMoves;
+        }
+        if(threatList.keySet().size() > 1){
+            return validMoves;
+        }
         return validMoves;
     }
 

@@ -2,6 +2,7 @@ package com.example.chess;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Bishop {
 
@@ -10,10 +11,12 @@ public class Bishop {
     private String [][] board;
 
     private List<int[]> validMoves = new ArrayList<>();
+    private Map<int[], String> threatList;
 
-    public Bishop(char color, String [][] board){
+    public Bishop(char color, String [][] board, Map<int[], String> threatList){
         this.color = color;
         this.board = board;
+        this.threatList = threatList;
     }
 
     public List<int[]> getValidMoves(int [] coords){
@@ -23,6 +26,16 @@ public class Bishop {
         southeastMovement(row, col);
         northwestMovement(row, col);
         southwestMovement(row, col);
+        return validMoves;
+    }
+
+    public List<int[]> getValidMovesWhenCheck(int [] coords){
+        if(threatList == null){
+            return validMoves;
+        }
+        if(threatList.keySet().size() > 1){
+            return validMoves;
+        }
         return validMoves;
     }
 

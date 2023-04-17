@@ -100,8 +100,7 @@ public class chessController {
             }
             if(isValidMove){
                 BOARD.swapTurn();
-                BOARD.allOpponentMoves(BOARD.getOpponentTurn());
-                inCheck = BOARD.isKingInCheck();
+                inCheck = BOARD.lookChecks();
                 System.out.println("is king in check: " + inCheck);
                 BOARD.updateCastlingVariables(previousClick, clickedButton);
                 BOARD.castle(previousClick, clickedButton);
