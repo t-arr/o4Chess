@@ -146,8 +146,7 @@ public class chessController {
         alert.initStyle(StageStyle.UNDECORATED);
         alert.setTitle("Promotion");
         alert.setHeaderText("Promote the pawn to: ");
-
-        // Create buttons for promotion options
+        
         ButtonType queenButton = new ButtonType("Queen");
         ButtonType rookButton = new ButtonType("Rook");
         ButtonType bishopButton = new ButtonType("Bishop");
