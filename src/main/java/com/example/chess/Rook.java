@@ -9,17 +9,23 @@ public class Rook {
     private char color;
     private String [][] board;
     private List<int[]> validMoves = new ArrayList<>();
+    private boolean isCheck;
     private Map<int[], String> threatList;
-    public Rook(char color, String [][] board, Map<int[], String> threatList){
+    public Rook(char color, String [][] board, Map<int[], String> threatList, boolean isCheck){
         this.color = color;
         this.board = board;
         this.threatList = threatList;
+        this.isCheck = isCheck;
     }
 
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
-        appendValidMoves(row, col);
+        if(isCheck){
+            appendValidMovesWhenCheck(row, col);
+        }else{
+            appendValidMoves(row, col);
+        }
         return validMoves;
     }
 
@@ -49,6 +55,12 @@ public class Rook {
 
     private boolean isValidPosition(int row, int col){
         return row >= 0 && row < 8 && col >= 0 && col < 8;
+    }
+
+    public void appendValidMovesWhenCheck(int row, int col){
+        if (threatList.keySet().size() > 1){
+            return;
+        }
     }
 
     private char getColor(int row, int col){

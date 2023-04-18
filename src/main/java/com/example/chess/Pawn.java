@@ -12,13 +12,16 @@ public class Pawn{
     private boolean enPassant;
     private int [] enPassantCoordinates;
     private Map<int[], String> threatList;
+    private boolean isCheck;
 
-    public Pawn(char color, String [][] board, boolean enPassant, int [] enPassantCoordinates, Map<int[], String> threatList){
+    public Pawn(char color, String [][] board, boolean enPassant, int [] enPassantCoordinates, Map<int[], String> threatList, boolean isCheck){
         this.color = color;
         this.board = board;
         this.enPassant = enPassant;
         this.enPassantCoordinates = new int[]{enPassantCoordinates[0], enPassantCoordinates[1]};
         this.threatList = threatList;
+        this.isCheck = isCheck;
+
     }
 
     public Pawn(char color, String [][] board, Map<int[], String> threatList){

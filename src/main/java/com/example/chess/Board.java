@@ -63,23 +63,23 @@ public class Board {
         type = type.substring(1);
         switch (type) {
             case "pawn" -> {
-                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates, threatList);
+                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates, threatList, isCheck);
                 return pawn.getValidMoves(coords);
             }
             case "rook" -> {
-                Rook rook = new Rook(color, board, threatList);
+                Rook rook = new Rook(color, board, threatList, isCheck);
                 return rook.getValidMoves(coords);
             }
             case "knight" -> {
-                Knight knight = new Knight(color, board, threatList);
+                Knight knight = new Knight(color, board, threatList, isCheck);
                 return knight.getValidMoves(coords);
             }
             case "bishop" -> {
-                Bishop bishop = new Bishop(color, board, threatList);
+                Bishop bishop = new Bishop(color, board, threatList, isCheck);
                 return bishop.getValidMoves(coords);
             }
             case "queen" -> {
-                Queen queen = new Queen(color, board, threatList);
+                Queen queen = new Queen(color, board, threatList, isCheck);
                 return queen.getValidMoves(coords);
             }
             case "king" -> {

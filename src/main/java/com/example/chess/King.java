@@ -78,19 +78,19 @@ public class King {
                 return pawn.getValidMoves(opponentPieceCoordinates);
             }
             case "rook" -> {
-                Rook rook = new Rook(opponentColor, copyBoard, threatList);
+                Rook rook = new Rook(opponentColor, copyBoard, threatList, isCheck);
                 return rook.getValidMoves(opponentPieceCoordinates);
             }
             case "knight" -> {
-                Knight knight = new Knight(opponentColor, copyBoard, threatList);
+                Knight knight = new Knight(opponentColor, copyBoard, threatList, isCheck);
                 return knight.getValidMoves(opponentPieceCoordinates);
             }
             case "bishop" -> {
-                Bishop bishop = new Bishop(opponentColor, copyBoard, threatList);
+                Bishop bishop = new Bishop(opponentColor, copyBoard, threatList, isCheck);
                 return bishop.getValidMoves(opponentPieceCoordinates);
             }
             case "queen" -> {
-                Queen queen = new Queen(opponentColor, copyBoard, threatList);
+                Queen queen = new Queen(opponentColor, copyBoard, threatList, isCheck);
                 return queen.getValidMoves(opponentPieceCoordinates);
             }
             default -> {

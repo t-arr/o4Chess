@@ -1,6 +1,7 @@
 package com.example.chess;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -10,17 +11,19 @@ public class Knight {
     private String [][] copyBoard;
     private List<int[]> validMoves = new ArrayList<>();
     private Map<int[], String> threatList;
+    private boolean isCheck;
 
-    public Knight(char color, String [][] board, Map<int[], String> threatList){
+    public Knight(char color, String [][] board, Map<int[], String> threatList, boolean isCheck){
         this.color = color;
         this.board = board;
         this.threatList = threatList;
+        this.isCheck = isCheck;
     }
 
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
-        if(threatList != null){
+        if(isCheck){
             appendValidMovesWhenCheck(row, col);
         }else{
             appendValidMoves(row, col);
