@@ -36,12 +36,12 @@ public class King {
         return validMoves;
     }
 
-    private void addValidMoves(int row, int col)  throws ArrayIndexOutOfBoundsException{
-        int[] dr = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] dc = {-1, 0, 1, -1, 1, -1, 0, 1};
+    private void addValidMoves(int row, int col){
+        int[] targetRow = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] targetCol = {-1, 0, 1, -1, 1, -1, 0, 1};
         for (int i = 0; i < 8; i++) {
-            int newRow = row + dr[i];
-            int newCol = col + dc[i];
+            int newRow = row + targetRow[i];
+            int newCol = col + targetCol[i];
             if (isValidPosition(newRow, newCol) && isNotSteppingToCheck(newRow, newCol, row, col) && isNotSteppingToPawnCheck(newRow, newCol) && isNotSteppingToKingCheck(newRow, newCol)) {
                 if (board[newRow][newCol].equals("-") || getColor(newRow, newCol) != color) {
                     validMoves.add(new int[]{newRow, newCol});

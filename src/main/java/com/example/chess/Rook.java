@@ -19,10 +19,13 @@ public class Rook {
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
-        northMovement(row, col);
+
+        appendValidMoves(row, col);
+
+      /*  northMovement(row, col);
         southMovement(row, col);
         eastMovement(row, col);
-        westMovement(row, col);
+        westMovement(row, col); */
         return validMoves;
     }
 
@@ -36,64 +39,39 @@ public class Rook {
         return validMoves;
     }
 
-    private void northMovement(int row, int col){
-        for (int i = row - 1; i >= 0; i--) {
-            if (movement(col, i)) break;
-        }
-    }
-
-    private void southMovement(int row, int col){
-        for (int i = row + 1; i <= 7; i++) {
-            if (movement(col, i)) break;
-        }
-    }
-
-    private void eastMovement(int row, int col){
-        for (int i = col + 1; i <= 7; i++) {
-            if (board[row][i].equals("-")) {
-                validMoves.add(new int[]{row, i});
-            } else if (getColor(row, i) != color) {
-                validMoves.add(new int[]{row, i});
-                break;
-            } else {
-                break;
+    private void appendValidMoves(int row, int col){
+        int [] targetRow = new int []{-1, 0, 1, 0};
+        int [] targetCol = new int []{0, 1, 0, -1};
+        for(int i = 0; i < 4; i++){
+            int newRow = row;
+            int newCol = col;
+            while(true){
+                newRow += targetRow[i];
+                newCol += targetCol[i];
+                if(!isValidPosition(newRow, newCol)){
+                    break;
+                }
+                if(getColor(newRow, newCol) == '-'){
+                    validMoves.add(new int[]{newRow, newCol});
+                }else if (getColor(newRow, newCol) != color && getColor(newRow, newCol) != '-'){
+                    validMoves.add(new int[]{newRow, newCol});
+                    break;
+                }else{
+                    break;
+                }
             }
         }
     }
 
-    private void westMovement(int row, int col){
-        for (int i = col - 1; i >= 0; i--) {
-            if (board[row][i].equals("-")) {
-                validMoves.add(new int[]{row, i});
-            } else if (getColor(row, i) != color) {
-                validMoves.add(new int[]{row, i});
-                break;
-            } else {
-                break;
-            }
-        }
-    }
-
-    private boolean movement(int col, int i) {
-        if (this.board[i][col].equals("-")) {
-            validMoves.add(new int[]{i, col});
-        } else if (getColor(i, col) != this.color) {
-            validMoves.add(new int[]{i, col});
-            return true;
-        } else {
-            return true;
-        }
-        return false;
+    private boolean isValidPosition(int row, int col){
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 
     private char getColor(int row, int col){
         if(board[row][col].equals("-")){
-            return 'n';
+            return '-';
         }
         String color = board[row][col];
         return color.charAt(0);
     }
-
-
-
 }

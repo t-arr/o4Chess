@@ -29,31 +29,25 @@ public class Knight {
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
-        double correctDistance = calculateDistance(5, 3, 3, 4);
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                double distance = calculateDistance(row, col, i, j);
-                if (distance == correctDistance) {
-                    if (board[i][j] == null) {
-                        validMoves.add(new int[]{i, j});
-                    } else if (getColor(i, j) != color) {
-                        validMoves.add(new int[]{i, j});
-                    }
-                }
-            }
-        }
+        appendValidMoves(row, col);
         return validMoves;
     }
 
-    private double calculateDistance(double firstX, double firstY, double secondX, double secondY) {
-        return Math.sqrt(Math.pow((secondX - firstX), 2) + Math.pow((secondY - firstY), 2));
+    public void appendValidMoves(int row, int col){
+        int [] targetRow = new int[]{-2, -2, 2, 2, -1, -1, 1, 1};
+        int [] targetCol = new int[]{1, -1, 1, -1, 2, -2, 2, -2};
+        for(int i = 0; i < 8; i++){
+            int newRow = row + targetRow[i];
+            int newCol = col + targetCol[i];
+            if(isValidPosition(newRow, newCol)){
+                if(board[newRow][newCol].charAt(0) != color){
+                    validMoves.add(new int[]{newRow, newCol});
+                }
+            }
+        }
     }
 
-    private char getColor(int row, int col){
-        if(board[row][col].equals("-")){
-            return 'n';
-        }
-        String color = board[row][col];
-        return color.charAt(0);
+    private boolean isValidPosition(int row, int col){
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 }

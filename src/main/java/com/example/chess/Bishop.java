@@ -7,9 +7,7 @@ import java.util.Map;
 public class Bishop {
 
     private char color;
-
     private String [][] board;
-
     private List<int[]> validMoves = new ArrayList<>();
     private Map<int[], String> threatList;
 
@@ -22,11 +20,36 @@ public class Bishop {
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
-        northeastMovement(row, col);
-        southeastMovement(row, col);
-        northwestMovement(row, col);
-        southwestMovement(row, col);
+        appendValidMoves(row, col);
         return validMoves;
+    }
+
+    public void appendValidMoves(int row, int col){
+        int [] targetRow = new int []{-1, 1, 1, -1};
+        int [] targetCol = new int []{1, 1, -1, -1};
+        for(int i = 0; i < 4; i++){
+            int newRow = row;
+            int newCol = col;
+            while(true){
+                newRow += targetRow[i];
+                newCol += targetCol[i];
+                if(!isValidPosition(newRow, newCol)){
+                    break;
+                }
+                if(getColor(newRow, newCol) == '-'){
+                    validMoves.add(new int[]{newRow, newCol});
+                }else if (getColor(newRow, newCol) != color && getColor(newRow, newCol) != '-'){
+                    validMoves.add(new int[]{newRow, newCol});
+                    break;
+                }else{
+                    break;
+                }
+            }
+        }
+    }
+
+    private boolean isValidPosition(int row, int col){
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 
     public List<int[]> getValidMovesWhenCheck(int [] coords){
@@ -39,79 +62,10 @@ public class Bishop {
         return validMoves;
     }
 
-    private void northeastMovement(int row, int col) {
-        int i = row - 1;
-        int j = col + 1;
-        while (i >= 0 && j <= 7) {
-            if (board[i][j].equals("-")) {
-                validMoves.add(new int[]{i, j});
-            } else if (getColor(i, j) != color) {
-                validMoves.add(new int[]{i, j});
-                break;
-            } else {
-                break;
-            }
-            i--;
-            j++;
-        }
-    }
-
-
-
-    private void southeastMovement(int row, int col){
-        int i = row + 1;
-        int j = col + 1;
-        while (i <= 7 && j <= 7) {
-            if (board[i][j].equals("-")) {
-                validMoves.add(new int[]{i, j});
-            } else if (getColor(i, j) != color) {
-                validMoves.add(new int[]{i, j});
-                break;
-            } else {
-                break;
-            }
-            i++;
-            j++;
-        }
-    }
-
-    private void northwestMovement(int row, int col){
-        int i = row - 1;
-        int j = col - 1;
-        while (i >= 0 && j >= 0) {
-            if (board[i][j].equals("-")) {
-                validMoves.add(new int[]{i, j});
-            } else if (getColor(i, j) != color) {
-                validMoves.add(new int[]{i, j});
-                break;
-            } else {
-                break;
-            }
-            i--;
-            j--;
-        }
-    }
-
-    private void southwestMovement(int row, int col){
-        int i = row + 1;
-        int j = col - 1;
-        while (i <= 7 && j >= 0) {
-            if (board[i][j].equals("-")) {
-                validMoves.add(new int[]{i, j});
-            } else if (getColor(i, j) != color) {
-                validMoves.add(new int[]{i, j});
-                break;
-            } else {
-                break;
-            }
-            i++;
-            j--;
-        }
-    }
 
     private char getColor(int row, int col){
         if(board[row][col].equals("-")){
-            return 'n';
+            return '-';
         }
         String color = board[row][col];
         return color.charAt(0);

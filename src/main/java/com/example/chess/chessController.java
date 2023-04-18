@@ -68,7 +68,12 @@ public class chessController {
             if(BOARD.getPiece(clickedButton).equals("-") || BOARD.getTurn() != BOARD.getPiece(clickedButton).charAt(0)){
                 return;
             }
-            List<int[]> validMoves = BOARD.validMoves(clickedButton);
+            List<int[]> validMoves;
+            if(inCheck){
+                validMoves = BOARD.validMovesWhenInCheck(clickedButton);
+            }else{
+                validMoves = BOARD.validMoves(clickedButton);
+            }
             prevButton = button;
             for(int[] validCoords : validMoves){
                 displayValidMoves(validCoords[0], validCoords[1]);
@@ -101,7 +106,6 @@ public class chessController {
             if(isValidMove){
                 BOARD.swapTurn();
                 inCheck = BOARD.lookChecks();
-                System.out.println("is king in check: " + inCheck);
                 BOARD.updateCastlingVariables(previousClick, clickedButton);
                 BOARD.castle(previousClick, clickedButton);
             }
@@ -152,12 +156,10 @@ public class chessController {
         alert.getButtonTypes().setAll(queenButton, rookButton, bishopButton, knightButton);
 
         Node header = alert.getDialogPane().lookup(".header-panel");
-        header.setOnMousePressed(event -> {
-            header.setOnMouseDragged(event1 -> {
-                alert.setX(event1.getScreenX() - event.getSceneX());
-                alert.setY(event1.getScreenY() - event.getSceneY());
-            });
-        });
+        header.setOnMousePressed(event -> header.setOnMouseDragged(event1 -> {
+            alert.setX(event1.getScreenX() - event.getSceneX());
+            alert.setY(event1.getScreenY() - event.getSceneY());
+        }));
 
         Optional<ButtonType> result = alert.showAndWait();
 
