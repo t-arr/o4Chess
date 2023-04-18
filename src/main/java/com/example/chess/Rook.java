@@ -19,23 +19,7 @@ public class Rook {
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
-
         appendValidMoves(row, col);
-
-      /*  northMovement(row, col);
-        southMovement(row, col);
-        eastMovement(row, col);
-        westMovement(row, col); */
-        return validMoves;
-    }
-
-    public List<int[]> getValidMovesWhenCheck(int [] coords){
-        if(threatList == null){
-            return validMoves;
-        }
-        if(threatList.keySet().size() > 1){
-            return validMoves;
-        }
         return validMoves;
     }
 

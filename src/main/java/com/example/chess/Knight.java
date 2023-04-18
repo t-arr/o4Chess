@@ -7,6 +7,7 @@ import java.util.Map;
 public class Knight {
     private char color;
     private String [][] board;
+    private String [][] copyBoard;
     private List<int[]> validMoves = new ArrayList<>();
     private Map<int[], String> threatList;
 
@@ -16,20 +17,14 @@ public class Knight {
         this.threatList = threatList;
     }
 
-    public List<int[]> getValidMovesWhenCheck(int [] coords){
-        if(threatList == null){
-            return validMoves;
-        }
-        if(threatList.keySet().size() > 1){
-            return validMoves;
-        }
-        return validMoves;
-    }
-
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
-        appendValidMoves(row, col);
+        if(threatList != null){
+            appendValidMovesWhenCheck(row, col);
+        }else{
+            appendValidMoves(row, col);
+        }
         return validMoves;
     }
 
@@ -49,5 +44,11 @@ public class Knight {
 
     private boolean isValidPosition(int row, int col){
         return row >= 0 && row < 8 && col >= 0 && col < 8;
+    }
+
+    public void appendValidMovesWhenCheck(int row, int col){
+        if (threatList.keySet().size() > 1){
+            return;
+        }
     }
 }

@@ -51,18 +51,7 @@ public class Bishop {
     private boolean isValidPosition(int row, int col){
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
-
-    public List<int[]> getValidMovesWhenCheck(int [] coords){
-        if(threatList == null){
-            return validMoves;
-        }
-        if(threatList.keySet().size() > 1){
-            return validMoves;
-        }
-        return validMoves;
-    }
-
-
+    
     private char getColor(int row, int col){
         if(board[row][col].equals("-")){
             return '-';

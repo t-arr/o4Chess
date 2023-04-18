@@ -1,11 +1,11 @@
 package com.example.chess;
 
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -68,12 +68,7 @@ public class chessController {
             if(BOARD.getPiece(clickedButton).equals("-") || BOARD.getTurn() != BOARD.getPiece(clickedButton).charAt(0)){
                 return;
             }
-            List<int[]> validMoves;
-            if(inCheck){
-                validMoves = BOARD.validMovesWhenInCheck(clickedButton);
-            }else{
-                validMoves = BOARD.validMoves(clickedButton);
-            }
+            List<int[]> validMoves = BOARD.validMoves(clickedButton);
             prevButton = button;
             for(int[] validCoords : validMoves){
                 displayValidMoves(validCoords[0], validCoords[1]);
@@ -130,9 +125,9 @@ public class chessController {
                 int col = GridPane.getColumnIndex(button);
                 if (row == validRow && col == validCol) {
                     if (button.getGraphic() != null) {
-                        Group group = new Group();
-                        group.getChildren().addAll(button.getGraphic(), new Circle(10, 10, 10, Color.RED));
-                        button.setGraphic(group);
+                        StackPane stackPane = new StackPane();
+                        stackPane.getChildren().addAll(button.getGraphic(), new Circle(10, 10, 10, Color.RED));
+                        button.setGraphic(stackPane);
                     } else {
                         Circle circle = new Circle(10, 10, 10, Color.RED);
                         button.setGraphic(circle);
@@ -146,13 +141,21 @@ public class chessController {
         alert.initStyle(StageStyle.UNDECORATED);
         alert.setTitle("Promotion");
         alert.setHeaderText("Promote the pawn to: ");
-        
+
         ButtonType queenButton = new ButtonType("Queen");
         ButtonType rookButton = new ButtonType("Rook");
         ButtonType bishopButton = new ButtonType("Bishop");
         ButtonType knightButton = new ButtonType("Knight");
-
         alert.getButtonTypes().setAll(queenButton, rookButton, bishopButton, knightButton);
+        List<ButtonType> allButtons = alert.getButtonTypes();
+        DialogPane dialogPane = alert.getDialogPane();
+
+        for (ButtonType btn : allButtons){
+            Node buttonNode = dialogPane.lookupButton(btn);
+            if (buttonNode instanceof Button) {
+                ((Button) buttonNode).setPrefHeight(70);
+            }
+        }
 
         Node header = alert.getDialogPane().lookup(".header-panel");
         header.setOnMousePressed(event -> header.setOnMouseDragged(event1 -> {

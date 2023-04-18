@@ -21,16 +21,6 @@ public class Queen {
         return validMoves;
     }
 
-    public List<int[]> getValidMovesWhenCheck(int [] coords){
-        if(threatList == null){
-            return validMoves;
-        }
-        if(threatList.keySet().size() > 1){
-            return validMoves;
-        }
-        return validMoves;
-    }
-
     public void appendValidMoves(int row, int col){
         int [] targetRow = new int []{-1, 0, 1, 0, -1, 1, 1, -1};
         int [] targetCol = new int []{0, 1, 0, -1, 1, 1, -1, -1};

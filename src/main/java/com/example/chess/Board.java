@@ -57,7 +57,6 @@ public class Board {
             turn = 'w';
         }
     }
-
     public List<int[]> validMoves(int[] coords) {
         String type = getPiece(coords);
         char color = type.charAt(0);
@@ -92,42 +91,6 @@ public class Board {
             }
         }
     }
-
-    public List<int[]> validMovesWhenInCheck(int[] coords) {
-        String type = getPiece(coords);
-        char color = type.charAt(0);
-        type = type.substring(1);
-        switch (type) {
-            case "pawn" -> {
-                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates, threatList);
-                return pawn.getValidMovesWhenCheck(coords);
-            }
-            case "rook" -> {
-                Rook rook = new Rook(color, board, threatList);
-                return rook.getValidMovesWhenCheck(coords);
-            }
-            case "knight" -> {
-                Knight knight = new Knight(color, board, threatList);
-                return knight.getValidMovesWhenCheck(coords);
-            }
-            case "bishop" -> {
-                Bishop bishop = new Bishop(color, board, threatList);
-                return bishop.getValidMovesWhenCheck(coords);
-            }
-            case "queen" -> {
-                Queen queen = new Queen(color, board, threatList);
-                return queen.getValidMovesWhenCheck(coords);
-            }
-            case "king" -> {
-                King king = new King(color, board, castlingList, validOpponentMoves, threatList, getOpponentColor(), isCheck);
-                return king.getValidMoves(coords);
-            }
-            default -> {
-                return new ArrayList<>();
-            }
-        }
-    }
-
     public void updateCastlingVariables(int[] from, int[] to) {
         if (Arrays.equals(from, new int[]{0, 4}) && (!Arrays.equals(to, new int[]{0, 2}) || !Arrays.equals(to, new int[]{0, 6}))) {
             castlingList[0] = false;
