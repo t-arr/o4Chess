@@ -10,11 +10,16 @@ public class Queen {
     private List<int[]> validMoves = new ArrayList<>();
     private Map<int[], String> threatList;
     private boolean isCheck;
-    public Queen(char color, String [][] board, Map<int[], String> threatList, boolean isCheck){
+    private char opponentColor;
+    private int[] kingCoordinates;
+
+    public Queen(char color, String [][] board, Map<int[], String> threatList, boolean isCheck, char opponentColor, int [] kingCoordinates){
         this.color = color;
         this.board = board;
         this.threatList = threatList;
         this.isCheck = isCheck;
+        this.opponentColor = opponentColor;
+        this.kingCoordinates = kingCoordinates;
     }
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
@@ -39,9 +44,9 @@ public class Queen {
                 if(!isValidPosition(newRow, newCol)){
                     break;
                 }
-                if(getColor(newRow, newCol) == '-'){
+                if(getColor(newRow, newCol) == '-' && !leavesKingInCheck(row, col, newRow, newCol)){
                     validMoves.add(new int[]{newRow, newCol});
-                }else if (getColor(newRow, newCol) != color && getColor(newRow, newCol) != '-'){
+                }else if (getColor(newRow, newCol) != color && getColor(newRow, newCol) != '-' && !leavesKingInCheck(row, col, newRow, newCol)){
                     validMoves.add(new int[]{newRow, newCol});
                     break;
                 }else{
@@ -53,6 +58,51 @@ public class Queen {
 
     private boolean isValidPosition(int row, int col){
         return row >= 0 && row < 8 && col >= 0 && col < 8;
+    }
+
+    private boolean leavesKingInCheck(int x, int y, int newX, int newY) {
+        String temp = board[newX][newY];
+        board[newX][newY] = board[x][y];
+        board[x][y] = "-";
+        boolean inCheck = isKingInCheck();
+        board[x][y] = board[newX][newY];
+        board[newX][newY] = temp;
+        return inCheck;
+    }
+
+    private boolean isKingInCheck() {
+        int kingX = kingCoordinates[0];
+        int kingY = kingCoordinates[1];
+        int[][] bishopMoves = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+        int[][] rookMoves = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
+        int[][] queenMoves = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+        int[][][] slidingMoves = {bishopMoves, rookMoves, queenMoves};
+        for (int[][] moves : slidingMoves) {
+            for (int[] move : moves) {
+                int dx = move[0];
+                int dy = move[1];
+                int newX = kingX + dx;
+                int newY = kingY + dy;
+                while (newX >= 0 && newX < 8 && newY >= 0 && newY < 8) {
+                    String piece = board[newX][newY];
+                    if (!piece.equals("-")) {
+                        if (piece.startsWith(opponentColor + "b") && (dx != 0 && dy != 0)) {
+                            return true;
+                        }
+                        if (piece.startsWith(opponentColor + "r") && (dx == 0 || dy == 0)) {
+                            return true;
+                        }
+                        if (piece.startsWith(opponentColor + "q")) {
+                            return true;
+                        }
+                        break;
+                    }
+                    newX += dx;
+                    newY += dy;
+                }
+            }
+        }
+        return false;
     }
 
     public void appendValidMovesWhenCheck(int row, int col){

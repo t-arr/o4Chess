@@ -2,19 +2,11 @@
 
 
 .white-button{
-    /*-fx-background-color: #f5f5dd;
-    -fx-background-color: #f5f5dd;
-    -fx-background-color: #f5f5dd;
-    -fx-background-color: #f5f5dd;
-    -fx-background-color: #1bb3d8;*/
     -fx-background-color: #f5f5dd
 }
 
 .black-button{
     -fx-background-color: #dab36e;
-    /*-fx-background-color: #dab36e;
-    -fx-background-color: #dab36e;
-    -fx-background-color: #5c00f1;*/
 }
 
 .valid-move{
@@ -39,13 +31,3 @@
     -fx-border-style: solid;
     -fx-background-insets: 0;
 }
-
-/*.white-button:pressed, .black-button:pressed {
-    -fx-background-color: inherit;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-padding: 0;
-    -fx-border-color: black;
-    -fx-border-width: 1px;
-    -fx-border-style: solid;
-}*/
