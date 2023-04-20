@@ -80,7 +80,7 @@ public class King {
     }
 
 
-    private boolean isKingInCheck(int x, int y) {
+    public boolean isKingInCheck(int x, int y) {
         int kingX = x;
         int kingY = y;
         int[][] knightMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};

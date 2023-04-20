@@ -196,15 +196,13 @@ public class Board {
         return null;
     }
 
-    public boolean lookChecks(){
+  /*  public boolean lookChecks(){
         isCheck = false;
-        List<int []> singlePieceMoves = new ArrayList<>();
         threatList = new HashMap<>();
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
-                if(!board[i][j].equals("-") && board[i][j].charAt(0) == getOpponentColor()){
-                    singlePieceMoves.clear();
-                    singlePieceMoves.addAll(validMoves(new int[]{i, j}));
+                if(!board[i][j].equals("-") && board[i][j].charAt(0) == getOpponentColor() && !board[i][j].substring(1).equals("king")){
+                    List<int[]> singlePieceMoves = new ArrayList<>(validMoves(new int[]{i, j}));
                     for(int [] ar : singlePieceMoves){
                         if(Arrays.equals(ar, getKingCoordinates())){
                             isCheck = true;
@@ -215,5 +213,15 @@ public class Board {
             }
         }
         return isCheck;
+    }*/
+
+    public boolean lookForChecks(){
+        int [] kingCoordinates = getKingCoordinates();
+        int row = kingCoordinates[0];
+        int col = kingCoordinates[1];
+        char color = getTurn();
+        char oppColor = getOpponentColor();
+        King k = new King(color, board, castlingList, threatList, oppColor, false);
+        return k.isKingInCheck(row, col);
     }
 }
