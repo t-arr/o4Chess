@@ -8,7 +8,6 @@ import java.util.Map;
 public class Knight {
     private char color;
     private String [][] board;
-    private String [][] copyBoard;
     private List<int[]> validMoves = new ArrayList<>();
     private Map<int[], String> threatList;
     private boolean isCheck;
