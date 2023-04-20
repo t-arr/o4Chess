@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class King {
     private char color;
-    private String [][] board;
-    private boolean [] castlingList;
+    private String[][] board;
+    private boolean[] castlingList;
     private List<int[]> validMoves = new ArrayList<>();
     private List<int[]> validOpponentMoves;
     private Map<int[], String> threatList;
@@ -16,7 +16,7 @@ public class King {
     private boolean isCheck;
 
 
-    public King(char color, String [][] board, boolean [] castlingList, Map<int[], String> threatList, char opponentColor, boolean isCheck){
+    public King(char color, String[][] board, boolean[] castlingList, Map<int[], String> threatList, char opponentColor, boolean isCheck) {
         this.color = color;
         this.board = board;
         this.castlingList = castlingList;
@@ -25,11 +25,11 @@ public class King {
         this.isCheck = isCheck;
     }
 
-    public List<int[]> getValidMoves(int [] coords){
+    public List<int[]> getValidMoves(int[] coords) {
         int row = coords[0];
         int col = coords[1];
         addValidMoves(row, col);
-        if(!isCheck){
+        if (!isCheck) {
             appendCastlingMoves();
         }
         return validMoves;
@@ -126,11 +126,8 @@ public class King {
     }
 
 
-
-
-
     private boolean isNotSteppingToPawnCheck(int row, int col) {
-        if(color == 'b' && row + 1 < 8 && col - 1 >= 0 && col + 1 < 8){
+        if (color == 'b' && row + 1 < 8 && col - 1 >= 0 && col + 1 < 8) {
             return !board[row + 1][col - 1].equals("wpawn") && !board[row + 1][col + 1].equals("wpawn");
         }
         if (color == 'w' && row - 1 >= 0 && col - 1 >= 0 && col + 1 < 8) {
@@ -151,13 +148,13 @@ public class King {
         return true;
     }
 
-    private boolean isNotSteppingToKingCheck(int row, int col){
+    private boolean isNotSteppingToKingCheck(int row, int col) {
         double firstDistance = calculateDistance(0, 0, 1, 1);
         double secondDistance = calculateDistance(0, 0, 0, 1);
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if(calculateDistance(row, col, i, j) == firstDistance || calculateDistance(row, col, i, j) == secondDistance){
-                    if(board[i][j].substring(1).equals("king") && color != board[i][j].charAt(0)){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (calculateDistance(row, col, i, j) == firstDistance || calculateDistance(row, col, i, j) == secondDistance) {
+                    if (board[i][j].substring(1).equals("king") && color != board[i][j].charAt(0)) {
                         return false;
                     }
                 }
@@ -174,34 +171,35 @@ public class King {
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 
-    private void appendCastlingMoves(){
-        if(color == 'b'){
-            if(castlingList[0]){
-                if(board[0][1].equals("-") && board[0][2].equals("-") && board[0][3].equals("-") && !leavesCastledInCheck(0, 4, 0, 2, 0, 0, 0, 3)){
+    private void appendCastlingMoves() {
+        System.out.println(isCheck);
+        if (color == 'b') {
+            if (castlingList[0]) {
+                if (board[0][1].equals("-") && board[0][2].equals("-") && board[0][3].equals("-") && !leavesCastledInCheck(0, 4, 0, 2, 0, 0, 0, 3)) {
                     validMoves.add(new int[]{0, 2});
                 }
             }
-            if (castlingList[1]){
-                if(board[0][6].equals("-") && board[0][5].equals("-") && !leavesCastledInCheck(0, 4, 0, 6, 0, 7, 0, 5)){
+            if (castlingList[1]) {
+                if (board[0][6].equals("-") && board[0][5].equals("-") && !leavesCastledInCheck(0, 4, 0, 6, 0, 7, 0, 5)) {
                     validMoves.add(new int[]{0, 6});
                 }
             }
-        }else{
-            if(castlingList[2]){
-                if(board[7][1].equals("-") && board[7][2].equals("-") && board[7][3].equals("-") && !leavesCastledInCheck(7, 4, 7, 2, 7, 0, 7, 3)){
+        } else {
+            if (castlingList[2]) {
+                if (board[7][1].equals("-") && board[7][2].equals("-") && board[7][3].equals("-") && !leavesCastledInCheck(7, 4, 7, 2, 7, 0, 7, 3)) {
                     validMoves.add(new int[]{7, 2});
                 }
             }
-            if (castlingList[3]){
-                if(board[7][6].equals("-") && board[7][5].equals("-") && !leavesCastledInCheck(7, 4, 7, 6, 7, 7, 7, 5)){
+            if (castlingList[3]) {
+                if (board[7][6].equals("-") && board[7][5].equals("-") && !leavesCastledInCheck(7, 4, 7, 6, 7, 7, 7, 5)) {
                     validMoves.add(new int[]{7, 6});
                 }
             }
         }
     }
 
-    private char getColor(int row, int col){
-        if(board[row][col].equals("-")){
+    private char getColor(int row, int col) {
+        if (board[row][col].equals("-")) {
             return 'n';
         }
         String color = board[row][col];

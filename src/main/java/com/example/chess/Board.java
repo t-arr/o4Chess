@@ -222,6 +222,7 @@ public class Board {
         char color = getTurn();
         char oppColor = getOpponentColor();
         King k = new King(color, board, castlingList, threatList, oppColor, false);
-        return k.isKingInCheck(row, col);
+        isCheck = k.isKingInCheck(row, col);
+        return isCheck;
     }
 }
