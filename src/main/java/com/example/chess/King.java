@@ -1,7 +1,6 @@
 package com.example.chess;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ public class King {
     private String[][] board;
     private boolean[] castlingList;
     private List<int[]> validMoves = new ArrayList<>();
-    private List<int[]> validOpponentMoves;
     private Map<int[], String> threatList;
     private char opponentColor;
     private boolean isCheck;
@@ -42,9 +40,6 @@ public class King {
             int newRow = row + targetRow[i];
             int newCol = col + targetCol[i];
             if (isValidPosition(newRow, newCol)) {
-                if (isCheck) {
-                    break;
-                }
                 if (isNotSteppingToPawnCheck(newRow, newCol) && isNotSteppingToKingCheck(newRow, newCol) && !leavesKingInCheck(row, col, newRow, newCol)) {
                     if (board[newRow][newCol].equals("-") || getColor(newRow, newCol) != color) {
                         validMoves.add(new int[]{newRow, newCol});
@@ -83,6 +78,19 @@ public class King {
     public boolean isKingInCheck(int x, int y) {
         int kingX = x;
         int kingY = y;
+
+        int pawnDir = color == 'w' ? -1 : 1;
+        int[][] pawnMoves = {{pawnDir, -1}, {pawnDir, 1}};
+        for (int[] move : pawnMoves) {
+            int dx = move[0];
+            int dy = move[1];
+            int newX = kingX + dx;
+            int newY = kingY + dy;
+            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "pa")) {
+                return true;
+            }
+        }
+
         int[][] knightMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
         for (int[] move : knightMoves) {
             int dx = move[0];
