@@ -180,7 +180,6 @@ public class King {
     }
 
     private void appendCastlingMoves() {
-        System.out.println(isCheck);
         if (color == 'b') {
             if (castlingList[0]) {
                 if (board[0][1].equals("-") && board[0][2].equals("-") && board[0][3].equals("-") && !leavesCastledInCheck(0, 4, 0, 2, 0, 0, 0, 3)) {

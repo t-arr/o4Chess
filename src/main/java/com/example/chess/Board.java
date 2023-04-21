@@ -8,9 +8,8 @@ public class Board {
     private boolean[] castlingList;
     private boolean validEnPassant;
     private int[] enPassantCoordinates = new int[]{0, 0};
-    private List<int[]> validOpponentMoves;
     private boolean isCheck = false;
-    private Map<int [], String> threatList;
+    private Map<int[], String> threatList;
 
     public Board() {
         this.board = new String[][]{{"brook", "bknight", "bbishop", "bqueen", "bking", "bbishop", "bknight", "brook"},
@@ -43,10 +42,11 @@ public class Board {
         return turn;
     }
 
-    public void setBoard (String[][] board){
+    public void setBoard(String[][] board) {
         this.board = board;
     }
-    public void setTurn(char turn){
+
+    public void setTurn(char turn) {
         this.turn = turn;
     }
 
@@ -64,6 +64,7 @@ public class Board {
             turn = 'w';
         }
     }
+
     public List<int[]> validMoves(int[] coords) {
         String type = getPiece(coords);
         char color = type.charAt(0);
@@ -99,6 +100,7 @@ public class Board {
             }
         }
     }
+
     public void updateCastlingVariables(int[] from, int[] to) {
         if (Arrays.equals(from, new int[]{0, 4}) && (!Arrays.equals(to, new int[]{0, 2}) || !Arrays.equals(to, new int[]{0, 6}))) {
             castlingList[0] = false;
@@ -195,8 +197,8 @@ public class Board {
         return null;
     }
 
-    public boolean lookForChecks(){
-        int [] kingCoordinates = getKingCoordinates();
+    public boolean lookForChecks() {
+        int[] kingCoordinates = getKingCoordinates();
         int row = kingCoordinates[0];
         int col = kingCoordinates[1];
         char color = getTurn();
@@ -204,5 +206,22 @@ public class Board {
         King k = new King(color, board, castlingList, threatList, oppColor, false);
         isCheck = k.isKingInCheck(row, col);
         return isCheck;
+    }
+
+    public String isGameOver() {
+        System.out.println(getOpponentColor());
+        List<int[]> validOpponentMoves = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                int[] coordinates = new int[]{i, j};
+                if (getPiece(coordinates).charAt(0) == getTurn() && !board[i][j].equals("-")) {
+                    validOpponentMoves.addAll(validMoves(coordinates));
+                }
+            }
+            if (validOpponentMoves.isEmpty() && isCheck) {
+                return "shakkimatti";
+            }
+        }
+        return "";
     }
 }
