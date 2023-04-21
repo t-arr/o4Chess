@@ -26,11 +26,7 @@ public class Rook {
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
-        if(isCheck){
-            appendValidMovesWhenCheck(row, col);
-        }else{
-            appendValidMoves(row, col);
-        }
+        appendValidMoves(row, col);
         return validMoves;
     }
 
@@ -46,9 +42,9 @@ public class Rook {
                 if(!isValidPosition(newRow, newCol)){
                     break;
                 }
-                if(getColor(newRow, newCol) == '-' && !leavesKingInCheck(row, col, newRow, newCol)){
+                if(getColor(newRow, newCol) == '-'){
                     validMoves.add(new int[]{newRow, newCol});
-                }else if (getColor(newRow, newCol) != color && getColor(newRow, newCol) != '-' && !leavesKingInCheck(row, col, newRow, newCol)){
+                }else if (getColor(newRow, newCol) != color && getColor(newRow, newCol) != '-'){
                     validMoves.add(new int[]{newRow, newCol});
                     break;
                 }else{
@@ -56,6 +52,13 @@ public class Rook {
                 }
             }
         }
+        List<int[]> movesToRemove = new ArrayList<>();
+        for (int[] move : validMoves) {
+            if (leavesKingInCheck(row, col, move[0], move[1])) {
+                movesToRemove.add(move);
+            }
+        }
+        validMoves.removeAll(movesToRemove);
     }
 
     private boolean isValidPosition(int row, int col){
@@ -75,6 +78,28 @@ public class Rook {
     private boolean isKingInCheck() {
         int kingX = kingCoordinates[0];
         int kingY = kingCoordinates[1];
+        int pawnDir = color == 'w' ? -1 : 1;
+        int[][] pawnMoves = {{pawnDir, -1}, {pawnDir, 1}};
+        for (int[] move : pawnMoves) {
+            int dx = move[0];
+            int dy = move[1];
+            int newX = kingX + dx;
+            int newY = kingY + dy;
+            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "pa")) {
+                return true;
+            }
+        }
+
+        int[][] knightMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
+        for (int[] move : knightMoves) {
+            int dx = move[0];
+            int dy = move[1];
+            int newX = kingX + dx;
+            int newY = kingY + dy;
+            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "kn")) {
+                return true;
+            }
+        }
         int[][] bishopMoves = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
         int[][] rookMoves = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
         int[][] queenMoves = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};

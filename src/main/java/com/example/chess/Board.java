@@ -95,7 +95,6 @@ public class Board {
                 return king.getValidMoves(coords);
             }
             default -> {
-                System.out.println("how did we end up here?");
                 return new ArrayList<>();
             }
         }
@@ -195,25 +194,6 @@ public class Board {
         }
         return null;
     }
-
-  /*  public boolean lookChecks(){
-        isCheck = false;
-        threatList = new HashMap<>();
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                if(!board[i][j].equals("-") && board[i][j].charAt(0) == getOpponentColor() && !board[i][j].substring(1).equals("king")){
-                    List<int[]> singlePieceMoves = new ArrayList<>(validMoves(new int[]{i, j}));
-                    for(int [] ar : singlePieceMoves){
-                        if(Arrays.equals(ar, getKingCoordinates())){
-                            isCheck = true;
-                            threatList.put(new int[]{i, j}, board[i][j].substring(1));
-                        }
-                    }
-                }
-            }
-        }
-        return isCheck;
-    }*/
 
     public boolean lookForChecks(){
         int [] kingCoordinates = getKingCoordinates();

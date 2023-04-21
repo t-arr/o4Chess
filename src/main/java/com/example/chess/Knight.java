@@ -37,13 +37,7 @@ public class Knight {
             int newRow = row + targetRow[i];
             int newCol = col + targetCol[i];
             if (isValidPosition(newRow, newCol)) {
-                if (isCheck) {
-                    if (shouldBreak()) {
-                        break;
-                    }
-                    appendValidMovesWhenCheck(newRow, newCol, row, col);
-                }
-                if (board[newRow][newCol].charAt(0) != color && !isCheck && !leavesKingInCheck(row, col, newRow, newCol)) {
+                if (board[newRow][newCol].charAt(0) != color && !leavesKingInCheck(row, col, newRow, newCol)) {
                     validMoves.add(new int[]{newRow, newCol});
                 }
             }
@@ -63,6 +57,28 @@ public class Knight {
     private boolean isKingInCheck() {
         int kingX = kingCoordinates[0];
         int kingY = kingCoordinates[1];
+        int pawnDir = color == 'w' ? -1 : 1;
+        int[][] pawnMoves = {{pawnDir, -1}, {pawnDir, 1}};
+        for (int[] move : pawnMoves) {
+            int dx = move[0];
+            int dy = move[1];
+            int newX = kingX + dx;
+            int newY = kingY + dy;
+            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "pa")) {
+                return true;
+            }
+        }
+
+        int[][] knightMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
+        for (int[] move : knightMoves) {
+            int dx = move[0];
+            int dy = move[1];
+            int newX = kingX + dx;
+            int newY = kingY + dy;
+            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "kn")) {
+                return true;
+            }
+        }
         int[][] bishopMoves = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
         int[][] rookMoves = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
         int[][] queenMoves = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};

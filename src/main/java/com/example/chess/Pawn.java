@@ -28,22 +28,15 @@ public class Pawn{
 
     }
 
-    public Pawn(char color, String [][] board, Map<int[], String> threatList){
-        this.color = color;
-        this.board = board;
-        this.enPassant = false;
-        this.threatList = threatList;
-    }
-
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
         int direction = (color == 'b') ? 1 : -1;
 
-        if (board[row+direction][col].equals("-") && !leavesKingInCheck(row, col, row+direction, col)) {
+        if (board[row+direction][col].equals("-")) {
             validMoves.add(new int[]{row+direction, col});
             if ((row == 1 && direction == 1) || (row == 6 && direction == -1)) {
-                if (board[row+2*direction][col].equals("-") && !leavesKingInCheck(row, col, row+2*direction, col)) {
+                if (board[row+2*direction][col].equals("-")) {
                     validMoves.add(new int[]{row+2*direction, col});
                 }
             }
@@ -52,10 +45,17 @@ public class Pawn{
         for (int i = -1; i <= 1; i += 2) {
             int newCol = col + i;
             if (newCol < 0 || newCol > 7) continue;
-            if (!board[row+direction][newCol].equals("-") && getColor(row+direction, newCol) != color && !leavesKingInCheck(row, col, row+direction, newCol)) {
+            if (!board[row+direction][newCol].equals("-") && getColor(row+direction, newCol) != color) {
                 validMoves.add(new int[]{row+direction, newCol});
             }
         }
+        List<int[]> movesToRemove = new ArrayList<>();
+        for (int[] move : validMoves) {
+            if (leavesKingInCheck(row, col, move[0], move[1])) {
+                movesToRemove.add(move);
+            }
+        }
+        validMoves.removeAll(movesToRemove);
 
         addValidEnPassant(row, col);
         return validMoves;
@@ -105,6 +105,28 @@ public class Pawn{
     private boolean isKingInCheck() {
         int kingX = kingCoordinates[0];
         int kingY = kingCoordinates[1];
+        int pawnDir = color == 'w' ? -1 : 1;
+        int[][] pawnMoves = {{pawnDir, -1}, {pawnDir, 1}};
+        for (int[] move : pawnMoves) {
+            int dx = move[0];
+            int dy = move[1];
+            int newX = kingX + dx;
+            int newY = kingY + dy;
+            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "pa")) {
+                return true;
+            }
+        }
+
+        int[][] knightMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
+        for (int[] move : knightMoves) {
+            int dx = move[0];
+            int dy = move[1];
+            int newX = kingX + dx;
+            int newY = kingY + dy;
+            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "kn")) {
+                return true;
+            }
+        }
         int[][] bishopMoves = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
         int[][] rookMoves = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
         int[][] queenMoves = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
