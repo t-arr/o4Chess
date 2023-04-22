@@ -9,14 +9,12 @@ public class Knight {
     private char color;
     private String [][] board;
     private List<int[]> validMoves = new ArrayList<>();
-    private boolean isCheck;
     private int[] kingCoordinates;
     private char opponentColor;
 
-    public Knight(char color, String [][] board, boolean isCheck, int [] kingCoordinates, char opponentColor){
+    public Knight(char color, String [][] board, char opponentColor, int [] kingCoordinates){
         this.color = color;
         this.board = board;
-        this.isCheck = isCheck;
         this.kingCoordinates = kingCoordinates;
         this.opponentColor = opponentColor;
     }

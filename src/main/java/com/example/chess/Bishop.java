@@ -9,14 +9,12 @@ public class Bishop {
     private char color;
     private String[][] board;
     private List<int[]> validMoves = new ArrayList<>();
-    private boolean isCheck;
     private char opponentColor;
     private int[] kingCoordinates;
 
-    public Bishop(char color, String[][] board, boolean isCheck, char opponentColor, int[] kingCoordinates) {
+    public Bishop(char color, String[][] board, char opponentColor, int[] kingCoordinates) {
         this.color = color;
         this.board = board;
-        this.isCheck = isCheck;
         this.opponentColor = opponentColor;
         this.kingCoordinates = kingCoordinates;
     }

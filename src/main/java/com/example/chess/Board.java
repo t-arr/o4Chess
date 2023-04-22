@@ -71,23 +71,23 @@ public class Board {
         type = type.substring(1);
         switch (type) {
             case "pawn" -> {
-                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates, isCheck, opponentColor, getKingCoordinates());
+                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates, opponentColor, getKingCoordinates());
                 return pawn.getValidMoves(coords);
             }
             case "rook" -> {
-                Rook rook = new Rook(color, board, isCheck, opponentColor, getKingCoordinates());
+                Rook rook = new Rook(color, board, opponentColor, getKingCoordinates());
                 return rook.getValidMoves(coords);
             }
             case "knight" -> {
-                Knight knight = new Knight(color, board, isCheck, getKingCoordinates(), opponentColor);
+                Knight knight = new Knight(color, board, opponentColor, getKingCoordinates());
                 return knight.getValidMoves(coords);
             }
             case "bishop" -> {
-                Bishop bishop = new Bishop(color, board, isCheck, opponentColor, getKingCoordinates());
+                Bishop bishop = new Bishop(color, board, opponentColor, getKingCoordinates());
                 return bishop.getValidMoves(coords);
             }
             case "queen" -> {
-                Queen queen = new Queen(color, board, isCheck, opponentColor, getKingCoordinates());
+                Queen queen = new Queen(color, board, opponentColor, getKingCoordinates());
                 return queen.getValidMoves(coords);
             }
             case "king" -> {

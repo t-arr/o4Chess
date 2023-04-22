@@ -1,10 +1,7 @@
 package com.example.chess;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -14,7 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.util.Arrays;
@@ -106,7 +102,6 @@ public class chessController {
                 board.swapTurn();
                 inCheck = board.lookForChecks();
                 String gameState = board.isGameOver();
-                System.out.println(board.isGameOver());
                 if(gameState.equals("checkmate") || gameState.equals("stalemate") || gameState.equals("insufficient material")){
                     displayGameOver(gameState);
                 }

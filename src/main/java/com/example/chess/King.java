@@ -2,7 +2,6 @@ package com.example.chess;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class King {
     private char color;
@@ -155,12 +154,13 @@ public class King {
     }
 
     private boolean isNotSteppingToKingCheck(int row, int col) {
-        double firstDistance = calculateDistance(0, 0, 1, 1);
-        double secondDistance = calculateDistance(0, 0, 0, 1);
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (calculateDistance(row, col, i, j) == firstDistance || calculateDistance(row, col, i, j) == secondDistance) {
-                    if (board[i][j].substring(1).equals("king") && color != board[i][j].charAt(0)) {
+        int[] offsets = {-1, 0, 1};
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int newRow = row + offsets[i];
+                int newCol = col + offsets[j];
+                if (isValidPosition(newRow, newCol) && (newRow != row || newCol != col)) {
+                    if (board[newRow][newCol].substring(1).equals("king") && color != board[newRow][newCol].charAt(0)) {
                         return false;
                     }
                 }
@@ -168,11 +168,6 @@ public class King {
         }
         return true;
     }
-
-    private double calculateDistance(double firstX, double firstY, double secondX, double secondY) {
-        return Math.sqrt(Math.pow((secondX - firstX), 2) + Math.pow((secondY - firstY), 2));
-    }
-
     private boolean isValidPosition(int row, int col) {
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
