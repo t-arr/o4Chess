@@ -34,6 +34,13 @@ public class MainMenuController {
             }
         } else if (btnId.equalsIgnoreCase("rules")) {
             hostServices.showDocument("https://en.wikipedia.org/wiki/Rules_of_chess");
+         } else if (btnId.equalsIgnoreCase("help")) {
+            Alert alerti = new Alert(AlertType.INFORMATION);
+            alerti.setTitle("Help");
+            alerti.setHeaderText("Tietoa pelistä perkele");
+            alerti.setContentText("Esimerkki erkki ISMO ISMO ISÄ SSDAD ADASDASDH HH HHH H HH HHHHHH HHHHHHASD AS DASDASD A ");
+            Optional<ButtonType> result = alerti.showAndWait();
+            System.out.println("PinkPinsk");
         }else{
             FXMLLoader loader = new FXMLLoader(getClass().getResource(btnId + "-view.fxml"));
             Parent root = loader.load();

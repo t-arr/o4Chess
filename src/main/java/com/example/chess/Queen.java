@@ -8,15 +8,14 @@ public class Queen {
     private char color;
     private String [][] board;
     private List<int[]> validMoves = new ArrayList<>();
-    private Map<int[], String> threatList;
+
     private boolean isCheck;
     private char opponentColor;
     private int[] kingCoordinates;
 
-    public Queen(char color, String [][] board, Map<int[], String> threatList, boolean isCheck, char opponentColor, int [] kingCoordinates){
+    public Queen(char color, String [][] board, boolean isCheck, char opponentColor, int [] kingCoordinates){
         this.color = color;
         this.board = board;
-        this.threatList = threatList;
         this.isCheck = isCheck;
         this.opponentColor = opponentColor;
         this.kingCoordinates = kingCoordinates;
@@ -128,12 +127,6 @@ public class Queen {
             }
         }
         return false;
-    }
-
-    public void appendValidMovesWhenCheck(int row, int col){
-        if (threatList.keySet().size() > 1){
-            return;
-        }
     }
 
     private char getColor(int row, int col){
