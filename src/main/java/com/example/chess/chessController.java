@@ -199,7 +199,7 @@ public class chessController {
         }else if (playerWon == 'b' && state.equals("checkmate")){
             playerColor = "black";
             alert.setHeaderText(playerColor + " won by checkmate");
-        } else if (state.equals("draw") || state.equals("stalemate")) {
+        } else if (state.equals("insufficient material") || state.equals("stalemate")) {
             alert.setHeaderText("Draw by " + state);
         }
 

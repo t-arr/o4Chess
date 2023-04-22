@@ -210,11 +210,12 @@ public class Board {
     public String isGameOver() {
         boolean isDraw = true;
         List<int[]> validOpponentMoves = new ArrayList<>();
+        List<String> piecesOnBoard = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 int[] coordinates = new int[]{i, j};
-                if(!getPiece(coordinates).substring(1).equals("king") || board[i][j].equals("-")){
-                    isDraw = false;
+                if(!board[i][j].equals("-")){
+                    piecesOnBoard.add(board[i][j]);
                 }
                 if (getPiece(coordinates).charAt(0) == getTurn() && !board[i][j].equals("-")) {
                     validOpponentMoves.addAll(validMoves(coordinates));
@@ -223,6 +224,12 @@ public class Board {
         }
         if (validOpponentMoves.isEmpty() && isCheck) {
             return "checkmate";
+        }
+        for(String piece : piecesOnBoard){
+            if (!piece.equals("wking") && !piece.equals("bking")) {
+                isDraw = false;
+                break;
+            }
         }
         if (validOpponentMoves.isEmpty()) {
             return "stalemate";
