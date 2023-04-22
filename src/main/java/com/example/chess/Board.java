@@ -209,18 +209,27 @@ public class Board {
     }
 
     public String isGameOver() {
-        System.out.println(getOpponentColor());
+        boolean isDraw = true;
         List<int[]> validOpponentMoves = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 int[] coordinates = new int[]{i, j};
+                if(!getPiece(coordinates).substring(1).equals("king") || board[i][j].equals("-")){
+                    isDraw = false;
+                }
                 if (getPiece(coordinates).charAt(0) == getTurn() && !board[i][j].equals("-")) {
                     validOpponentMoves.addAll(validMoves(coordinates));
                 }
             }
-            if (validOpponentMoves.isEmpty() && isCheck) {
-                return "shakkimatti";
-            }
+        }
+        if (validOpponentMoves.isEmpty() && isCheck) {
+            return "checkmate";
+        }
+        if (validOpponentMoves.isEmpty()) {
+            return "stalemate";
+        }
+        if(isDraw){
+            return "insufficient material";
         }
         return "";
     }

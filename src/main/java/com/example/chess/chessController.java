@@ -1,7 +1,10 @@
 package com.example.chess;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -11,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.util.Arrays;
@@ -19,7 +23,7 @@ import java.util.Optional;
 
 public class chessController {
 
-    private final Board BOARD = new Board();
+    private Board board = new Board();
     @FXML
     private GridPane boardGrid;
     private Button prevButton = null;
@@ -48,7 +52,7 @@ public class chessController {
     }
 
     private void drawImages(Button button, int row, int col) {
-        String[][] state = BOARD.getBoard();
+        String[][] state = board.getBoard();
 
         if (state[row][col].equals("-")) {
             button.setGraphic(null);
@@ -65,18 +69,18 @@ public class chessController {
     private void handleButtonClick(Button button) {
         int[] clickedButton = new int[]{GridPane.getRowIndex(button), GridPane.getColumnIndex(button)};
         if (prevButton == null) {
-            if(BOARD.getPiece(clickedButton).equals("-") || BOARD.getTurn() != BOARD.getPiece(clickedButton).charAt(0)){
+            if(board.getPiece(clickedButton).equals("-") || board.getTurn() != board.getPiece(clickedButton).charAt(0)){
                 return;
             }
-            List<int[]> validMoves = BOARD.validMoves(clickedButton);
+            List<int[]> validMoves = board.validMoves(clickedButton);
             prevButton = button;
             for(int[] validCoords : validMoves){
                 displayValidMoves(validCoords[0], validCoords[1]);
             }
         } else {
             int [] previousClick = new int[]{GridPane.getRowIndex(prevButton), GridPane.getColumnIndex(prevButton)};
-            List<int[]> validMoves = BOARD.validMoves(previousClick);
-            if(BOARD.getPiece(clickedButton).charAt(0) == BOARD.getTurn() && !Arrays.equals(previousClick, clickedButton)){
+            List<int[]> validMoves = board.validMoves(previousClick);
+            if(board.getPiece(clickedButton).charAt(0) == board.getTurn() && !Arrays.equals(previousClick, clickedButton)){
                 prevButton = null;
                 updateBoardGUI();
                 handleButtonClick(button);
@@ -85,13 +89,13 @@ public class chessController {
             boolean isValidMove = false;
             for(int [] validCoords : validMoves){
                 if(validCoords[0] == clickedButton[0] && validCoords[1] == clickedButton[1]){
-                    BOARD.setEnPassant(previousClick, clickedButton);
-                    if(BOARD.isPromotion(previousClick, clickedButton)){
+                    board.setEnPassant(previousClick, clickedButton);
+                    if(board.isPromotion(previousClick, clickedButton)){
                         showPromotionOptions(previousClick, clickedButton);
-                    }else if(BOARD.isMoveEnPassant(previousClick, clickedButton)){
-                        BOARD.swapEnPassant(previousClick, clickedButton);
+                    }else if(board.isMoveEnPassant(previousClick, clickedButton)){
+                        board.swapEnPassant(previousClick, clickedButton);
                     }else{
-                        BOARD.swap(previousClick, clickedButton);
+                        board.swap(previousClick, clickedButton);
                     }
                     updateBoardGUI();
                     isValidMove = true;
@@ -99,11 +103,15 @@ public class chessController {
                 }
             }
             if(isValidMove){
-                BOARD.swapTurn();
-                inCheck = BOARD.lookForChecks();
-                System.out.println(BOARD.isGameOver());
-                BOARD.updateCastlingVariables(previousClick, clickedButton);
-                BOARD.castle(previousClick, clickedButton);
+                board.swapTurn();
+                inCheck = board.lookForChecks();
+                String gameState = board.isGameOver();
+                System.out.println(board.isGameOver());
+                if(gameState.equals("checkmate") || gameState.equals("stalemate") || gameState.equals("insufficient material")){
+                    displayGameOver(gameState);
+                }
+                board.updateCastlingVariables(previousClick, clickedButton);
+                board.castle(previousClick, clickedButton);
             }
             updateBoardGUI();
             prevButton = null;
@@ -168,13 +176,59 @@ public class chessController {
 
         result.ifPresent(buttonType -> {
             if (buttonType == queenButton) {
-                BOARD.swapPromotion(from, to, "queen");
+                board.swapPromotion(from, to, "queen");
             } else if (buttonType == rookButton) {
-                BOARD.swapPromotion(from, to, "rook");
+                board.swapPromotion(from, to, "rook");
             } else if (buttonType == bishopButton) {
-                BOARD.swapPromotion(from, to, "bishop");
+                board.swapPromotion(from, to, "bishop");
             } else if (buttonType == knightButton) {
-                BOARD.swapPromotion(from, to, "knight");
+                board.swapPromotion(from, to, "knight");
+            }
+        });
+    }
+
+    public void displayGameOver(String state){
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.initStyle(StageStyle.DECORATED);
+        alert.setTitle("Game Over");
+        char playerWon = board.getOpponentColor();
+        String playerColor;
+        if(playerWon == 'w' && state.equals("checkmate")){
+            playerColor = "white";
+            alert.setHeaderText(playerColor + " won by checkmate");
+        }else if (playerWon == 'b' && state.equals("checkmate")){
+            playerColor = "black";
+            alert.setHeaderText(playerColor + " won by checkmate");
+        } else if (state.equals("draw") || state.equals("stalemate")) {
+            alert.setHeaderText("Draw by " + state);
+        }
+
+        ButtonType newGame = new ButtonType("New game");
+        ButtonType mainMenu = new ButtonType("Back to menu");
+        alert.getButtonTypes().setAll(newGame, mainMenu);
+        List<ButtonType> allButtons = alert.getButtonTypes();
+        DialogPane dialogPane = alert.getDialogPane();
+
+        for (ButtonType btn : allButtons){
+            Node buttonNode = dialogPane.lookupButton(btn);
+            if (buttonNode instanceof Button) {
+                ((Button) buttonNode).setPrefHeight(30);
+            }
+        }
+
+        Node header = alert.getDialogPane().lookup(".header-panel");
+        header.setOnMousePressed(event -> header.setOnMouseDragged(event1 -> {
+            alert.setX(event1.getScreenX() - event.getSceneX());
+            alert.setY(event1.getScreenY() - event.getSceneY());
+        }));
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        result.ifPresent(buttonType -> {
+            if (buttonType == newGame) {
+                board = new Board();
+            } else if (buttonType == mainMenu) {
+                System.out.println("pinkkupinsku");
             }
         });
     }
