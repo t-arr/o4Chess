@@ -9,10 +9,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -35,11 +37,12 @@ public class MainMenuController {
         } else if (btnId.equalsIgnoreCase("rules")) {
             hostServices.showDocument("https://en.wikipedia.org/wiki/Rules_of_chess");
          } else if (btnId.equalsIgnoreCase("help")) {
-            Alert alerti = new Alert(AlertType.INFORMATION);
-            alerti.setTitle("Help");
-            alerti.setHeaderText("Tietoa pelistä perkele");
-            alerti.setContentText("Esimerkki erkki ISMO ISMO ISÄ SSDAD ADASDASDH HH HHH H HH HHHHHH HHHHHHASD AS DASDASD A ");
-            Optional<ButtonType> result = alerti.showAndWait();
+            Popup popup = new Popup();
+            Label label = new Label("This is a Popup");
+            label.setStyle(" -fx-background-color: white;");
+            popup.getContent().add(label);
+            label.setMinWidth(80);
+            label.setMinHeight(50);
             System.out.println("PinkPinsk");
         }else{
             FXMLLoader loader = new FXMLLoader(getClass().getResource(btnId + "-view.fxml"));
