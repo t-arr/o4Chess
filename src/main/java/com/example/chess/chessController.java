@@ -75,7 +75,7 @@ public class chessController {
             List<int[]> validMoves = board.validMoves(clickedButton);
             prevButton = button;
             for(int[] validCoords : validMoves){
-                displayValidMoves(validCoords[0], validCoords[1], board.getPiece(clickedButton));
+                displayValidMoves(validCoords[0], validCoords[1], board.getPiece(clickedButton), clickedButton);
             }
         } else {
             int [] previousClick = new int[]{GridPane.getRowIndex(prevButton), GridPane.getColumnIndex(prevButton)};
@@ -127,7 +127,7 @@ public class chessController {
             }
         }
     }
-    private void displayValidMoves(int validRow, int validCol, String type) {
+    private void displayValidMoves(int validRow, int validCol, String type, int [] coordinates) {
         for (Node node : boardGrid.getChildren()) {
             if (node instanceof Button button) {
                 int row = GridPane.getRowIndex(button);
@@ -138,13 +138,19 @@ public class chessController {
                         stackPane.getChildren().addAll(button.getGraphic(), new Circle(10, 10, 10, Color.RED));
                         button.setGraphic(stackPane);
                     } else {
-                        Circle circle = new Circle(10, 10, 10, Color.RED);
+                        Circle circle;
+                        if(type.substring(1).equals("king") && Math.abs(validCol-coordinates[1]) == 2){
+                                circle = new Circle(10, 10, 10, Color.BLUE);
+                        }else{
+                            circle = new Circle(10, 10, 10, Color.RED);
+                        }
                         button.setGraphic(circle);
                     }
                 }
             }
         }
     }
+
     public void showPromotionOptions(int [] from, int [] to){
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.initStyle(StageStyle.UNDECORATED);
