@@ -75,7 +75,7 @@ public class chessController {
             List<int[]> validMoves = board.validMoves(clickedButton);
             prevButton = button;
             for(int[] validCoords : validMoves){
-                displayValidMoves(validCoords[0], validCoords[1], BOARD.getPiece(clickedButton));
+                displayValidMoves(validCoords[0], validCoords[1], board.getPiece(clickedButton));
             }
         } else {
             int [] previousClick = new int[]{GridPane.getRowIndex(prevButton), GridPane.getColumnIndex(prevButton)};
