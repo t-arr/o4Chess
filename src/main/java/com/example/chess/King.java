@@ -9,16 +9,14 @@ public class King {
     private String[][] board;
     private boolean[] castlingList;
     private List<int[]> validMoves = new ArrayList<>();
-    private Map<int[], String> threatList;
     private char opponentColor;
     private boolean isCheck;
 
 
-    public King(char color, String[][] board, boolean[] castlingList, Map<int[], String> threatList, char opponentColor, boolean isCheck) {
+    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck) {
         this.color = color;
         this.board = board;
         this.castlingList = castlingList;
-        this.threatList = threatList;
         this.opponentColor = opponentColor;
         this.isCheck = isCheck;
     }

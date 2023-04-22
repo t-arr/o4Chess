@@ -10,14 +10,12 @@ public class Rook {
     private String [][] board;
     private List<int[]> validMoves = new ArrayList<>();
     private boolean isCheck;
-    private Map<int[], String> threatList;
     private char opponentColor;
     private int[] kingCoordinates;
 
-    public Rook(char color, String [][] board, Map<int[], String> threatList, boolean isCheck, char opponentColor, int [] kingCoordinates){
+    public Rook(char color, String [][] board, boolean isCheck, char opponentColor, int [] kingCoordinates){
         this.color = color;
         this.board = board;
-        this.threatList = threatList;
         this.isCheck = isCheck;
         this.opponentColor = opponentColor;
         this.kingCoordinates = kingCoordinates;
@@ -130,12 +128,6 @@ public class Rook {
             }
         }
         return false;
-    }
-
-    public void appendValidMovesWhenCheck(int row, int col){
-        if (threatList.keySet().size() > 1){
-            return;
-        }
     }
 
     private char getColor(int row, int col){
