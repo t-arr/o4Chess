@@ -80,7 +80,7 @@ public class Board {
                 return rook.getValidMoves(coords);
             }
             case "knight" -> {
-                Knight knight = new Knight(color, board, threatList, isCheck, getKingCoordinates(), opponentColor);
+                Knight knight = new Knight(color, board, isCheck, getKingCoordinates(), opponentColor);
                 return knight.getValidMoves(coords);
             }
             case "bishop" -> {
@@ -92,7 +92,7 @@ public class Board {
                 return queen.getValidMoves(coords);
             }
             case "king" -> {
-                King king = new King(color, board, castlingList, threatList, opponentColor, isCheck);
+                King king = new King(color, board, castlingList, opponentColor, isCheck);
                 return king.getValidMoves(coords);
             }
             default -> {
@@ -203,7 +203,7 @@ public class Board {
         int col = kingCoordinates[1];
         char color = getTurn();
         char oppColor = getOpponentColor();
-        King k = new King(color, board, castlingList, threatList, oppColor, false);
+        King k = new King(color, board, castlingList, oppColor, false);
         isCheck = k.isKingInCheck(row, col);
         return isCheck;
     }

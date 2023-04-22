@@ -9,15 +9,13 @@ public class Knight {
     private char color;
     private String [][] board;
     private List<int[]> validMoves = new ArrayList<>();
-    private Map<int[], String> threatList;
     private boolean isCheck;
     private int[] kingCoordinates;
     private char opponentColor;
 
-    public Knight(char color, String [][] board, Map<int[], String> threatList, boolean isCheck, int [] kingCoordinates, char opponentColor){
+    public Knight(char color, String [][] board, boolean isCheck, int [] kingCoordinates, char opponentColor){
         this.color = color;
         this.board = board;
-        this.threatList = threatList;
         this.isCheck = isCheck;
         this.kingCoordinates = kingCoordinates;
         this.opponentColor = opponentColor;
@@ -111,29 +109,10 @@ public class Knight {
         return false;
     }
 
-    private boolean shouldBreak(){
-        return threatList.keySet().size() > 1;
-    }
 
     private boolean isValidPosition(int row, int col){
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 
-    public void appendValidMovesWhenCheck(int row, int col, int oldRow, int oldCol){
-        if (threatList.keySet().size() > 1){
-            return;
-        }
-        int[] threatCoordinates = new int[]{0, 0};
-        for (int[] key : threatList.keySet()) {
-            threatCoordinates = key;
-            if (Arrays.equals(key, new int[]{row, col})) {
-                validMoves.add(new int[]{row, col});
-                return;
-            }
-        }
-        String threatType = board[threatCoordinates[0]][threatCoordinates[1]].substring(1);
-        if(threatType.equals("queen") || threatType.equals("rook") || threatType.equals("bishop")){
-            System.out.println("ass");
-        }
-    }
+  
 }

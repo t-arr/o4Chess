@@ -11,17 +11,15 @@ public class Pawn{
     private List<int[]> validMoves = new ArrayList<>();
     private boolean enPassant;
     private int [] enPassantCoordinates;
-    private Map<int[], String> threatList;
     private boolean isCheck;
     private char opponentColor;
     private int [] kingCoordinates;
 
-    public Pawn(char color, String [][] board, boolean enPassant, int [] enPassantCoordinates, Map<int[], String> threatList, boolean isCheck, char opponentColor, int [] kingCoordinates){
+    public Pawn(char color, String [][] board, boolean enPassant, int [] enPassantCoordinates, boolean isCheck, char opponentColor, int [] kingCoordinates){
         this.color = color;
         this.board = board;
         this.enPassant = enPassant;
         this.enPassantCoordinates = new int[]{enPassantCoordinates[0], enPassantCoordinates[1]};
-        this.threatList = threatList;
         this.isCheck = isCheck;
         this.opponentColor = opponentColor;
         this.kingCoordinates = kingCoordinates;
