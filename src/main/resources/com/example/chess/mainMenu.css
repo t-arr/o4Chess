@@ -1,0 +1,57 @@
+.menu-grid {
+    -fx-background-color: #e5cfa7;
+    -fx-alignment: center;
+    -fx-vgap: 20;
+    -fx-hgap: 0;
+}
+.buttons{
+    -fx-pref-width: 300px;
+    -fx-pref-height: 60px;
+    -fx-alignment: center;
+    -fx-font: bold 25px "Times New Roman";
+    -fx-focus-traversable: false;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-background-insets: 0;
+}
+
+.buttons:hover{
+    -fx-cursor: hand;
+}
+
+.sidebar {
+    -fx-background-color: #e5cfa7;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-min-width: 800px;
+    -fx-max-width: 800px;
+}
+
+.sidebarContainer{
+    -fx-background-color: #e5cfa7;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+}
+
+.close-button {
+    -fx-pref-width: 150;
+    -fx-pref-height: 30;
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-focus-traversable: false;
+    -fx-background-insets: 0;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+}
+
+.question{
+    -fx-font: bold 28px "Times New Roman";
+}
+
+.answer{
+    -fx-font: 18px "Times New Roman";
+    -fx-padding: 5px 0;
+}

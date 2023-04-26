@@ -5,23 +5,54 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.stage.Popup;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 
 import java.io.IOException;
+
+import java.util.List;
 import java.util.Optional;
 
 public class MainMenuController {
+    @FXML
+    public GridPane menuGrid;
     private HostServices hostServices;
 
+    @FXML
+    public void initialize(){
+        Button playButton = new Button("Play");
+        playButton.setId("play");
+        Button helpButton = new Button("Help");
+        helpButton.setId("help");
+        Button rulesButton = new Button("Rules of chess");
+        rulesButton.setId("rules");
+        Button quitButton = new Button("Quit");
+        quitButton.setId("quit");
+        List<Button> menuBtns = List.of(playButton, helpButton, rulesButton, quitButton);
+        menuGrid.add(playButton, 0, 0);
+        menuGrid.add(helpButton, 0, 1);
+        menuGrid.add(rulesButton, 0, 2);
+        menuGrid.add(quitButton, 0, 3);
+        for(Button btn : menuBtns){
+            btn.getStyleClass().add("buttons");
+            btn.setOnAction(event -> {
+                try {
+                    switchScreen(event);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
     @FXML
     public void switchScreen(ActionEvent event) throws IOException {
         String btnId = ((Button) event.getSource()).getId();
@@ -37,13 +68,52 @@ public class MainMenuController {
         } else if (btnId.equalsIgnoreCase("rules")) {
             hostServices.showDocument("https://en.wikipedia.org/wiki/Rules_of_chess");
          } else if (btnId.equalsIgnoreCase("help")) {
-            Popup popup = new Popup();
-            Label label = new Label("This is a Popup");
-            label.setStyle(" -fx-background-color: white;");
-            popup.getContent().add(label);
-            label.setMinWidth(80);
-            label.setMinHeight(50);
-            System.out.println("PinkPinsk");
+            VBox sidebar = new VBox();
+            sidebar.getStyleClass().add("sidebar");
+            BorderPane sidebarContainer = new BorderPane();
+            sidebarContainer.setCenter(sidebar);
+            sidebarContainer.getStyleClass().add("sidebarContainer");
+            Label howToPlay = new Label("How to play?");
+            howToPlay.getStyleClass().add("question");
+            howToPlay.setWrapText(true);
+            sidebar.getChildren().add(howToPlay);
+            Label howToPlayAnswer = new Label("-To play, click on the button named play, then set up your game preferences and click play again. Now you should see a game view. Press start to initialize game, notice that white moves first.");
+            howToPlayAnswer.getStyleClass().add("answer");
+            howToPlayAnswer.setWrapText(true);
+            sidebar.getChildren().add(howToPlayAnswer);
+            Label howToMovePiece = new Label("How to move pieces?");
+            howToMovePiece.getStyleClass().add("question");
+            howToMovePiece.setWrapText(true);
+            sidebar.getChildren().add(howToMovePiece);
+            Label howToMovePieceAnswer = new Label("-To move a piece you should first click a piece to be moved, then all the red dots that appear on the screen are valid squares where you can move. Now click one of them to successfully move a piece.");
+            howToMovePieceAnswer.getStyleClass().add("answer");
+            howToMovePieceAnswer.setWrapText(true);
+            sidebar.getChildren().add(howToMovePieceAnswer);
+            Label howChessIsPlayed = new Label("How chess works?");
+            howChessIsPlayed.getStyleClass().add("question");
+            howChessIsPlayed.setWrapText(true);
+            sidebar.getChildren().add(howChessIsPlayed);
+            Label howChessIsPlayedAnswer = new Label("-Click rules of chess button in main menu to understand how the game is played, make sure you are connected to the internet.");
+            howChessIsPlayedAnswer.getStyleClass().add("answer");
+            howChessIsPlayedAnswer.setWrapText(true);
+            sidebar.getChildren().add(howChessIsPlayedAnswer);
+            Label howToQuit = new Label("How to quit?");
+            howToQuit.getStyleClass().add("question");
+            howToQuit.setWrapText(true);
+            sidebar.getChildren().add(howToQuit);
+            Label howToQuitAnswer = new Label("-To quit you can click the x on the right upper corner or by clicking quit in the main menu and validating it.");
+            howToQuitAnswer.getStyleClass().add("answer");
+            howToQuitAnswer.setWrapText(true);
+            sidebar.getChildren().add(howToQuitAnswer);
+            Button closeButton = new Button("Back to menu");
+            closeButton.setOnAction(closeEvent -> {
+                menuGrid.getChildren().remove(sidebarContainer);
+            });
+            closeButton.getStyleClass().add("close-button");
+            sidebarContainer.setBottom(closeButton);
+            BorderPane.setAlignment(closeButton, Pos.CENTER);
+            BorderPane.setMargin(closeButton, new Insets(0, 0, 10, 0));
+            menuGrid.add(sidebarContainer, 0, 0, 10, 10);
         }else{
             FXMLLoader loader = new FXMLLoader(getClass().getResource(btnId + "-view.fxml"));
             Parent root = loader.load();
