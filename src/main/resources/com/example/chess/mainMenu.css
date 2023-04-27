@@ -56,5 +56,5 @@
 
 .answer{
     -fx-font: 18px "Times New Roman";
-    -fx-padding: 5px 0;
+    -fx-padding: 0px 0 5px 10px;
 }
