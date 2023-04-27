@@ -20,7 +20,7 @@
     -fx-cursor: hand;
 }
 
-.sidebar {
+.help-box {
     -fx-background-color: #e5cfa7;
     -fx-padding: 10px;
     -fx-spacing: 10px;
