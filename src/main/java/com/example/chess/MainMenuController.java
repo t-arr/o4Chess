@@ -121,7 +121,10 @@ public class MainMenuController {
             Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setMaximized(true);
+            stage.setX(currentStage.getX());
+            stage.setY(currentStage.getY());
+            stage.setWidth(currentStage.getWidth());
+            stage.setHeight(currentStage.getHeight());
             stage.show();
             currentStage.close();
         }
