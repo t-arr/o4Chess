@@ -14,8 +14,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 
@@ -77,7 +82,7 @@ public class MainMenuController {
             howToPlay.getStyleClass().add("question");
             howToPlay.setWrapText(true);
             sidebar.getChildren().add(howToPlay);
-            Label howToPlayAnswer = new Label("-From menu, click on the button named play, then set up your game preferences and click play again. Now you should see a game view. Press start to initialize game, notice that white moves first.");
+            Label howToPlayAnswer = new Label("From menu, click on the button named 'Play', then set up your game preferences and click 'Start game'. Now you should see a game view. Press start to initialize game and notice that white moves first.");
             howToPlayAnswer.getStyleClass().add("answer");
             howToPlayAnswer.setWrapText(true);
             sidebar.getChildren().add(howToPlayAnswer);
@@ -85,7 +90,7 @@ public class MainMenuController {
             howToMovePiece.getStyleClass().add("question");
             howToMovePiece.setWrapText(true);
             sidebar.getChildren().add(howToMovePiece);
-            Label howToMovePieceAnswer = new Label("-To move a piece you should first click a piece to be moved, then all the red dots that appear on the screen are valid squares where you can move. Now click one of them to successfully move a piece.");
+            Label howToMovePieceAnswer = new Label("To move a piece you should first click a piece to be moved, then all the red dots that appear on the screen are valid squares where you can move. Now click one of them to successfully move a piece.");
             howToMovePieceAnswer.getStyleClass().add("answer");
             howToMovePieceAnswer.setWrapText(true);
             sidebar.getChildren().add(howToMovePieceAnswer);
@@ -93,7 +98,7 @@ public class MainMenuController {
             howChessIsPlayed.getStyleClass().add("question");
             howChessIsPlayed.setWrapText(true);
             sidebar.getChildren().add(howChessIsPlayed);
-            Label howChessIsPlayedAnswer = new Label("-Click rules of chess button in main menu to understand how the game is played, make sure you are connected to the internet.");
+            Label howChessIsPlayedAnswer = new Label("Click 'Rules of chess' button in main menu to understand how the game is played. Make sure you are connected to the internet.");
             howChessIsPlayedAnswer.getStyleClass().add("answer");
             howChessIsPlayedAnswer.setWrapText(true);
             sidebar.getChildren().add(howChessIsPlayedAnswer);
@@ -101,7 +106,7 @@ public class MainMenuController {
             howToQuit.getStyleClass().add("question");
             howToQuit.setWrapText(true);
             sidebar.getChildren().add(howToQuit);
-            Label howToQuitAnswer = new Label("-To quit you can click the x on the right upper corner or by clicking quit in the main menu and validating it.");
+            Label howToQuitAnswer = new Label("To quit you can click the X on the right upper corner or by clicking quit in the main menu");
             howToQuitAnswer.getStyleClass().add("answer");
             howToQuitAnswer.setWrapText(true);
             sidebar.getChildren().add(howToQuitAnswer);
@@ -128,6 +133,11 @@ public class MainMenuController {
             stage.show();
             currentStage.close();
         }
+    }
+
+    public void help(Stage stage){
+        stage.setTitle("popup");
+        
     }
 
     public void setHostServices(HostServices hostServices) {
