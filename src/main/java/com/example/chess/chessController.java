@@ -1,7 +1,10 @@
 package com.example.chess;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -11,8 +14,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -229,7 +234,26 @@ public class chessController {
             if (buttonType == newGame) {
                 board = new Board();
             } else if (buttonType == mainMenu) {
-                System.out.println("pinkkupinsku");
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("main-view.fxml"));
+                Parent root = null;
+                try {
+                    root = loader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Scene scene = new Scene(root);
+                Stage currentStage = (Stage) boardGrid.getScene().getWindow();
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.setX(currentStage.getX());
+                stage.setY(currentStage.getY());
+                stage.setWidth(currentStage.getWidth());
+                stage.setHeight(currentStage.getHeight());
+                if (currentStage.isMaximized()) {
+                    stage.setMaximized(true);
+                }
+                stage.show();
+                currentStage.close();
             }
         });
     }
