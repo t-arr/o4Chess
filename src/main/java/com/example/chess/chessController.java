@@ -2,6 +2,7 @@ package com.example.chess;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,8 +28,11 @@ public class chessController {
     private Board board = new Board();
     @FXML
     private GridPane boardGrid;
+    @FXML
+    private GridPane boardInformation;
     private Button prevButton = null;
     private boolean inCheck = false;
+    private boolean hasGameBegun = false;
 
 
     @FXML
@@ -50,7 +54,71 @@ public class chessController {
             }
             isWhite = !isWhite;
         }
+        Button startButton = new Button("Start");
+        startButton.setOnAction(event -> handleStartClick(startButton));
+        startButton.getStyleClass().add("startMenuButtons");
+        GridPane.setConstraints(startButton, 1, 4, 3, 1);
+
+        Button menuButton = new Button("Main menu");
+        menuButton.setOnAction(event -> goToMenu());
+        menuButton.getStyleClass().add("startMenuButtons");
+        GridPane.setConstraints(menuButton, 1, 5, 3, 1);
+
+        GridPane.setMargin(startButton, new Insets(0, 0, 10, 0));
+        GridPane.setMargin(menuButton, new Insets(10, 0, 0, 0));
+        boardInformation.setGridLinesVisible(false);
+        boardInformation.getChildren().addAll(startButton, menuButton);
     }
+
+    private void handleStartClick(Button btn) {
+        if(!hasGameBegun){
+            hasGameBegun = true;
+            btn.setText("restart");
+            return;
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Do you want to restart the game?");
+        alert.setTitle("restart?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            board = new Board();
+            updateBoardGUI();
+        }
+    }
+
+    private void goToMenu() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText("Do you want to go back to menu?");
+        alert.setTitle("Back to menu");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            executeMenuCommand();
+        }
+    }
+
+    private void executeMenuCommand(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("main-view.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Scene scene = new Scene(root);
+        Stage currentStage = (Stage) boardGrid.getScene().getWindow();
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setX(currentStage.getX());
+        stage.setY(currentStage.getY());
+        stage.setWidth(currentStage.getWidth());
+        stage.setHeight(currentStage.getHeight());
+        if (currentStage.isMaximized()) {
+            stage.setMaximized(true);
+        }
+        stage.show();
+        currentStage.close();
+    }
+
 
     private void drawImages(Button button, int row, int col) {
         String[][] state = board.getBoard();
@@ -70,7 +138,7 @@ public class chessController {
     private void handleButtonClick(Button button) {
         int[] clickedButton = new int[]{GridPane.getRowIndex(button), GridPane.getColumnIndex(button)};
         if (prevButton == null) {
-            if(board.getPiece(clickedButton).equals("-") || board.getTurn() != board.getPiece(clickedButton).charAt(0)){
+            if(board.getPiece(clickedButton).equals("-") || board.getTurn() != board.getPiece(clickedButton).charAt(0) || !hasGameBegun){
                 return;
             }
             List<int[]> validMoves = board.validMoves(clickedButton);
@@ -234,26 +302,7 @@ public class chessController {
             if (buttonType == newGame) {
                 board = new Board();
             } else if (buttonType == mainMenu) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("main-view.fxml"));
-                Parent root = null;
-                try {
-                    root = loader.load();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                Scene scene = new Scene(root);
-                Stage currentStage = (Stage) boardGrid.getScene().getWindow();
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.setX(currentStage.getX());
-                stage.setY(currentStage.getY());
-                stage.setWidth(currentStage.getWidth());
-                stage.setHeight(currentStage.getHeight());
-                if (currentStage.isMaximized()) {
-                    stage.setMaximized(true);
-                }
-                stage.show();
-                currentStage.close();
+                executeMenuCommand();
             }
         });
     }
