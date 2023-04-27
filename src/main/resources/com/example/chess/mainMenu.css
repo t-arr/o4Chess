@@ -4,11 +4,14 @@
     -fx-vgap: 20;
     -fx-hgap: 0;
 }
+
 .buttons{
     -fx-pref-width: 300px;
     -fx-pref-height: 60px;
     -fx-alignment: center;
     -fx-font: bold 25px "Times New Roman";
+    -fx-background-radius: 35px;
+    -fx-border-radius: 35px;
     -fx-focus-traversable: false;
     -fx-border-color: black;
     -fx-border-width: 1px;
@@ -45,6 +48,8 @@
     -fx-border-color: black;
     -fx-border-width: 1px;
     -fx-border-style: solid;
+    -fx-background-radius: 35px;
+    -fx-border-radius: 35px;
 }
 
 .question{

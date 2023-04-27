@@ -38,10 +38,10 @@ public class MainMenuController {
         Button quitButton = new Button("Quit");
         quitButton.setId("quit");
         List<Button> menuBtns = List.of(playButton, helpButton, rulesButton, quitButton);
-        menuGrid.add(playButton, 0, 0);
-        menuGrid.add(helpButton, 0, 1);
-        menuGrid.add(rulesButton, 0, 2);
-        menuGrid.add(quitButton, 0, 3);
+        menuGrid.add(playButton, 0, 1);
+        menuGrid.add(helpButton, 0, 2);
+        menuGrid.add(rulesButton, 0, 3);
+        menuGrid.add(quitButton, 0, 4);
         for(Button btn : menuBtns){
             btn.getStyleClass().add("buttons");
             btn.setOnAction(event -> {
