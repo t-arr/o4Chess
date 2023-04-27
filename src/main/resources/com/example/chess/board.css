@@ -1,16 +1,9 @@
-
-
-
 .white-button{
     -fx-background-color: #f5f5dd
 }
 
 .black-button{
     -fx-background-color: #dab36e;
-}
-
-.valid-move{
-    -fx-background-color: #52f827;
 }
 
 .status-card{
@@ -22,10 +15,6 @@
 
 .borderpane-container{
     -fx-background-color: #1e1e1e;
-}
-
-.valid-move-button{
-    -fx-background-color: rgba(37, 211, 0, 0.61);
 }
 
 .white-button, .black-button {
