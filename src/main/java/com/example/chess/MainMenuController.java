@@ -77,7 +77,7 @@ public class MainMenuController {
             howToPlay.getStyleClass().add("question");
             howToPlay.setWrapText(true);
             sidebar.getChildren().add(howToPlay);
-            Label howToPlayAnswer = new Label("-To play, click on the button named play, then set up your game preferences and click play again. Now you should see a game view. Press start to initialize game, notice that white moves first.");
+            Label howToPlayAnswer = new Label("-From menu, click on the button named play, then set up your game preferences and click play again. Now you should see a game view. Press start to initialize game, notice that white moves first.");
             howToPlayAnswer.getStyleClass().add("answer");
             howToPlayAnswer.setWrapText(true);
             sidebar.getChildren().add(howToPlayAnswer);
