@@ -125,6 +125,9 @@ public class MainMenuController {
             stage.setY(currentStage.getY());
             stage.setWidth(currentStage.getWidth());
             stage.setHeight(currentStage.getHeight());
+            if (currentStage.isMaximized()) {
+                stage.setMaximized(true);
+            }
             stage.show();
             currentStage.close();
         }
