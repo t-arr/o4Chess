@@ -41,14 +41,6 @@ public class Board {
         return turn;
     }
 
-    public void setBoard(String[][] board) {
-        this.board = board;
-    }
-
-    public void setTurn(char turn) {
-        this.turn = turn;
-    }
-
     public char getOpponentColor() {
         if (getTurn() == 'w') {
             return 'b';
