@@ -124,8 +124,10 @@ public class chessController {
         }
         stage.show();
         currentStage.close(); */
+        Stage currentStage = (Stage) boardGrid.getScene().getWindow();
         ChessApplication ca = new ChessApplication();
         ca.start(new Stage());
+        currentStage.close();
     }
 
 
