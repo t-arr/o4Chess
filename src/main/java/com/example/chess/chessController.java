@@ -60,7 +60,13 @@ public class chessController {
         GridPane.setConstraints(startButton, 1, 4, 3, 1);
 
         Button menuButton = new Button("Main menu");
-        menuButton.setOnAction(event -> goToMenu());
+        menuButton.setOnAction(event -> {
+            try {
+                goToMenu();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         menuButton.getStyleClass().add("startMenuButtons");
         GridPane.setConstraints(menuButton, 1, 5, 3, 1);
 
@@ -86,7 +92,7 @@ public class chessController {
         }
     }
 
-    private void goToMenu() {
+    private void goToMenu() throws Exception {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Do you want to go back to menu?");
         alert.setTitle("Back to menu");
@@ -96,14 +102,15 @@ public class chessController {
         }
     }
 
-    private void executeMenuCommand(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("main-view.fxml"));
+    private void executeMenuCommand() throws Exception {
+      /*  FXMLLoader loader = new FXMLLoader(getClass().getResource("main-view.fxml"));
         Parent root = null;
         try {
             root = loader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         Scene scene = new Scene(root);
         Stage currentStage = (Stage) boardGrid.getScene().getWindow();
         Stage stage = new Stage();
@@ -116,7 +123,9 @@ public class chessController {
             stage.setMaximized(true);
         }
         stage.show();
-        currentStage.close();
+        currentStage.close(); */
+        ChessApplication ca = new ChessApplication();
+        ca.start(new Stage());
     }
 
 
@@ -302,7 +311,11 @@ public class chessController {
             if (buttonType == newGame) {
                 board = new Board();
             } else if (buttonType == mainMenu) {
-                executeMenuCommand();
+                try {
+                    executeMenuCommand();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
