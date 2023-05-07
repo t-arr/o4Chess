@@ -32,7 +32,23 @@ public class VeryBadBot {
         List<int[]> values = piecesAndMoves.get(randomKey);
         randomIndex = (int) (Math.random() * values.size());
         int[] randomValue = values.get(randomIndex);
+        if(gameState.getPiece(randomKey).substring(1).equals("pawn")){
+            if(randomValue[0] == 0 || randomValue[0] == 7){
+                board[randomKey[0]][randomKey[1]] = color + "queen";
+            }
+        }
+        if(gameState.isMoveEnPassant(randomKey, randomValue)){
+            gameState.swapEnPassant(randomKey, randomValue);
+        }else if(gameState.getPiece(randomKey).substring(1).equals("king") && isMoveCastling(randomKey, randomValue)){
+            gameState.swap(randomKey, randomValue);
+            gameState.castle(randomKey, randomValue);
+        }else{
+            gameState.swap(randomKey, randomValue);
+        }
         gameState.updateCastlingVariables(randomKey, randomValue);
-        gameState.swap(randomKey, randomValue);
+        gameState.setEnPassant(randomKey, randomValue);
+    }
+    private boolean isMoveCastling(int[] from, int [] to){
+        return Math.abs(from[1]-to[1]) == 2;
     }
 }

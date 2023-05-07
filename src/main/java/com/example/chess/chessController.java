@@ -172,14 +172,21 @@ public class chessController {
                 }
                 board.updateCastlingVariables(previousClick, clickedButton);
                 board.castle(previousClick, clickedButton);
+                updateBoardGUI();
+                if(playAgainstBot){
+                    bot.makeMove(board.getBoard(), board);
+                    board.swapTurn();
+                    updateBoardGUI();
+                    gameState = board.isGameOver();
+                    if(gameState.equals("checkmate") || gameState.equals("stalemate") || gameState.equals("insufficient material")){
+                        displayGameOver(gameState);
+                        updateBoardGUI();
+                        return;
+                    }
+                }
             }
             updateBoardGUI();
             prevButton = null;
-            if(playAgainstBot){
-                bot.makeMove(board.getBoard(), board);
-                board.swapTurn();
-                updateBoardGUI();
-            }
         }
     }
 
@@ -205,7 +212,7 @@ public class chessController {
                     } else {
                         Circle circle;
                         if(type.substring(1).equals("king") && Math.abs(validCol-coordinates[1]) == 2){
-                                circle = new Circle(10, 10, 10, Color.BLUE);
+                            circle = new Circle(10, 10, 10, Color.BLUE);
                         }else{
                             circle = new Circle(10, 10, 10, Color.RED);
                         }
