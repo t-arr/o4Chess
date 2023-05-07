@@ -3,14 +3,14 @@ package com.example.chess;
 import java.util.*;
 
 public class VeryBadBot {
-    private GameSetupForBot setupSingleton = GameSetupForBot.getInstance();
     private char color;
 
-    public VeryBadBot(){
-        if(setupSingleton.getColor().equals("White")){
+    public VeryBadBot(String gameMode){
+        if(gameMode.equalsIgnoreCase("black")){
             this.color = 'b';
-        }else{
-            this.color = 'w';
+        }
+        if(gameMode.equalsIgnoreCase("white")){
+            this.color = 'b';
         }
     }
     public void makeMove(String[][] board, Board gameState){

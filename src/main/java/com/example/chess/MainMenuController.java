@@ -55,7 +55,7 @@ public class MainMenuController {
                 }
             });
         }
-        this.instance = GameSetupForBot.getInstance("white", "10 minutes", false);
+        this.instance = GameSetupForBot.getInstance("White", "10 minutes", false);
     }
     @FXML
     public void switchScreen(ActionEvent event) throws IOException {
@@ -71,7 +71,7 @@ public class MainMenuController {
             }
         } else if (btnId.equalsIgnoreCase("rules")) {
             hostServices.showDocument("https://en.wikipedia.org/wiki/Rules_of_chess");
-         } else if (btnId.equalsIgnoreCase("help")) {
+        } else if (btnId.equalsIgnoreCase("help")) {
             VBox helpBox = new VBox();
             helpBox.getStyleClass().add("help-box");
             BorderPane helpBoxContainer = new BorderPane();
@@ -132,6 +132,7 @@ public class MainMenuController {
         Button twoPlayersButton = new Button("Two Players");
         twoPlayersButton.setOnAction(event -> {
             try {
+                instance.setAgainstComp(false);
                 launchGame();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -212,7 +213,6 @@ public class MainMenuController {
                 instance.setColor(selectedColor);
                 instance.setDuration(duration);
                 instance.setAgainstComp(true);
-                System.out.println(instance.getColor() + " " + instance.getDuration() + " " + String.valueOf(instance.getAgainstComp()));
                 launchGame();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -234,19 +234,19 @@ public class MainMenuController {
 
     public void launchGame() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("play-view.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage currentStage = (Stage) menuGrid.getScene().getWindow();
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setX(currentStage.getX());
-            stage.setY(currentStage.getY());
-            stage.setWidth(currentStage.getWidth());
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage currentStage = (Stage) menuGrid.getScene().getWindow();
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setX(currentStage.getX());
+        stage.setY(currentStage.getY());
+        stage.setWidth(currentStage.getWidth());
         stage.setHeight(currentStage.getHeight());
-            if (currentStage.isMaximized()) {
-                stage.setMaximized(true);
-            }
-            stage.show();
-            currentStage.close();
+        if (currentStage.isMaximized()) {
+            stage.setMaximized(true);
+        }
+        stage.show();
+        currentStage.close();
     }
 }

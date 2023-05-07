@@ -10,15 +10,26 @@ public class Board {
     private int[] enPassantCoordinates = new int[]{0, 0};
     private boolean isCheck = false;
 
-    public Board() {
-        this.board = new String[][]{{"brook", "bknight", "bbishop", "bqueen", "bking", "bbishop", "bknight", "brook"},
-                {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
-                {"-", "-", "-", "-", "-", "-", "-", "-"},
-                {"-", "-", "-", "-", "-", "-", "-", "-"},
-                {"-", "-", "-", "-", "-", "-", "-", "-"},
-                {"-", "-", "-", "-", "-", "-", "-", "-"},
-                {"wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn"},
-                {"wrook", "wknight", "wbishop", "wqueen", "wking", "wbishop", "wknight", "wrook"}};
+    public Board(String mode) {
+        if(mode.equalsIgnoreCase("black")){
+            this.board = new String[][]{{"brook", "bknight", "bbishop", "bking", "bqueen", "bbishop", "bknight", "brook"},
+                    {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
+                    {"-", "-", "-", "-", "-", "-", "-", "-"},
+                    {"-", "-", "-", "-", "-", "-", "-", "-"},
+                    {"-", "-", "-", "-", "-", "-", "-", "-"},
+                    {"-", "-", "-", "-", "-", "-", "-", "-"},
+                    {"wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn"},
+                    {"wrook", "wknight", "wbishop", "wking", "wqueen", "wbishop", "wknight", "wrook"}};
+        }else{
+            this.board = new String[][]{{"brook", "bknight", "bbishop", "bqueen", "bking", "bbishop", "bknight", "brook"},
+                    {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
+                    {"-", "-", "-", "-", "-", "-", "-", "-"},
+                    {"-", "-", "-", "-", "-", "-", "-", "-"},
+                    {"-", "-", "-", "-", "-", "-", "-", "-"},
+                    {"-", "-", "-", "-", "-", "-", "-", "-"},
+                    {"wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn", "wpawn"},
+                    {"wrook", "wknight", "wbishop", "wqueen", "wking", "wbishop", "wknight", "wrook"}};
+        }
         this.castlingList = new boolean[]{true, true, true, true};
         validEnPassant = false;
     }

@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class chessController {
 
-    private Board board = new Board();
+    private Board board;
     @FXML
     private GridPane boardGrid;
     @FXML
@@ -30,11 +30,17 @@ public class chessController {
     private boolean hasGameBegun = false;
     private boolean playAgainstBot;
     private GameSetupForBot instance;
-    VeryBadBot bot = new VeryBadBot();
+    private String gameMode;
+    VeryBadBot bot;
 
 
     @FXML
     public void initialize() {
+        instance = GameSetupForBot.getInstance();
+        this.playAgainstBot = instance.getAgainstComp();
+        gameMode = instance.getColor();
+        board = new Board(gameMode);
+        bot = new VeryBadBot(gameMode);
         boolean isWhite = true;
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
@@ -72,14 +78,16 @@ public class chessController {
         GridPane.setMargin(menuButton, new Insets(10, 0, 0, 0));
         boardInformation.setGridLinesVisible(false);
         boardInformation.getChildren().addAll(startButton, menuButton);
-        instance = GameSetupForBot.getInstance();
-        this.playAgainstBot = instance.getAgainstComp();
     }
 
     private void handleStartClick(Button btn) {
         if(!hasGameBegun){
             hasGameBegun = true;
             btn.setText("restart");
+            if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
+                bot.makeMove(board.getBoard(), board);
+                updateBoardGUI();
+            }
             return;
         }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -87,7 +95,11 @@ public class chessController {
         alert.setTitle("restart?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            board = new Board();
+            board = new Board(gameMode);
+            if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
+                bot.makeMove(board.getBoard(), board);
+                updateBoardGUI();
+            }
             updateBoardGUI();
         }
     }
@@ -116,7 +128,12 @@ public class chessController {
         if (state[row][col].equals("-")) {
             button.setGraphic(null);
         } else {
-            String imageUrl = System.getProperty("user.dir") + "/src/main/java/com/example/chess/pawns/" + state[row][col] + ".png";
+            String imageUrl;
+            if(gameMode.equals("Black")){
+                imageUrl = System.getProperty("user.dir") + "/src/main/java/com/example/chess/invertedPawns/" + state[row][col] + ".png";
+            }else{
+                imageUrl = System.getProperty("user.dir") + "/src/main/java/com/example/chess/pawns/" + state[row][col] + ".png";
+            }
             Image image = new Image(imageUrl);
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(50);
@@ -304,7 +321,11 @@ public class chessController {
 
         result.ifPresent(buttonType -> {
             if (buttonType == newGame) {
-                board = new Board();
+                board = new Board(gameMode);
+                if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
+                    bot.makeMove(board.getBoard(), board);
+                    updateBoardGUI();
+                }
             } else if (buttonType == mainMenu) {
                 try {
                     executeMenuCommand();
