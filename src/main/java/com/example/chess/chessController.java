@@ -1,11 +1,8 @@
 package com.example.chess;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -17,8 +14,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +28,9 @@ public class chessController {
     private Button prevButton = null;
     private boolean inCheck = false;
     private boolean hasGameBegun = false;
+    private boolean playAgainstBot;
+    private GameSetupForBot instance;
+    VeryBadBot bot = new VeryBadBot();
 
 
     @FXML
@@ -74,6 +72,8 @@ public class chessController {
         GridPane.setMargin(menuButton, new Insets(10, 0, 0, 0));
         boardInformation.setGridLinesVisible(false);
         boardInformation.getChildren().addAll(startButton, menuButton);
+        instance = GameSetupForBot.getInstance();
+        this.playAgainstBot = instance.getAgainstComp();
     }
 
     private void handleStartClick(Button btn) {
@@ -103,27 +103,6 @@ public class chessController {
     }
 
     private void executeMenuCommand() throws Exception {
-      /*  FXMLLoader loader = new FXMLLoader(getClass().getResource("main-view.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        Scene scene = new Scene(root);
-        Stage currentStage = (Stage) boardGrid.getScene().getWindow();
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setX(currentStage.getX());
-        stage.setY(currentStage.getY());
-        stage.setWidth(currentStage.getWidth());
-        stage.setHeight(currentStage.getHeight());
-        if (currentStage.isMaximized()) {
-            stage.setMaximized(true);
-        }
-        stage.show();
-        currentStage.close(); */
         Stage currentStage = (Stage) boardGrid.getScene().getWindow();
         ChessApplication ca = new ChessApplication();
         ca.start(new Stage());
@@ -188,12 +167,19 @@ public class chessController {
                 String gameState = board.isGameOver();
                 if(gameState.equals("checkmate") || gameState.equals("stalemate") || gameState.equals("insufficient material")){
                     displayGameOver(gameState);
+                    updateBoardGUI();
+                    return;
                 }
                 board.updateCastlingVariables(previousClick, clickedButton);
                 board.castle(previousClick, clickedButton);
             }
             updateBoardGUI();
             prevButton = null;
+            if(playAgainstBot){
+                bot.makeMove(board.getBoard(), board);
+                board.swapTurn();
+                updateBoardGUI();
+            }
         }
     }
 

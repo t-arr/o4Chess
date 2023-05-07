@@ -28,7 +28,7 @@
     -fx-max-width: 800px;
 }
 
-.sidebarContainer{
+.helpBoxContainer{
     -fx-background-color: #e5cfa7;
     -fx-border-color: black;
     -fx-border-width: 1px;
@@ -39,7 +39,7 @@
     -fx-pref-width: 150;
     -fx-pref-height: 30;
     -fx-text-fill: black;
-    -fx-font-size: 16px;
+    -fx-font: bold 16px "Times New Roman";
     -fx-focus-traversable: false;
     -fx-background-insets: 0;
     -fx-border-color: black;
@@ -48,6 +48,19 @@
     -fx-background-radius: 35px;
     -fx-border-radius: 35px;
     -fx-cursor: hand;
+}
+
+.section-label{
+    -fx-font: bold 28px "Times New Roman";
+}
+
+.radio-buttons{
+    -fx-font: bold 20px "Times New Roman";
+}
+
+.section-boxes {
+    -fx-alignment: center;
+    -fx-spacing: 25;
 }
 
 .question{
