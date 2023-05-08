@@ -15,12 +15,18 @@ public class VeryBadBot {
         }
         this.gameMode = gameMode;
     }
-    public void makeMove(String[][] board, Board gameState){
+    public void makeMove(String[][] board, Board gameState, String gameMode){
+        if(gameMode.equalsIgnoreCase("black")){
+            this.color = 'b';
+        }
+        if(gameMode.equalsIgnoreCase("white")){
+            this.color = 'b';
+        }
         Map<int[], List<int []>> piecesAndMoves = new HashMap<>();
         for(int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
                 int [] coordinates = new int[]{i, j};
-                if(gameState.getPiece(coordinates).charAt(0) == color && !gameState.getPiece(coordinates).substring(1).equalsIgnoreCase("pawn") && !gameState.getPiece(coordinates).substring(1).equalsIgnoreCase("rook")){
+                if(gameState.getPiece(coordinates).charAt(0) == color){
                     List<int[]> validMoves = gameState.validMoves(coordinates);
                     if(!validMoves.isEmpty()){
                         piecesAndMoves.put(coordinates, validMoves);

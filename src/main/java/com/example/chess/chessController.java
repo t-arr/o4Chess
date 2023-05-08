@@ -39,7 +39,7 @@ public class chessController {
         instance = GameSetupForBot.getInstance();
         this.playAgainstBot = instance.getAgainstComp();
         gameMode = instance.getColor();
-        board = new Board(gameMode);
+        board = new Board(gameMode, playAgainstBot);
         bot = new VeryBadBot(gameMode);
         boolean isWhite = true;
         for (int row = 0; row < 8; row++) {
@@ -85,7 +85,7 @@ public class chessController {
             hasGameBegun = true;
             btn.setText("restart");
             if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
-                bot.makeMove(board.getBoard(), board);
+                bot.makeMove(board.getBoard(), board, gameMode);
                 updateBoardGUI();
             }
             return;
@@ -95,9 +95,9 @@ public class chessController {
         alert.setTitle("restart?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            board = new Board(gameMode);
+            board = new Board(gameMode, playAgainstBot);
             if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
-                bot.makeMove(board.getBoard(), board);
+                bot.makeMove(board.getBoard(), board, gameMode);
                 updateBoardGUI();
             }
             updateBoardGUI();
@@ -191,7 +191,7 @@ public class chessController {
                 board.castle(previousClick, clickedButton);
                 updateBoardGUI();
                 if(playAgainstBot){
-                    bot.makeMove(board.getBoard(), board);
+                    bot.makeMove(board.getBoard(), board, gameMode);
                     board.swapTurn();
                     updateBoardGUI();
                     gameState = board.isGameOver();
@@ -321,9 +321,9 @@ public class chessController {
 
         result.ifPresent(buttonType -> {
             if (buttonType == newGame) {
-                board = new Board(gameMode);
+                board = new Board(gameMode, playAgainstBot);
                 if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
-                    bot.makeMove(board.getBoard(), board);
+                    bot.makeMove(board.getBoard(), board, gameMode);
                     updateBoardGUI();
                 }
             } else if (buttonType == mainMenu) {

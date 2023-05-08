@@ -133,6 +133,7 @@ public class MainMenuController {
         twoPlayersButton.setOnAction(event -> {
             try {
                 instance.setAgainstComp(false);
+                instance.setColor("twoPlayers");
                 launchGame();
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -12,9 +12,11 @@ public class King {
     private boolean isCheck;
     private String gameMode;
     private Board gameState;
+    private boolean playAgainstBot;
 
 
-    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode, Board gameState) {
+    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode, Board gameState, boolean playAgainstBot) {
+        this.playAgainstBot = playAgainstBot;
         this.color = color;
         this.board = board;
         this.castlingList = castlingList;
@@ -22,8 +24,15 @@ public class King {
         this.isCheck = isCheck;
         this.gameMode = gameMode;
         this.gameState = gameState;
-        if(gameMode.equalsIgnoreCase("black") && gameState.getTurn() == 'b'){
-            this.opponentColor = 'w';
+        if(playAgainstBot){
+            if(gameMode.equalsIgnoreCase("black")  && gameState.getTurn() == 'b'){
+                this.opponentColor = 'w';
+                this.color = 'b';
+            }
+            if(gameMode.equalsIgnoreCase("white")  && gameState.getTurn() == 'b'){
+                this.opponentColor = 'w';
+                this.color = 'b';
+            }
         }
     }
 
@@ -32,11 +41,16 @@ public class King {
         int col = coords[1];
         addValidMoves(row, col);
         if (!isCheck) {
-            if(gameMode.equalsIgnoreCase("black")){
-                appendCastlingMovesWhenPlayingWithBlack();
-            }else{
+            if(!playAgainstBot){
                 appendCastlingMovesWhenPlayingWithWhite();
+            }else{
+                if(gameMode.equalsIgnoreCase("black")){
+                    appendCastlingMovesWhenPlayingWithBlack();
+                }else{
+                    appendCastlingMovesWhenPlayingWithWhite();
+                }
             }
+            return validMoves;
         }
         return validMoves;
     }
@@ -75,7 +89,6 @@ public class King {
         board[rookX][rookY] = "-";
         board[newRookX][newRookY] = temp2;
         boolean inCheck = isKingInCheck(newX, newY);
-        System.out.println(inCheck);
         board[newX][newY] = "-";
         board[x][y] = temp1;
         board[newRookX][newRookY] = "-";
@@ -187,9 +200,6 @@ public class King {
     private void appendCastlingMovesWhenPlayingWithWhite() {
         if (color == 'b') {
             if (castlingList[0]) {
-                if(leavesCastledInCheck(0, 4, 0, 2, 0, 0, 0, 3)){
-                    System.out.println("häh");
-                }
                 if (board[0][1].equals("-") && board[0][2].equals("-") && board[0][3].equals("-") && !leavesCastledInCheck(0, 4, 0, 2, 0, 0, 0, 3)) {
                     validMoves.add(new int[]{0, 2});
                 }

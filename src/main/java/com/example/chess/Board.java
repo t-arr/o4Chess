@@ -10,9 +10,11 @@ public class Board {
     private int[] enPassantCoordinates = new int[]{0, 0};
     private boolean isCheck = false;
     private String gameMode;
+    private boolean playAgainstBot;
 
-    public Board(String gameMode) {
+    public Board(String gameMode, boolean playAgainstBot) {
         this.gameMode = gameMode;
+        this.playAgainstBot = playAgainstBot;
         if(gameMode.equalsIgnoreCase("black")){
             this.board = new String[][]{{"brook", "bknight", "bbishop", "bking", "bqueen", "bbishop", "bknight", "brook"},
                     {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
@@ -96,7 +98,7 @@ public class Board {
                 return queen.getValidMoves(coords);
             }
             case "king" -> {
-                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode, this);
+                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode, this, playAgainstBot);
                 return king.getValidMoves(coords);
             }
             default -> {
@@ -240,7 +242,7 @@ public class Board {
         int col = kingCoordinates[1];
         char color = getTurn();
         char oppColor = getOpponentColor();
-        King k = new King(color, board, castlingList, oppColor, false, gameMode, this);
+        King k = new King(color, board, castlingList, oppColor, false, gameMode, this, playAgainstBot);
         isCheck = k.isKingInCheck(row, col);
         return isCheck;
     }
