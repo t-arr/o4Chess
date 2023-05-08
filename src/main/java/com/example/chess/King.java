@@ -11,16 +11,18 @@ public class King {
     private char opponentColor;
     private boolean isCheck;
     private String gameMode;
+    private Board gameState;
 
 
-    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode) {
+    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode, Board gameState) {
         this.color = color;
         this.board = board;
         this.castlingList = castlingList;
         this.opponentColor = opponentColor;
         this.isCheck = isCheck;
         this.gameMode = gameMode;
-        if(gameMode.equalsIgnoreCase("black")){
+        this.gameState = gameState;
+        if(gameMode.equalsIgnoreCase("black") && gameState.getTurn() == 'b'){
             this.opponentColor = 'w';
         }
     }

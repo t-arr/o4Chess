@@ -96,7 +96,7 @@ public class Board {
                 return queen.getValidMoves(coords);
             }
             case "king" -> {
-                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode);
+                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode, this);
                 return king.getValidMoves(coords);
             }
             default -> {
@@ -240,7 +240,7 @@ public class Board {
         int col = kingCoordinates[1];
         char color = getTurn();
         char oppColor = getOpponentColor();
-        King k = new King(color, board, castlingList, oppColor, false, gameMode);
+        King k = new King(color, board, castlingList, oppColor, false, gameMode, this);
         isCheck = k.isKingInCheck(row, col);
         return isCheck;
     }
