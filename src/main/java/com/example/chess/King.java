@@ -98,9 +98,14 @@ public class King {
 
 
     public boolean isKingInCheck(int x, int y) {
+        //For first move, remove if causes bugs
+        if(playAgainstBot){
+            if (gameMode.equalsIgnoreCase("black")){
+                opponentColor = 'w';
+            }
+        }
         int kingX = x;
         int kingY = y;
-
         int pawnDir = color == 'w' ? -1 : 1;
         int[][] pawnMoves = {{pawnDir, -1}, {pawnDir, 1}};
         for (int[] move : pawnMoves) {
