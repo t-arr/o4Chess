@@ -10,14 +10,19 @@ public class King {
     private List<int[]> validMoves = new ArrayList<>();
     private char opponentColor;
     private boolean isCheck;
+    private String gameMode;
 
 
-    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck) {
+    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode) {
         this.color = color;
         this.board = board;
         this.castlingList = castlingList;
         this.opponentColor = opponentColor;
         this.isCheck = isCheck;
+        this.gameMode = gameMode;
+        if(gameMode.equalsIgnoreCase("black")){
+            this.opponentColor = 'w';
+        }
     }
 
     public List<int[]> getValidMoves(int[] coords) {
@@ -25,7 +30,11 @@ public class King {
         int col = coords[1];
         addValidMoves(row, col);
         if (!isCheck) {
-            appendCastlingMoves();
+            if(gameMode.equalsIgnoreCase("black")){
+                appendCastlingMovesWhenPlayingWithBlack();
+            }else{
+                appendCastlingMovesWhenPlayingWithWhite();
+            }
         }
         return validMoves;
     }
@@ -64,6 +73,7 @@ public class King {
         board[rookX][rookY] = "-";
         board[newRookX][newRookY] = temp2;
         boolean inCheck = isKingInCheck(newX, newY);
+        System.out.println(inCheck);
         board[newX][newY] = "-";
         board[x][y] = temp1;
         board[newRookX][newRookY] = "-";
@@ -172,9 +182,12 @@ public class King {
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 
-    private void appendCastlingMoves() {
+    private void appendCastlingMovesWhenPlayingWithWhite() {
         if (color == 'b') {
             if (castlingList[0]) {
+                if(leavesCastledInCheck(0, 4, 0, 2, 0, 0, 0, 3)){
+                    System.out.println("häh");
+                }
                 if (board[0][1].equals("-") && board[0][2].equals("-") && board[0][3].equals("-") && !leavesCastledInCheck(0, 4, 0, 2, 0, 0, 0, 3)) {
                     validMoves.add(new int[]{0, 2});
                 }
@@ -197,6 +210,33 @@ public class King {
             }
         }
     }
+
+    private void appendCastlingMovesWhenPlayingWithBlack() {
+        if (color == 'b') {
+            if (castlingList[0]) {
+                if (board[0][1].equals("-") && board[0][2].equals("-") && !leavesCastledInCheck(0, 3, 0, 1, 0, 0, 0, 2)) {
+                    validMoves.add(new int[]{0, 1});
+                }
+            }
+            if (castlingList[1]) {
+                if (board[0][6].equals("-") && board[0][5].equals("-") && board[0][4].equals("-") && !leavesCastledInCheck(0, 3, 0, 5, 0, 7, 0, 4)) {
+                    validMoves.add(new int[]{0, 5});
+                }
+            }
+        } else {
+            if (castlingList[2]) {
+                if (board[7][1].equals("-") && board[7][2].equals("-") && !leavesCastledInCheck(7, 3, 7, 1, 7, 0, 7, 2)) {
+                    validMoves.add(new int[]{7, 1});
+                }
+            }
+            if (castlingList[3]) {
+                if (board[7][6].equals("-") && board[7][5].equals("-") && board[7][4].equals("-") && !leavesCastledInCheck(7, 3, 7, 5, 7, 7, 7, 4)) {
+                    validMoves.add(new int[]{7, 5});
+                }
+            }
+        }
+    }
+
 
     private char getColor(int row, int col) {
         if (board[row][col].equals("-")) {

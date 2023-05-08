@@ -9,9 +9,11 @@ public class Board {
     private boolean validEnPassant;
     private int[] enPassantCoordinates = new int[]{0, 0};
     private boolean isCheck = false;
+    private String gameMode;
 
-    public Board(String mode) {
-        if(mode.equalsIgnoreCase("black")){
+    public Board(String gameMode) {
+        this.gameMode = gameMode;
+        if(gameMode.equalsIgnoreCase("black")){
             this.board = new String[][]{{"brook", "bknight", "bbishop", "bking", "bqueen", "bbishop", "bknight", "brook"},
                     {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
@@ -94,7 +96,7 @@ public class Board {
                 return queen.getValidMoves(coords);
             }
             case "king" -> {
-                King king = new King(color, board, castlingList, opponentColor, isCheck);
+                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode);
                 return king.getValidMoves(coords);
             }
             default -> {
@@ -104,14 +106,9 @@ public class Board {
     }
 
     public void updateCastlingVariables(int[] from, int[] to) {
-        if (Arrays.equals(from, new int[]{0, 4}) && (!Arrays.equals(to, new int[]{0, 2}) || !Arrays.equals(to, new int[]{0, 6}))) {
-            castlingList[0] = false;
-            castlingList[1] = false;
-        }
-        if (Arrays.equals(from, new int[]{7, 4}) && (!Arrays.equals(to, new int[]{7, 2}) || !Arrays.equals(to, new int[]{7, 6}))) {
-            castlingList[2] = false;
-            castlingList[3] = false;
-        }
+
+        updateKingCastlingVariables(from, to);
+
         if (Arrays.equals(from, new int[]{0, 0})) {
             castlingList[0] = false;
         }
@@ -126,22 +123,60 @@ public class Board {
         }
     }
 
+    private void updateKingCastlingVariables(int [] from, int [] to){
+        if(gameMode.equalsIgnoreCase("black")){
+            if (Arrays.equals(from, new int[]{0, 3}) && (!Arrays.equals(to, new int[]{0, 1}) || !Arrays.equals(to, new int[]{0, 5}))) {
+                castlingList[0] = false;
+                castlingList[1] = false;
+            }
+            if (Arrays.equals(from, new int[]{7, 3}) && (!Arrays.equals(to, new int[]{7, 1}) || !Arrays.equals(to, new int[]{7, 5}))) {
+                castlingList[2] = false;
+                castlingList[3] = false;
+            }
+        }else{
+            if (Arrays.equals(from, new int[]{0, 4}) && (!Arrays.equals(to, new int[]{0, 2}) || !Arrays.equals(to, new int[]{0, 6}))) {
+                castlingList[0] = false;
+                castlingList[1] = false;
+            }
+            if (Arrays.equals(from, new int[]{7, 4}) && (!Arrays.equals(to, new int[]{7, 2}) || !Arrays.equals(to, new int[]{7, 6}))) {
+                castlingList[2] = false;
+                castlingList[3] = false;
+            }
+        }
+    }
+
     public void castle(int[] from, int[] to) {
         int fromRow = from[0];
         int fromCol = from[1];
         int toRow = to[0];
         int toCol = to[1];
 
-        if ((fromRow == 0 && fromCol == 4) || (fromRow == 7 && fromCol == 4)) {
-            if ((toRow == 0 && (toCol == 2 || toCol == 6)) || (toRow == 7 && (toCol == 2 || toCol == 6))) {
-                if (toCol < fromCol) {
-                    String tmp = board[fromRow][0];
-                    board[fromRow][0] = "-";
-                    board[fromRow][3] = tmp;
-                } else {
-                    String tmp = board[fromRow][7];
-                    board[fromRow][7] = "-";
-                    board[fromRow][5] = tmp;
+        if(gameMode.equalsIgnoreCase("black")){
+            if ((fromRow == 0 && fromCol == 3) || (fromRow == 7 && fromCol == 3)) {
+                if ((toRow == 0 && (toCol == 1 || toCol == 5)) || (toRow == 7 && (toCol == 1 || toCol == 5))) {
+                    if (toCol < fromCol) {
+                        String tmp = board[fromRow][0];
+                        board[fromRow][0] = "-";
+                        board[fromRow][2] = tmp;
+                    } else {
+                        String tmp = board[fromRow][7];
+                        board[fromRow][7] = "-";
+                        board[fromRow][4] = tmp;
+                    }
+                }
+            }
+        }else{
+            if ((fromRow == 0 && fromCol == 4) || (fromRow == 7 && fromCol == 4)) {
+                if ((toRow == 0 && (toCol == 2 || toCol == 6)) || (toRow == 7 && (toCol == 2 || toCol == 6))) {
+                    if (toCol < fromCol) {
+                        String tmp = board[fromRow][0];
+                        board[fromRow][0] = "-";
+                        board[fromRow][3] = tmp;
+                    } else {
+                        String tmp = board[fromRow][7];
+                        board[fromRow][7] = "-";
+                        board[fromRow][5] = tmp;
+                    }
                 }
             }
         }
@@ -205,7 +240,7 @@ public class Board {
         int col = kingCoordinates[1];
         char color = getTurn();
         char oppColor = getOpponentColor();
-        King k = new King(color, board, castlingList, oppColor, false);
+        King k = new King(color, board, castlingList, oppColor, false, gameMode);
         isCheck = k.isKingInCheck(row, col);
         return isCheck;
     }
