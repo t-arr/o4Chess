@@ -13,9 +13,10 @@ public class King {
     private String gameMode;
     private Board gameState;
     private boolean playAgainstBot;
+    private boolean isBotTurn;
 
 
-    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode, Board gameState, boolean playAgainstBot) {
+    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode, Board gameState, boolean playAgainstBot, boolean isBotTurn) {
         this.playAgainstBot = playAgainstBot;
         this.color = color;
         this.board = board;
@@ -24,16 +25,6 @@ public class King {
         this.isCheck = isCheck;
         this.gameMode = gameMode;
         this.gameState = gameState;
-        if(playAgainstBot){
-            if(gameMode.equalsIgnoreCase("black")  && gameState.getTurn() == 'b'){
-                this.opponentColor = 'w';
-                this.color = 'b';
-            }
-            if(gameMode.equalsIgnoreCase("white")  && gameState.getTurn() == 'b'){
-                this.opponentColor = 'w';
-                this.color = 'b';
-            }
-        }
     }
 
     public List<int[]> getValidMoves(int[] coords) {
@@ -98,12 +89,6 @@ public class King {
 
 
     public boolean isKingInCheck(int x, int y) {
-        //For first move, remove if causes bugs
-        if(playAgainstBot){
-            if (gameMode.equalsIgnoreCase("black")){
-                opponentColor = 'w';
-            }
-        }
         int kingX = x;
         int kingY = y;
         int pawnDir = color == 'w' ? -1 : 1;
@@ -253,7 +238,6 @@ public class King {
             }
         }
     }
-
 
     private char getColor(int row, int col) {
         if (board[row][col].equals("-")) {

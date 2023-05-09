@@ -85,7 +85,11 @@ public class chessController {
             hasGameBegun = true;
             btn.setText("restart");
             if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
+                board.swapTurn();
+                board.setBotTurn(true);
                 bot.makeMove(board.getBoard(), board, gameMode);
+                board.setBotTurn(false);
+                board.swapTurn();
                 updateBoardGUI();
             }
             return;
@@ -97,7 +101,11 @@ public class chessController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             board = new Board(gameMode, playAgainstBot);
             if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
+                board.swapTurn();
+                board.setBotTurn(true);
                 bot.makeMove(board.getBoard(), board, gameMode);
+                board.setBotTurn(false);
+                board.swapTurn();
                 updateBoardGUI();
             }
             updateBoardGUI();
@@ -189,10 +197,14 @@ public class chessController {
                 }
                 board.updateCastlingVariables(previousClick, clickedButton);
                 board.castle(previousClick, clickedButton);
+                if(playAgainstBot){
+                    board.setBotTurn(true);
+                }
                 updateBoardGUI();
                 if(playAgainstBot){
                     bot.makeMove(board.getBoard(), board, gameMode);
                     board.swapTurn();
+                    board.setBotTurn(false);
                     updateBoardGUI();
                     gameState = board.isGameOver();
                     if(gameState.equals("checkmate") || gameState.equals("stalemate") || gameState.equals("insufficient material")){
@@ -323,7 +335,11 @@ public class chessController {
             if (buttonType == newGame) {
                 board = new Board(gameMode, playAgainstBot);
                 if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
+                    board.setBotTurn(true);
+                    board.swapTurn();
                     bot.makeMove(board.getBoard(), board, gameMode);
+                    board.setBotTurn(false);
+                    board.swapTurn();
                     updateBoardGUI();
                 }
             } else if (buttonType == mainMenu) {

@@ -11,14 +11,15 @@ public class Board {
     private boolean isCheck = false;
     private String gameMode;
     private boolean playAgainstBot;
+    private boolean isBotTurn = false;
 
     public Board(String gameMode, boolean playAgainstBot) {
         this.gameMode = gameMode;
         this.playAgainstBot = playAgainstBot;
         if(gameMode.equalsIgnoreCase("black")){
-            this.board = new String[][]{{"brook", "bknight", "bbishop", "bking", "bqueen", "bbishop", "bknight", "brook"},
-                    {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
-                    {"-", "-", "-", "-", "-", "-", "-", "-"},
+            this.board = new String[][]{{"brook", "-", "-", "bking", "-", "-", "-", "brook"},
+                    {"bpawn", "-", "-", "-", "-", "-", "-", "bpawn"},
+                    {"wpawn", "-", "-", "-", "-", "-", "-", "wpawn"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
@@ -46,6 +47,13 @@ public class Board {
 
     public String[][] getBoard() {
         return board;
+    }
+
+    public boolean getBotTurn() {
+        return isBotTurn;
+    }
+    public void setBotTurn(boolean isBotTurn) {
+        this.isBotTurn = isBotTurn;
     }
 
     public String getPiece(int[] coords) {
@@ -98,7 +106,7 @@ public class Board {
                 return queen.getValidMoves(coords);
             }
             case "king" -> {
-                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode, this, playAgainstBot);
+                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode, this, playAgainstBot, isBotTurn);
                 return king.getValidMoves(coords);
             }
             default -> {
@@ -242,7 +250,7 @@ public class Board {
         int col = kingCoordinates[1];
         char color = getTurn();
         char oppColor = getOpponentColor();
-        King k = new King(color, board, castlingList, oppColor, false, gameMode, this, playAgainstBot);
+        King k = new King(color, board, castlingList, oppColor, false, gameMode, this, playAgainstBot, isBotTurn);
         isCheck = k.isKingInCheck(row, col);
         return isCheck;
     }

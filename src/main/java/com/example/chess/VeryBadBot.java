@@ -26,7 +26,7 @@ public class VeryBadBot {
         for(int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
                 int [] coordinates = new int[]{i, j};
-                if(gameState.getPiece(coordinates).charAt(0) == color){
+                if(gameState.getPiece(coordinates).charAt(0) == color && !gameState.getPiece(coordinates).substring(1).equalsIgnoreCase("rook")){
                     List<int[]> validMoves = gameState.validMoves(coordinates);
                     if(!validMoves.isEmpty()){
                         piecesAndMoves.put(coordinates, validMoves);
