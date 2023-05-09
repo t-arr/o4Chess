@@ -27,7 +27,7 @@ public class Board {
                     {"wrook", "wknight", "wbishop", "wking", "wqueen", "wbishop", "wknight", "wrook"}};
         }else{
             this.board = new String[][]{{"brook", "bknight", "bbishop", "bqueen", "bking", "bbishop", "bknight", "brook"},
-                    {"bqueen", "bqueen", "bqueen", "bqueen", "bqueen", "bqueen", "bqueen", "bqueen"},
+                    {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
