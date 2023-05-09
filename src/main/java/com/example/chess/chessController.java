@@ -206,6 +206,7 @@ public class chessController {
                     board.swapTurn();
                     board.setBotTurn(false);
                     updateBoardGUI();
+                    board.lookForChecks();
                     gameState = board.isGameOver();
                     if(gameState.equals("checkmate") || gameState.equals("stalemate") || gameState.equals("insufficient material")){
                         displayGameOver(gameState);
@@ -301,10 +302,10 @@ public class chessController {
         char playerWon = board.getOpponentColor();
         String playerColor;
         if(playerWon == 'w' && state.equals("checkmate")){
-            playerColor = "white";
+            playerColor = gameMode.equalsIgnoreCase("black") ? "black" : "white";
             alert.setHeaderText(playerColor + " won by checkmate");
         }else if (playerWon == 'b' && state.equals("checkmate")){
-            playerColor = "black";
+            playerColor = gameMode.equalsIgnoreCase("black") ? "white" : "black";
             alert.setHeaderText(playerColor + " won by checkmate");
         } else if (state.equals("insufficient material") || state.equals("stalemate")) {
             alert.setHeaderText("Draw by " + state);

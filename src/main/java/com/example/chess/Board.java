@@ -17,9 +17,9 @@ public class Board {
         this.gameMode = gameMode;
         this.playAgainstBot = playAgainstBot;
         if(gameMode.equalsIgnoreCase("black")){
-            this.board = new String[][]{{"brook", "-", "-", "bking", "-", "-", "-", "brook"},
-                    {"bpawn", "-", "-", "-", "-", "-", "-", "bpawn"},
-                    {"wpawn", "-", "-", "-", "-", "-", "-", "wpawn"},
+            this.board = new String[][]{{"brook", "bknight", "bbishop", "bking", "bqueen", "bbishop", "bknight", "brook"},
+                    {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
+                    {"-", "-", "-", "-", "-", "-", "-", "-"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
@@ -27,7 +27,7 @@ public class Board {
                     {"wrook", "wknight", "wbishop", "wking", "wqueen", "wbishop", "wknight", "wrook"}};
         }else{
             this.board = new String[][]{{"brook", "bknight", "bbishop", "bqueen", "bking", "bbishop", "bknight", "brook"},
-                    {"bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn", "bpawn"},
+                    {"bqueen", "bqueen", "bqueen", "bqueen", "bqueen", "bqueen", "bqueen", "bqueen"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
                     {"-", "-", "-", "-", "-", "-", "-", "-"},
@@ -49,9 +49,6 @@ public class Board {
         return board;
     }
 
-    public boolean getBotTurn() {
-        return isBotTurn;
-    }
     public void setBotTurn(boolean isBotTurn) {
         this.isBotTurn = isBotTurn;
     }
@@ -194,6 +191,7 @@ public class Board {
 
     public void setEnPassant(int[] from, int[] to) {
         String type = getPiece(from).substring(1);
+        System.out.println();
         if (type.equals("pawn") && (Math.abs(from[0] - to[0]) == 2)) {
             validEnPassant = true;
             enPassantCoordinates = new int[]{to[0], to[1]};
