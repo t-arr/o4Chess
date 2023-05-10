@@ -55,7 +55,7 @@ public class MainMenuController {
                 }
             });
         }
-        this.instance = GameSetupForBot.getInstance("White", "10 minutes", false);
+        this.instance = GameSetupForBot.getInstance("White", false);
     }
     @FXML
     public void switchScreen(ActionEvent event) throws IOException {
@@ -178,28 +178,12 @@ public class MainMenuController {
         VBox piecesSectionBox = new VBox();
         piecesSectionBox.getStyleClass().add("section-boxes");
         piecesSectionBox.getChildren().addAll(piecesLabel, piecesBox);
-        Label durationLabel = new Label("Choose game duration");
-        durationLabel.getStyleClass().add("section-label");
-        HBox durationBox = new HBox();
-        durationBox.setAlignment(Pos.CENTER);
-        durationBox.setSpacing(20);
-        ToggleGroup durationToggleGroup = new ToggleGroup();
-        RadioButton fiveMinButton = new RadioButton("5 minutes");
-        fiveMinButton.setToggleGroup(durationToggleGroup);
-        RadioButton tenMinButton = new RadioButton("10 minutes");
-        tenMinButton.setSelected(true);
-        tenMinButton.setToggleGroup(durationToggleGroup);
-        RadioButton fifteenMinButton = new RadioButton("15 minutes");
-        fifteenMinButton.setToggleGroup(durationToggleGroup);
-        durationBox.getChildren().addAll(fiveMinButton, tenMinButton, fifteenMinButton);
-        RadioButton [] rbList = new RadioButton[]{whiteButton, blackButton, fiveMinButton, tenMinButton, fifteenMinButton};
+
+        RadioButton [] rbList = new RadioButton[]{whiteButton, blackButton};
         for(RadioButton rb : rbList){
             rb.getStyleClass().add("radio-buttons");
         }
-        VBox durationSectionBox = new VBox();
-        durationSectionBox.getStyleClass().add("section-boxes");
-        durationSectionBox.getChildren().addAll(durationLabel, durationBox);
-        setupBox.getChildren().addAll(piecesSectionBox, durationSectionBox);
+        setupBox.getChildren().addAll(piecesSectionBox);
         HBox buttonsBox = new HBox();
         buttonsBox.setAlignment(Pos.CENTER);
         buttonsBox.setSpacing(20);
@@ -209,10 +193,7 @@ public class MainMenuController {
             try {
                 RadioButton selectedPieces = (RadioButton) piecesToggleGroup.getSelectedToggle();
                 String selectedColor = selectedPieces.getText();
-                RadioButton selectedDuration = (RadioButton) durationToggleGroup.getSelectedToggle();
-                String duration = selectedDuration.getText();
                 instance.setColor(selectedColor);
-                instance.setDuration(duration);
                 instance.setAgainstComp(true);
                 launchGame();
             } catch (IOException e) {

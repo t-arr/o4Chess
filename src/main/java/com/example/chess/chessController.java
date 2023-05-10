@@ -14,6 +14,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,10 @@ public class chessController {
     private boolean hasGameBegun = false;
     private boolean playAgainstBot;
     private GameSetupForBot instance;
+    private int upperImageRow = 0;
+    private int upperImageCol = 0;
+    private int lowerImageRow = 6;
+    private int lowerImageCol = 0;
     private String gameMode;
     VeryBadBot bot;
 
@@ -57,6 +63,18 @@ public class chessController {
             }
             isWhite = !isWhite;
         }
+        for (int i = 0; i < 5; i++) {
+            ColumnConstraints column = new ColumnConstraints();
+            column.setPercentWidth(20); // set the width of each column to 20% of the grid
+            boardInformation.getColumnConstraints().add(column);
+        }
+
+        // Add row constraints
+        for (int i = 0; i < 10; i++) {
+            RowConstraints row = new RowConstraints();
+            row.setPercentHeight(10); // set the height of each row to 10% of the grid
+            boardInformation.getRowConstraints().add(row);
+        }
         Button startButton = new Button("Start");
         startButton.setOnAction(event -> handleStartClick(startButton));
         startButton.getStyleClass().add("startMenuButtons");
@@ -72,7 +90,6 @@ public class chessController {
         });
         menuButton.getStyleClass().add("startMenuButtons");
         GridPane.setConstraints(menuButton, 1, 5, 3, 1);
-
         GridPane.setMargin(startButton, new Insets(0, 0, 10, 0));
         GridPane.setMargin(menuButton, new Insets(10, 0, 0, 0));
         boardInformation.setGridLinesVisible(false);
@@ -94,6 +111,11 @@ public class chessController {
             board = new Board(gameMode, playAgainstBot);
             correctColoringAgainstWhiteBot();
             prevButton = null;
+            clearBoardInformation();
+            upperImageRow = 0;
+            upperImageCol = 0;
+            lowerImageRow = 6;
+            lowerImageCol = 0;
             updateBoardGUI();
         }
     }
@@ -173,10 +195,16 @@ public class chessController {
                 if(validCoords[0] == clickedButton[0] && validCoords[1] == clickedButton[1]){
                     board.setEnPassant(previousClick, clickedButton);
                     if(board.isPromotion(previousClick, clickedButton)){
+                        addImageToBoardInformation(board.getPiece(clickedButton));
                         showPromotionOptions(previousClick, clickedButton);
                     }else if(board.isMoveEnPassant(previousClick, clickedButton)){
+                        addImageToBoardInformation(board.getOpponentColor() + "pawn");
                         board.swapEnPassant(previousClick, clickedButton);
-                    }else{
+                    } else if (board.getPiece(previousClick).substring(1).equalsIgnoreCase("king") && isMoveCastling(previousClick, clickedButton)) {
+                        board.swapCastle(previousClick, clickedButton);
+                        board.swap(previousClick, clickedButton);
+                    } else{
+                        addImageToBoardInformation(board.getPiece(clickedButton));
                         board.swap(previousClick, clickedButton);
                     }
                     updateBoardGUI();
@@ -194,7 +222,6 @@ public class chessController {
                     return;
                 }
                 board.updateCastlingVariables(previousClick, clickedButton);
-                board.swapCastle(previousClick, clickedButton);
                 updateBoardGUI();
                 //Handle opponent movement when playing against a bot
                 if(playAgainstBot){
@@ -215,6 +242,10 @@ public class chessController {
         }
     }
 
+    private boolean isMoveCastling(int[] from, int [] to){
+        return Math.abs(from[1]-to[1]) == 2;
+    }
+
     //iterates board and calls draw images to update view according to player movement
     private void updateBoardGUI() {
         for (Node node : boardGrid.getChildren()) {
@@ -224,6 +255,45 @@ public class chessController {
                 drawImages(button, row, col);
             }
         }
+    }
+
+    private void addImageToBoardInformation(String piece){
+        if(!piece.equalsIgnoreCase("-")){
+            String imageUrl = System.getProperty("user.dir") + "/src/main/java/com/example/chess/pawns/" + piece + ".png";
+            ImageView imageView = new ImageView(imageUrl);
+            imageView.setFitWidth(50);
+            imageView.setFitHeight(50);
+            if(piece.charAt(0) == 'w'){
+                GridPane.setConstraints(imageView, upperImageCol, upperImageRow);
+                boardInformation.getChildren().addAll(imageView);
+                if(upperImageCol == 4){
+                    upperImageCol = 0;
+                    upperImageRow++;
+                    return;
+                }
+                upperImageCol++;
+            }
+            if(piece.charAt(0) == 'b'){
+                GridPane.setConstraints(imageView, lowerImageCol, lowerImageRow);
+                boardInformation.getChildren().addAll(imageView);
+                if(lowerImageCol == 4){
+                    lowerImageCol = 0;
+                    lowerImageRow++;
+                    return;
+                }
+                lowerImageCol++;
+            }
+        }
+    }
+
+    private void clearBoardInformation() {
+        List<Node> nodesToRemove = new ArrayList<>();
+        for (Node node : boardInformation.getChildren()) {
+            if (!(node instanceof Button)) {
+                nodesToRemove.add(node);
+            }
+        }
+        boardInformation.getChildren().removeAll(nodesToRemove);
     }
 
     //displays valid moves of certain pawn by drawing circle on board
@@ -337,6 +407,11 @@ public class chessController {
             if (buttonType == newGame) {
                 board = new Board(gameMode, playAgainstBot);
                 prevButton = null;
+                clearBoardInformation();
+                upperImageRow = 0;
+                upperImageCol = 0;
+                lowerImageRow = 6;
+                lowerImageCol = 0;
                 correctColoringAgainstWhiteBot();
             } else if (buttonType == mainMenu) {
                 try {

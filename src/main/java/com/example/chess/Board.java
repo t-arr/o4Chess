@@ -105,32 +105,25 @@ public class Board {
         int toCol = to[1];
         //updates castling when bot is white
         if(gameMode.equalsIgnoreCase("black")){
-            if ((fromRow == 0 && fromCol == 3) || (fromRow == 7 && fromCol == 3)) {
-                if ((toRow == 0 && (toCol == 1 || toCol == 5)) || (toRow == 7 && (toCol == 1 || toCol == 5))) {
-                    if (toCol < fromCol) {
-                        String tmp = board[fromRow][0];
-                        board[fromRow][0] = "-";
-                        board[fromRow][2] = tmp;
-                    } else {
-                        String tmp = board[fromRow][7];
-                        board[fromRow][7] = "-";
-                        board[fromRow][4] = tmp;
-                    }
-                }
+            if (toCol < fromCol) {
+                String tmp = board[fromRow][0];
+                board[fromRow][0] = "-";
+                board[fromRow][2] = tmp;
+            } else {
+                String tmp = board[fromRow][7];
+                board[fromRow][7] = "-";
+                board[fromRow][4] = tmp;
             }
+
         }else{
-            if ((fromRow == 0 && fromCol == 4) || (fromRow == 7 && fromCol == 4)) {
-                if ((toRow == 0 && (toCol == 2 || toCol == 6)) || (toRow == 7 && (toCol == 2 || toCol == 6))) {
-                    if (toCol < fromCol) {
-                        String tmp = board[fromRow][0];
-                        board[fromRow][0] = "-";
-                        board[fromRow][3] = tmp;
-                    } else {
-                        String tmp = board[fromRow][7];
-                        board[fromRow][7] = "-";
-                        board[fromRow][5] = tmp;
-                    }
-                }
+            if (toCol < fromCol) {
+                String tmp = board[fromRow][0];
+                board[fromRow][0] = "-";
+                board[fromRow][3] = tmp;
+            } else {
+                String tmp = board[fromRow][7];
+                board[fromRow][7] = "-";
+                board[fromRow][5] = tmp;
             }
         }
     }
