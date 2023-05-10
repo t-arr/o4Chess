@@ -11,7 +11,6 @@ public class Board {
     private boolean isCheck = false;
     private String gameMode;
     private boolean playAgainstBot;
-    private boolean isBotTurn = false;
 
     public Board(String gameMode, boolean playAgainstBot) {
         this.gameMode = gameMode;
@@ -39,22 +38,23 @@ public class Board {
         validEnPassant = false;
     }
 
-    public void swap(int[] from, int[] to) {
-        String temp = board[from[0]][from[1]];
-        board[from[0]][from[1]] = "-";
-        board[to[0]][to[1]] = temp;
-    }
-
     public String[][] getBoard() {
         return board;
     }
 
-    public void setBotTurn(boolean isBotTurn) {
-        this.isBotTurn = isBotTurn;
-    }
-
     public String getPiece(int[] coords) {
         return board[coords[0]][coords[1]];
+    }
+
+    public int[] getKingCoordinates() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board[i][j].equals(getTurn() + "king")) {
+                    return new int[]{i, j};
+                }
+            }
+        }
+        return null;
     }
 
     public char getTurn() {
@@ -76,38 +76,61 @@ public class Board {
         }
     }
 
-    public List<int[]> validMoves(int[] coords) {
-        String type = getPiece(coords);
-        char color = type.charAt(0);
-        char opponentColor = getOpponentColor();
-        type = type.substring(1);
-        switch (type) {
-            case "pawn" -> {
-                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates, opponentColor, getKingCoordinates());
-                return pawn.getValidMoves(coords);
+    public void swap(int[] from, int[] to) {
+        String temp = board[from[0]][from[1]];
+        board[from[0]][from[1]] = "-";
+        board[to[0]][to[1]] = temp;
+    }
+
+    //Promotion methods
+    public void swapPromotion(int[] from, int[] to, String wantedPiece) {
+        char color = getPiece(from).charAt(0);
+        board[to[0]][to[1]] = color + wantedPiece;
+        board[from[0]][from[1]] = "-";
+    }
+
+    public boolean isPromotion(int[] from, int[] to) {
+        String piece = getPiece(from).substring(1);
+        char color = getPiece(from).charAt(0);
+        if (piece.equals("pawn") && color == 'b' && to[0] == 7) {
+            return true;
+        } else return piece.equals("pawn") && color == 'w' && to[0] == 0;
+    }
+
+    //Castling methods
+    public void swapCastle(int[] from, int[] to) {
+        int fromRow = from[0];
+        int fromCol = from[1];
+        int toRow = to[0];
+        int toCol = to[1];
+        //updates castling when bot is white
+        if(gameMode.equalsIgnoreCase("black")){
+            if ((fromRow == 0 && fromCol == 3) || (fromRow == 7 && fromCol == 3)) {
+                if ((toRow == 0 && (toCol == 1 || toCol == 5)) || (toRow == 7 && (toCol == 1 || toCol == 5))) {
+                    if (toCol < fromCol) {
+                        String tmp = board[fromRow][0];
+                        board[fromRow][0] = "-";
+                        board[fromRow][2] = tmp;
+                    } else {
+                        String tmp = board[fromRow][7];
+                        board[fromRow][7] = "-";
+                        board[fromRow][4] = tmp;
+                    }
+                }
             }
-            case "rook" -> {
-                Rook rook = new Rook(color, board, opponentColor, getKingCoordinates());
-                return rook.getValidMoves(coords);
-            }
-            case "knight" -> {
-                Knight knight = new Knight(color, board, opponentColor, getKingCoordinates());
-                return knight.getValidMoves(coords);
-            }
-            case "bishop" -> {
-                Bishop bishop = new Bishop(color, board, opponentColor, getKingCoordinates());
-                return bishop.getValidMoves(coords);
-            }
-            case "queen" -> {
-                Queen queen = new Queen(color, board, opponentColor, getKingCoordinates());
-                return queen.getValidMoves(coords);
-            }
-            case "king" -> {
-                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode, this, playAgainstBot, isBotTurn);
-                return king.getValidMoves(coords);
-            }
-            default -> {
-                return new ArrayList<>();
+        }else{
+            if ((fromRow == 0 && fromCol == 4) || (fromRow == 7 && fromCol == 4)) {
+                if ((toRow == 0 && (toCol == 2 || toCol == 6)) || (toRow == 7 && (toCol == 2 || toCol == 6))) {
+                    if (toCol < fromCol) {
+                        String tmp = board[fromRow][0];
+                        board[fromRow][0] = "-";
+                        board[fromRow][3] = tmp;
+                    } else {
+                        String tmp = board[fromRow][7];
+                        board[fromRow][7] = "-";
+                        board[fromRow][5] = tmp;
+                    }
+                }
             }
         }
     }
@@ -152,40 +175,16 @@ public class Board {
         }
     }
 
-    public void castle(int[] from, int[] to) {
-        int fromRow = from[0];
-        int fromCol = from[1];
-        int toRow = to[0];
-        int toCol = to[1];
-
-        if(gameMode.equalsIgnoreCase("black")){
-            if ((fromRow == 0 && fromCol == 3) || (fromRow == 7 && fromCol == 3)) {
-                if ((toRow == 0 && (toCol == 1 || toCol == 5)) || (toRow == 7 && (toCol == 1 || toCol == 5))) {
-                    if (toCol < fromCol) {
-                        String tmp = board[fromRow][0];
-                        board[fromRow][0] = "-";
-                        board[fromRow][2] = tmp;
-                    } else {
-                        String tmp = board[fromRow][7];
-                        board[fromRow][7] = "-";
-                        board[fromRow][4] = tmp;
-                    }
-                }
-            }
-        }else{
-            if ((fromRow == 0 && fromCol == 4) || (fromRow == 7 && fromCol == 4)) {
-                if ((toRow == 0 && (toCol == 2 || toCol == 6)) || (toRow == 7 && (toCol == 2 || toCol == 6))) {
-                    if (toCol < fromCol) {
-                        String tmp = board[fromRow][0];
-                        board[fromRow][0] = "-";
-                        board[fromRow][3] = tmp;
-                    } else {
-                        String tmp = board[fromRow][7];
-                        board[fromRow][7] = "-";
-                        board[fromRow][5] = tmp;
-                    }
-                }
-            }
+    //En passant methods
+    public void swapEnPassant(int[] from, int[] to) {
+        char color = getPiece(from).charAt(0);
+        String temp = board[from[0]][from[1]];
+        board[from[0]][from[1]] = "-";
+        board[to[0]][to[1]] = temp;
+        if (color == 'b') {
+            board[to[0] - 1][to[1]] = "-";
+        } else {
+            board[to[0] + 1][to[1]] = "-";
         }
     }
 
@@ -200,59 +199,60 @@ public class Board {
         }
     }
 
-    public void swapEnPassant(int[] from, int[] to) {
-        char color = getPiece(from).charAt(0);
-        String temp = board[from[0]][from[1]];
-        board[from[0]][from[1]] = "-";
-        board[to[0]][to[1]] = temp;
-        if (color == 'b') {
-            board[to[0] - 1][to[1]] = "-";
-        } else {
-            board[to[0] + 1][to[1]] = "-";
-        }
-    }
-
     public boolean isMoveEnPassant(int[] from, int[] to) {
         String type = getPiece(from).substring(1);
         return type.equals("pawn") && getPiece(to).equals("-") && from[1] != to[1];
     }
 
-    public boolean isPromotion(int[] from, int[] to) {
-        String piece = getPiece(from).substring(1);
-        char color = getPiece(from).charAt(0);
-        if (piece.equals("pawn") && color == 'b' && to[0] == 7) {
-            return true;
-        } else return piece.equals("pawn") && color == 'w' && to[0] == 0;
-    }
-
-    public void swapPromotion(int[] from, int[] to, String wantedPiece) {
-        char color = getPiece(from).charAt(0);
-        board[to[0]][to[1]] = color + wantedPiece;
-        board[from[0]][from[1]] = "-";
-    }
-
-    public int[] getKingCoordinates() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (board[i][j].equals(getTurn() + "king")) {
-                    return new int[]{i, j};
-                }
+    //Retruns all legal moves from selected coordinates
+    public List<int[]> validMoves(int[] coords) {
+        String type = getPiece(coords);
+        char color = type.charAt(0);
+        char opponentColor = getOpponentColor();
+        type = type.substring(1);
+        switch (type) {
+            case "pawn" -> {
+                Pawn pawn = new Pawn(color, board, validEnPassant, enPassantCoordinates, opponentColor, getKingCoordinates());
+                return pawn.getValidMoves(coords);
+            }
+            case "rook" -> {
+                Rook rook = new Rook(color, board, opponentColor, getKingCoordinates());
+                return rook.getValidMoves(coords);
+            }
+            case "knight" -> {
+                Knight knight = new Knight(color, board, opponentColor, getKingCoordinates());
+                return knight.getValidMoves(coords);
+            }
+            case "bishop" -> {
+                Bishop bishop = new Bishop(color, board, opponentColor, getKingCoordinates());
+                return bishop.getValidMoves(coords);
+            }
+            case "queen" -> {
+                Queen queen = new Queen(color, board, opponentColor, getKingCoordinates());
+                return queen.getValidMoves(coords);
+            }
+            case "king" -> {
+                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode, this, playAgainstBot);
+                return king.getValidMoves(coords);
+            }
+            default -> {
+                return new ArrayList<>();
             }
         }
-        return null;
     }
 
-    public boolean lookForChecks() {
+    //Updates isCheck variable if king is in check
+    public void lookForChecks() {
         int[] kingCoordinates = getKingCoordinates();
         int row = kingCoordinates[0];
         int col = kingCoordinates[1];
         char color = getTurn();
         char oppColor = getOpponentColor();
-        King k = new King(color, board, castlingList, oppColor, false, gameMode, this, playAgainstBot, isBotTurn);
+        King k = new King(color, board, castlingList, oppColor, false, gameMode, this, playAgainstBot);
         isCheck = k.isKingInCheck(row, col);
-        return isCheck;
     }
 
+    //Returns empty string if game is not over or string that tells why game is over
     public String isGameOver() {
         boolean isDraw = true;
         List<int[]> validOpponentMoves = new ArrayList<>();

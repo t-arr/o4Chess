@@ -26,7 +26,6 @@ public class chessController {
     @FXML
     private GridPane boardInformation;
     private Button prevButton = null;
-    private boolean inCheck = false;
     private boolean hasGameBegun = false;
     private boolean playAgainstBot;
     private GameSetupForBot instance;
@@ -40,7 +39,7 @@ public class chessController {
         this.playAgainstBot = instance.getAgainstComp();
         gameMode = instance.getColor();
         board = new Board(gameMode, playAgainstBot);
-        bot = new VeryBadBot(gameMode);
+        bot = new VeryBadBot();
         boolean isWhite = true;
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
@@ -84,14 +83,7 @@ public class chessController {
         if(!hasGameBegun){
             hasGameBegun = true;
             btn.setText("restart");
-            if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
-                board.swapTurn();
-                board.setBotTurn(true);
-                bot.makeMove(board.getBoard(), board, gameMode);
-                board.setBotTurn(false);
-                board.swapTurn();
-                updateBoardGUI();
-            }
+            correctColoringAgainstWhiteBot();
             return;
         }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -100,15 +92,18 @@ public class chessController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             board = new Board(gameMode, playAgainstBot);
-            if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
-                board.swapTurn();
-                board.setBotTurn(true);
-                bot.makeMove(board.getBoard(), board, gameMode);
-                board.setBotTurn(false);
-                board.swapTurn();
-                updateBoardGUI();
-            }
+            correctColoringAgainstWhiteBot();
             prevButton = null;
+            updateBoardGUI();
+        }
+    }
+
+    //handles correct coloring when playing with black pieces
+    private void correctColoringAgainstWhiteBot(){
+        if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
+            board.swapTurn();
+            bot.makeMove(board.getBoard(), board);
+            board.swapTurn();
             updateBoardGUI();
         }
     }
@@ -132,6 +127,7 @@ public class chessController {
 
 
     private void drawImages(Button button, int row, int col) {
+
         String[][] state = board.getBoard();
 
         if (state[row][col].equals("-")) {
@@ -151,6 +147,7 @@ public class chessController {
         }
     }
 
+    //Handles movement during the game by keeping track of clicked button and previously clicked button
     private void handleButtonClick(Button button) {
         int[] clickedButton = new int[]{GridPane.getRowIndex(button), GridPane.getColumnIndex(button)};
         if (prevButton == null) {
@@ -189,7 +186,7 @@ public class chessController {
             }
             if(isValidMove){
                 board.swapTurn();
-                inCheck = board.lookForChecks();
+                board.lookForChecks();
                 String gameState = board.isGameOver();
                 if(gameState.equals("checkmate") || gameState.equals("stalemate") || gameState.equals("insufficient material")){
                     displayGameOver(gameState);
@@ -197,15 +194,12 @@ public class chessController {
                     return;
                 }
                 board.updateCastlingVariables(previousClick, clickedButton);
-                board.castle(previousClick, clickedButton);
-                if(playAgainstBot){
-                    board.setBotTurn(true);
-                }
+                board.swapCastle(previousClick, clickedButton);
                 updateBoardGUI();
+                //Handle opponent movement when playing against a bot
                 if(playAgainstBot){
-                    bot.makeMove(board.getBoard(), board, gameMode);
+                    bot.makeMove(board.getBoard(), board);
                     board.swapTurn();
-                    board.setBotTurn(false);
                     updateBoardGUI();
                     board.lookForChecks();
                     gameState = board.isGameOver();
@@ -221,6 +215,7 @@ public class chessController {
         }
     }
 
+    //iterates board and calls draw images to update view according to player movement
     private void updateBoardGUI() {
         for (Node node : boardGrid.getChildren()) {
             if (node instanceof Button button) {
@@ -230,6 +225,8 @@ public class chessController {
             }
         }
     }
+
+    //displays valid moves of certain pawn by drawing circle on board
     private void displayValidMoves(int validRow, int validCol, String type, int [] coordinates) {
         for (Node node : boardGrid.getChildren()) {
             if (node instanceof Button button) {
@@ -242,6 +239,7 @@ public class chessController {
                         button.setGraphic(stackPane);
                     } else {
                         Circle circle;
+                        //if king can castle -> display movement as blue circle to differentiate movement
                         if(type.substring(1).equals("king") && Math.abs(validCol-coordinates[1]) == 2){
                             circle = new Circle(10, 10, 10, Color.BLUE);
                         }else{
@@ -254,6 +252,7 @@ public class chessController {
         }
     }
 
+    //handles promoting
     public void showPromotionOptions(int [] from, int [] to){
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.initStyle(StageStyle.UNDECORATED);
@@ -296,6 +295,7 @@ public class chessController {
         });
     }
 
+    //handles situations when game is over
     public void displayGameOver(String state){
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.initStyle(StageStyle.DECORATED);
@@ -337,14 +337,7 @@ public class chessController {
             if (buttonType == newGame) {
                 board = new Board(gameMode, playAgainstBot);
                 prevButton = null;
-                if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
-                    board.setBotTurn(true);
-                    board.swapTurn();
-                    bot.makeMove(board.getBoard(), board, gameMode);
-                    board.setBotTurn(false);
-                    board.swapTurn();
-                    updateBoardGUI();
-                }
+                correctColoringAgainstWhiteBot();
             } else if (buttonType == mainMenu) {
                 try {
                     executeMenuCommand();

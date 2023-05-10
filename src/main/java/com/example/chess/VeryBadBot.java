@@ -3,14 +3,13 @@ package com.example.chess;
 import java.util.*;
 
 public class VeryBadBot {
-    private char color;
-    private String gameMode;
 
-    public VeryBadBot(String gameMode){
+    private char color;
+
+    public VeryBadBot(){
         this.color = 'b';
-        this.gameMode = gameMode;
     }
-    public void makeMove(String[][] board, Board gameState, String gameMode){
+    public void makeMove(String[][] board, Board gameState){
         Map<int[], List<int []>> piecesAndMoves = new HashMap<>();
         for(int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++){
@@ -39,7 +38,7 @@ public class VeryBadBot {
             gameState.swapEnPassant(randomKey, randomValue);
         }else if(gameState.getPiece(randomKey).substring(1).equals("king") && isMoveCastling(randomKey, randomValue)){
             gameState.swap(randomKey, randomValue);
-            gameState.castle(randomKey, randomValue);
+            gameState.swapCastle(randomKey, randomValue);
         }else{
             gameState.swap(randomKey, randomValue);
         }

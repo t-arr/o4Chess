@@ -13,10 +13,9 @@ public class King {
     private String gameMode;
     private Board gameState;
     private boolean playAgainstBot;
-    private boolean isBotTurn;
 
 
-    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode, Board gameState, boolean playAgainstBot, boolean isBotTurn) {
+    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode, Board gameState, boolean playAgainstBot) {
         this.playAgainstBot = playAgainstBot;
         this.color = color;
         this.board = board;
