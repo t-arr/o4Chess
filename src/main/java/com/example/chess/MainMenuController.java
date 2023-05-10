@@ -81,7 +81,7 @@ public class MainMenuController {
             howToPlay.getStyleClass().add("question");
             howToPlay.setWrapText(true);
             helpBox.getChildren().add(howToPlay);
-            Label howToPlayAnswer = new Label("From menu, click on the button named 'Play', then set up your game preferences and click 'Start game'. Now you should see a game view. Press start to initialize game and notice that white moves first.");
+            Label howToPlayAnswer = new Label("From menu, click on the button named 'Play', then choose preferred game mode. If you play against computer, choose the piece colors you want. Enter your name(s) and press 'Play'. To initialize game, press start. Notice that white moves first.");
             howToPlayAnswer.getStyleClass().add("answer");
             howToPlayAnswer.setWrapText(true);
             helpBox.getChildren().add(howToPlayAnswer);
