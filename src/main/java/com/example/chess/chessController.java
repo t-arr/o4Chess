@@ -1,7 +1,9 @@
 package com.example.chess;
 
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -78,10 +80,15 @@ public class chessController {
         }
 
         Label playerLabels = new Label("White: " + whitePlayerName + "  Black: " + blackPlayerName);
-        playerLabels.getStyleClass().add("board-information-label");
+        if(whitePlayerName.length() + blackPlayerName.length() > 18){
+            playerLabels.getStyleClass().add("board-information-label-long-names");
+        }else{
+            playerLabels.getStyleClass().add("board-information-label");
+        }
         GridPane.setConstraints(playerLabels, 0, 0, 5, 1);
+        GridPane.setHalignment(playerLabels, HPos.CENTER);
         boardInformation.getChildren().add(playerLabels);
-
+        boardInformation.setAlignment(Pos.CENTER);
         Button startButton = new Button("Start");
         startButton.setOnAction(event -> handleStartClick(startButton));
         startButton.getStyleClass().add("startMenuButtons");

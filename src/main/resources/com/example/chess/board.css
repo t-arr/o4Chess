@@ -18,6 +18,9 @@
     -fx-text-alignment: center;
 }
 
+.board-information-label-long-names{
+    -fx-font: bold 14px "Times New Roman";
+}
 .borderpane-container{
     -fx-background-color: #1e1e1e;
 }

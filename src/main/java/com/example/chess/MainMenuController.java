@@ -184,8 +184,8 @@ public class MainMenuController {
         Label nameLabel = new Label("Enter your name:");
         nameLabel.getStyleClass().add("section-label");
         TextField nameField = new TextField();
-        nameField.setPromptText("Name");
-        nameField.setMaxWidth(200);
+        nameField.setPromptText("Name (preferably under 7 characters)");
+        nameField.setMaxWidth(250);
         VBox nameInputBox = new VBox();
         nameInputBox.setAlignment(Pos.CENTER);
         nameInputBox.setSpacing(20);
@@ -242,8 +242,8 @@ public class MainMenuController {
         Label nameLabelWhite = new Label("Enter name for White player:");
         nameLabelWhite.getStyleClass().add("section-label");
         TextField nameFieldWhite = new TextField();
-        nameFieldWhite.setPromptText("Name");
-        nameFieldWhite.setMaxWidth(200);
+        nameFieldWhite.setPromptText("Name (preferably under 7 characters)");
+        nameFieldWhite.setMaxWidth(250);
         VBox nameInputBoxWhite = new VBox();
         nameInputBoxWhite.setAlignment(Pos.CENTER);
         nameInputBoxWhite.setSpacing(20);
@@ -252,8 +252,8 @@ public class MainMenuController {
         Label nameLabelBlack = new Label("Enter name for Black player:");
         nameLabelBlack.getStyleClass().add("section-label");
         TextField nameFieldBlack = new TextField();
-        nameFieldBlack.setPromptText("Name");
-        nameFieldBlack.setMaxWidth(200);
+        nameFieldBlack.setPromptText("Name (preferably under 7 characters)");
+        nameFieldBlack.setMaxWidth(250);
         VBox nameInputBoxBlack = new VBox();
         nameInputBoxBlack.setAlignment(Pos.CENTER);
         nameInputBoxBlack.setSpacing(20);
