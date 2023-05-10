@@ -4,6 +4,9 @@ public class GameSetupForBot {
     private static GameSetupForBot instance;
     private String color;
     private boolean againstComp;
+    private String blackPieces;
+    private String whitePieces;
+
 
     private GameSetupForBot(String color, boolean againstComp){
         this.color = color;
@@ -31,6 +34,22 @@ public class GameSetupForBot {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void setWhitePieces(String whitePieces){
+        this.whitePieces = whitePieces;
+    }
+
+    public void setBlackPieces(String blackPieces){
+        this.blackPieces = blackPieces;
+    }
+
+    public String getWhitePieces(){
+        return whitePieces;
+    }
+
+    public String getBlackPieces(){
+        return blackPieces;
     }
 
     public void setAgainstComp(boolean againstComp) {

@@ -13,6 +13,11 @@
     -fx-border-style: solid;
 }
 
+.board-information-label{
+    -fx-font: bold 16px "Times New Roman";
+    -fx-text-alignment: center;
+}
+
 .borderpane-container{
     -fx-background-color: #1e1e1e;
 }

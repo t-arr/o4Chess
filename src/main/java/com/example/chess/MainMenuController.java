@@ -131,13 +131,7 @@ public class MainMenuController {
 
         Button twoPlayersButton = new Button("Two Players");
         twoPlayersButton.setOnAction(event -> {
-            try {
-                instance.setAgainstComp(false);
-                instance.setColor("twoPlayers");
-                launchGame();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+                setupTwoPlayers();
         });
 
         Button playAgainstComputerButton = new Button("Play against Computer");
@@ -183,7 +177,22 @@ public class MainMenuController {
         for(RadioButton rb : rbList){
             rb.getStyleClass().add("radio-buttons");
         }
-        setupBox.getChildren().addAll(piecesSectionBox);
+        VBox nameBox = new VBox();
+        nameBox.setAlignment(Pos.CENTER);
+        nameBox.setSpacing(20);
+
+        Label nameLabel = new Label("Enter your name:");
+        nameLabel.getStyleClass().add("section-label");
+        TextField nameField = new TextField();
+        nameField.setPromptText("Name");
+        nameField.setMaxWidth(200);
+        VBox nameInputBox = new VBox();
+        nameInputBox.setAlignment(Pos.CENTER);
+        nameInputBox.setSpacing(20);
+        nameInputBox.getChildren().addAll(nameLabel, nameField);
+        nameBox.getChildren().addAll(nameInputBox, piecesSectionBox);
+        setupBox.getChildren().addAll(piecesSectionBox, nameBox);
+
         HBox buttonsBox = new HBox();
         buttonsBox.setAlignment(Pos.CENTER);
         buttonsBox.setSpacing(20);
@@ -192,8 +201,16 @@ public class MainMenuController {
         playButton.setOnAction(event -> {
             try {
                 RadioButton selectedPieces = (RadioButton) piecesToggleGroup.getSelectedToggle();
+                String playerName = nameField.getText();
                 String selectedColor = selectedPieces.getText();
                 instance.setColor(selectedColor);
+                if(selectedColor.equalsIgnoreCase("black")){
+                    instance.setWhitePieces("Computer");
+                    instance.setBlackPieces(playerName);
+                }else{
+                    instance.setWhitePieces(playerName);
+                    instance.setBlackPieces("Computer");
+                }
                 instance.setAgainstComp(true);
                 launchGame();
             } catch (IOException e) {
@@ -207,6 +224,73 @@ public class MainMenuController {
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(setupBox);
+        borderPane.setBottom(buttonsBox);
+
+        container.getChildren().add(borderPane);
+        BorderPane.setMargin(buttonsBox, new Insets(0, 0, 10, 0));
+        menuGrid.add(container, 0, 0, 10, 10);
+    }
+
+    public void setupTwoPlayers() {
+        StackPane container = new StackPane();
+        container.getStyleClass().add("helpBoxContainer");
+
+        VBox setupBox = new VBox();
+        setupBox.setAlignment(Pos.CENTER);
+        setupBox.setSpacing(50);
+
+        Label nameLabelWhite = new Label("Enter name for White player:");
+        nameLabelWhite.getStyleClass().add("section-label");
+        TextField nameFieldWhite = new TextField();
+        nameFieldWhite.setPromptText("Name");
+        nameFieldWhite.setMaxWidth(200);
+        VBox nameInputBoxWhite = new VBox();
+        nameInputBoxWhite.setAlignment(Pos.CENTER);
+        nameInputBoxWhite.setSpacing(20);
+        nameInputBoxWhite.getChildren().addAll(nameLabelWhite, nameFieldWhite);
+
+        Label nameLabelBlack = new Label("Enter name for Black player:");
+        nameLabelBlack.getStyleClass().add("section-label");
+        TextField nameFieldBlack = new TextField();
+        nameFieldBlack.setPromptText("Name");
+        nameFieldBlack.setMaxWidth(200);
+        VBox nameInputBoxBlack = new VBox();
+        nameInputBoxBlack.setAlignment(Pos.CENTER);
+        nameInputBoxBlack.setSpacing(20);
+        nameInputBoxBlack.getChildren().addAll(nameLabelBlack, nameFieldBlack);
+
+        VBox nameBox = new VBox();
+        nameBox.setAlignment(Pos.CENTER);
+        nameBox.setSpacing(50);
+        nameBox.getChildren().addAll(nameInputBoxWhite, nameInputBoxBlack);
+
+        HBox buttonsBox = new HBox();
+        buttonsBox.setAlignment(Pos.CENTER);
+        buttonsBox.setSpacing(20);
+
+        Button playButton = new Button("Play");
+        playButton.getStyleClass().add("close-button");
+        playButton.setOnAction(event -> {
+            try {
+                String nameBlack = nameFieldBlack.getText();
+                String nameWhite = nameFieldWhite.getText();
+                instance.setColor("twoPlayers");
+                instance.setWhitePieces(nameWhite);
+                instance.setBlackPieces(nameBlack);
+                instance.setAgainstComp(false);
+                launchGame();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        Button cancelButton = new Button("Go back");
+        cancelButton.getStyleClass().add("close-button");
+        cancelButton.setOnAction(event -> menuGrid.getChildren().remove(container));
+        buttonsBox.getChildren().addAll(playButton, cancelButton);
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(nameBox);
         borderPane.setBottom(buttonsBox);
 
         container.getChildren().add(borderPane);

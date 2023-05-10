@@ -3,10 +3,7 @@ package com.example.chess;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -31,17 +28,21 @@ public class chessController {
     private boolean hasGameBegun = false;
     private boolean playAgainstBot;
     private GameSetupForBot instance;
-    private int upperImageRow = 0;
+    private int upperImageRow = 1;
     private int upperImageCol = 0;
     private int lowerImageRow = 6;
     private int lowerImageCol = 0;
     private String gameMode;
+    private String whitePlayerName;
+    private String blackPlayerName;
     VeryBadBot bot;
 
 
     @FXML
     public void initialize() {
         instance = GameSetupForBot.getInstance();
+        this.whitePlayerName = instance.getWhitePieces();
+        this.blackPlayerName = instance.getBlackPieces();
         this.playAgainstBot = instance.getAgainstComp();
         gameMode = instance.getColor();
         board = new Board(gameMode, playAgainstBot);
@@ -75,6 +76,12 @@ public class chessController {
             row.setPercentHeight(10); // set the height of each row to 10% of the grid
             boardInformation.getRowConstraints().add(row);
         }
+
+        Label playerLabels = new Label("White: " + whitePlayerName + "  Black: " + blackPlayerName);
+        playerLabels.getStyleClass().add("board-information-label");
+        GridPane.setConstraints(playerLabels, 0, 0, 5, 1);
+        boardInformation.getChildren().add(playerLabels);
+
         Button startButton = new Button("Start");
         startButton.setOnAction(event -> handleStartClick(startButton));
         startButton.getStyleClass().add("startMenuButtons");
@@ -112,7 +119,7 @@ public class chessController {
             correctColoringAgainstWhiteBot();
             prevButton = null;
             clearBoardInformation();
-            upperImageRow = 0;
+            upperImageRow = 1;
             upperImageCol = 0;
             lowerImageRow = 6;
             lowerImageCol = 0;
@@ -289,7 +296,7 @@ public class chessController {
     private void clearBoardInformation() {
         List<Node> nodesToRemove = new ArrayList<>();
         for (Node node : boardInformation.getChildren()) {
-            if (!(node instanceof Button)) {
+            if (!(node instanceof Button) && !(node instanceof Label)) {
                 nodesToRemove.add(node);
             }
         }
@@ -408,7 +415,7 @@ public class chessController {
                 board = new Board(gameMode, playAgainstBot);
                 prevButton = null;
                 clearBoardInformation();
-                upperImageRow = 0;
+                upperImageRow = 1;
                 upperImageCol = 0;
                 lowerImageRow = 6;
                 lowerImageCol = 0;
