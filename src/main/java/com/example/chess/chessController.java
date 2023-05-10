@@ -108,6 +108,7 @@ public class chessController {
                 board.swapTurn();
                 updateBoardGUI();
             }
+            prevButton = null;
             updateBoardGUI();
         }
     }
@@ -335,6 +336,7 @@ public class chessController {
         result.ifPresent(buttonType -> {
             if (buttonType == newGame) {
                 board = new Board(gameMode, playAgainstBot);
+                prevButton = null;
                 if(playAgainstBot && gameMode.equalsIgnoreCase("black")){
                     board.setBotTurn(true);
                     board.swapTurn();

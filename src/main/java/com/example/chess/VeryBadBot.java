@@ -44,8 +44,6 @@ public class VeryBadBot {
             gameState.swap(randomKey, randomValue);
         }
         gameState.updateCastlingVariables(randomKey, randomValue);
-        System.out.println(gameState.getPiece(randomKey));
-        System.out.println("key: " + Arrays.toString(randomKey) + "value: " + Arrays.toString(randomValue));
     }
     private boolean isMoveCastling(int[] from, int [] to){
         return Math.abs(from[1]-to[1]) == 2;
