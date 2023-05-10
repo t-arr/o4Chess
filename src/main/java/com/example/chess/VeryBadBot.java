@@ -5,6 +5,7 @@ import java.util.*;
 public class VeryBadBot {
 
     private char color;
+    private String eatenPiece = "-";
 
     public VeryBadBot(){
         this.color = 'b';
@@ -35,16 +36,26 @@ public class VeryBadBot {
             }
         }
         if(gameState.isMoveEnPassant(randomKey, randomValue)){
+            setEatenPiece("wpawn");
             gameState.swapEnPassant(randomKey, randomValue);
         }else if(gameState.getPiece(randomKey).substring(1).equals("king") && isMoveCastling(randomKey, randomValue)){
             gameState.swap(randomKey, randomValue);
             gameState.swapCastle(randomKey, randomValue);
         }else{
+            setEatenPiece(gameState.getPiece(randomValue));
             gameState.swap(randomKey, randomValue);
         }
         gameState.updateCastlingVariables(randomKey, randomValue);
     }
     private boolean isMoveCastling(int[] from, int [] to){
         return Math.abs(from[1]-to[1]) == 2;
+    }
+
+    private void setEatenPiece(String piece){
+        this.eatenPiece = piece;
+    }
+
+    public String getEatenPiece(){
+        return eatenPiece;
     }
 }

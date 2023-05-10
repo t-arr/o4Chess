@@ -236,6 +236,7 @@ public class chessController {
                     board.swapTurn();
                     updateBoardGUI();
                     board.lookForChecks();
+                    addImageToBoardInformation(bot.getEatenPiece());
                     gameState = board.isGameOver();
                     if(gameState.equals("checkmate") || gameState.equals("stalemate") || gameState.equals("insufficient material")){
                         displayGameOver(gameState);
@@ -266,7 +267,12 @@ public class chessController {
 
     private void addImageToBoardInformation(String piece){
         if(!piece.equalsIgnoreCase("-")){
-            String imageUrl = System.getProperty("user.dir") + "/src/main/java/com/example/chess/pawns/" + piece + ".png";
+            String imageUrl;
+            if(gameMode.equals("Black")){
+                imageUrl = System.getProperty("user.dir") + "/src/main/java/com/example/chess/invertedPawns/" + piece + ".png";
+            }else{
+                imageUrl = System.getProperty("user.dir") + "/src/main/java/com/example/chess/pawns/" + piece + ".png";
+            }
             ImageView imageView = new ImageView(imageUrl);
             imageView.setFitWidth(50);
             imageView.setFitHeight(50);
