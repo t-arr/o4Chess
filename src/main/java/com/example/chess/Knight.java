@@ -1,9 +1,7 @@
 package com.example.chess;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Knight {
     private char color;
@@ -19,6 +17,7 @@ public class Knight {
         this.opponentColor = opponentColor;
     }
 
+    //retruns all valid moves that a knight can make
     public List<int[]> getValidMoves(int [] coords){
         int row = coords[0];
         int col = coords[1];
@@ -40,27 +39,28 @@ public class Knight {
         }
     }
 
-    private boolean leavesKingInCheck(int x, int y, int newX, int newY) {
-        String temp = board[newX][newY];
-        board[newX][newY] = board[x][y];
-        board[x][y] = "-";
+    //Swaps temporarily the board to see if the move is in fact valid by calling is kingincheck method
+    private boolean leavesKingInCheck(int row, int col, int newRow, int newCol) {
+        String temp = board[newRow][newCol];
+        board[newRow][newCol] = board[row][col];
+        board[row][col] = "-";
         boolean inCheck = isKingInCheck();
-        board[x][y] = board[newX][newY];
-        board[newX][newY] = temp;
+        board[row][col] = board[newRow][newCol];
+        board[newRow][newCol] = temp;
         return inCheck;
     }
 
     private boolean isKingInCheck() {
-        int kingX = kingCoordinates[0];
-        int kingY = kingCoordinates[1];
+        int kingRow = kingCoordinates[0];
+        int kingCol = kingCoordinates[1];
         int pawnDir = color == 'w' ? -1 : 1;
         int[][] pawnMoves = {{pawnDir, -1}, {pawnDir, 1}};
         for (int[] move : pawnMoves) {
             int dx = move[0];
             int dy = move[1];
-            int newX = kingX + dx;
-            int newY = kingY + dy;
-            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "pa")) {
+            int newRow = kingRow + dx;
+            int newCol = kingCol + dy;
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8 && board[newRow][newCol].startsWith(opponentColor + "pa")) {
                 return true;
             }
         }
@@ -69,9 +69,9 @@ public class Knight {
         for (int[] move : knightMoves) {
             int dx = move[0];
             int dy = move[1];
-            int newX = kingX + dx;
-            int newY = kingY + dy;
-            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "kn")) {
+            int newRow = kingRow + dx;
+            int newCol = kingCol + dy;
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8 && board[newRow][newCol].startsWith(opponentColor + "kn")) {
                 return true;
             }
         }
@@ -83,10 +83,10 @@ public class Knight {
             for (int[] move : moves) {
                 int dx = move[0];
                 int dy = move[1];
-                int newX = kingX + dx;
-                int newY = kingY + dy;
-                while (newX >= 0 && newX < 8 && newY >= 0 && newY < 8) {
-                    String piece = board[newX][newY];
+                int newRow = kingRow + dx;
+                int newCol = kingCol + dy;
+                while (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+                    String piece = board[newRow][newCol];
                     if (!piece.equals("-")) {
                         if (piece.startsWith(opponentColor + "b") && (dx != 0 && dy != 0)) {
                             return true;
@@ -99,8 +99,8 @@ public class Knight {
                         }
                         break;
                     }
-                    newX += dx;
-                    newY += dy;
+                    newRow += dx;
+                    newCol += dy;
                 }
             }
         }
@@ -111,6 +111,4 @@ public class Knight {
     private boolean isValidPosition(int row, int col){
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
-
-  
 }

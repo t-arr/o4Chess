@@ -11,11 +11,10 @@ public class King {
     private char opponentColor;
     private boolean isCheck;
     private String gameMode;
-    private Board gameState;
     private boolean playAgainstBot;
 
 
-    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode, Board gameState, boolean playAgainstBot) {
+    public King(char color, String[][] board, boolean[] castlingList, char opponentColor, boolean isCheck, String gameMode, boolean playAgainstBot) {
         this.playAgainstBot = playAgainstBot;
         this.color = color;
         this.board = board;
@@ -23,9 +22,9 @@ public class King {
         this.opponentColor = opponentColor;
         this.isCheck = isCheck;
         this.gameMode = gameMode;
-        this.gameState = gameState;
     }
 
+    //retruns all valid moves that a king can make
     public List<int[]> getValidMoves(int[] coords) {
         int row = coords[0];
         int col = coords[1];
@@ -52,7 +51,7 @@ public class King {
             int newRow = row + targetRow[i];
             int newCol = col + targetCol[i];
             if (isValidPosition(newRow, newCol)) {
-                if (isNotSteppingToPawnCheck(newRow, newCol) && isNotSteppingToKingCheck(newRow, newCol) && !leavesKingInCheck(row, col, newRow, newCol)) {
+                if (isNotSteppingToKingCheck(newRow, newCol) && !leavesKingInCheck(row, col, newRow, newCol)) {
                     if (board[newRow][newCol].equals("-") || getColor(newRow, newCol) != color) {
                         validMoves.add(new int[]{newRow, newCol});
                     }
@@ -61,43 +60,45 @@ public class King {
         }
     }
 
-    private boolean leavesKingInCheck(int x, int y, int newX, int newY) {
-        String temp = board[newX][newY];
-        board[newX][newY] = board[x][y];
-        board[x][y] = "-";
-        boolean inCheck = isKingInCheck(newX, newY);
-        board[x][y] = board[newX][newY];
-        board[newX][newY] = temp;
+    //Swaps temporarily the board to see if the move is in fact valid by calling is kingincheck method
+    private boolean leavesKingInCheck(int row, int col, int newRow, int newCol) {
+        String temp = board[newRow][newCol];
+        board[newRow][newCol] = board[row][col];
+        board[row][col] = "-";
+        boolean inCheck = isKingInCheck(newRow, newCol);
+        board[row][col] = board[newRow][newCol];
+        board[newRow][newCol] = temp;
         return inCheck;
     }
 
-    private boolean leavesCastledInCheck(int x, int y, int newX, int newY, int rookX, int rookY, int newRookX, int newRookY) {
-        String temp1 = board[x][y];
-        String temp2 = board[rookX][rookY];
-        board[x][y] = "-";
-        board[newX][newY] = temp1;
-        board[rookX][rookY] = "-";
-        board[newRookX][newRookY] = temp2;
-        boolean inCheck = isKingInCheck(newX, newY);
-        board[newX][newY] = "-";
-        board[x][y] = temp1;
-        board[newRookX][newRookY] = "-";
-        board[rookX][rookY] = temp2;
+    //Swaps temporarily the board to see if possible castling move is in fact valid by calling is kingincheck method
+    private boolean leavesCastledInCheck(int row, int col, int newRow, int newCol, int rookRow, int rookCol, int newRookRow, int newRookCol) {
+        String temp1 = board[row][col];
+        String temp2 = board[rookRow][rookCol];
+        board[row][col] = "-";
+        board[newRow][newCol] = temp1;
+        board[rookRow][rookCol] = "-";
+        board[newRookRow][newRookCol] = temp2;
+        boolean inCheck = isKingInCheck(newRow, newCol);
+        board[newRow][newCol] = "-";
+        board[row][col] = temp1;
+        board[newRookRow][newRookCol] = "-";
+        board[rookRow][rookCol] = temp2;
         return inCheck;
     }
 
 
     public boolean isKingInCheck(int x, int y) {
-        int kingX = x;
-        int kingY = y;
+        int kingRow = x;
+        int kingCol = y;
         int pawnDir = color == 'w' ? -1 : 1;
         int[][] pawnMoves = {{pawnDir, -1}, {pawnDir, 1}};
         for (int[] move : pawnMoves) {
             int dx = move[0];
             int dy = move[1];
-            int newX = kingX + dx;
-            int newY = kingY + dy;
-            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "pa")) {
+            int newRow = kingRow + dx;
+            int newCol = kingCol + dy;
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8 && board[newRow][newCol].startsWith(opponentColor + "pa")) {
                 return true;
             }
         }
@@ -106,9 +107,9 @@ public class King {
         for (int[] move : knightMoves) {
             int dx = move[0];
             int dy = move[1];
-            int newX = kingX + dx;
-            int newY = kingY + dy;
-            if (newX >= 0 && newX < 8 && newY >= 0 && newY < 8 && board[newX][newY].startsWith(opponentColor + "kn")) {
+            int newRow = kingRow + dx;
+            int newCol = kingCol + dy;
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8 && board[newRow][newCol].startsWith(opponentColor + "kn")) {
                 return true;
             }
         }
@@ -120,10 +121,10 @@ public class King {
             for (int[] move : moves) {
                 int dx = move[0];
                 int dy = move[1];
-                int newX = kingX + dx;
-                int newY = kingY + dy;
-                while (newX >= 0 && newX < 8 && newY >= 0 && newY < 8) {
-                    String piece = board[newX][newY];
+                int newRow = kingRow + dx;
+                int newCol = kingCol + dy;
+                while (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+                    String piece = board[newRow][newCol];
                     if (!piece.equals("-")) {
                         if (piece.startsWith(opponentColor + "b") && (dx != 0 && dy != 0)) {
                             return true;
@@ -136,37 +137,15 @@ public class King {
                         }
                         break;
                     }
-                    newX += dx;
-                    newY += dy;
+                    newRow += dx;
+                    newCol += dy;
                 }
             }
         }
         return false;
     }
 
-
-    private boolean isNotSteppingToPawnCheck(int row, int col) {
-        if (color == 'b' && row + 1 < 8 && col - 1 >= 0 && col + 1 < 8) {
-            return !board[row + 1][col - 1].equals("wpawn") && !board[row + 1][col + 1].equals("wpawn");
-        }
-        if (color == 'w' && row - 1 >= 0 && col - 1 >= 0 && col + 1 < 8) {
-            return !board[row - 1][col - 1].equals("bpawn") && !board[row - 1][col + 1].equals("bpawn");
-        }
-        if (color == 'b' && row + 1 < 8 && col == 0) {
-            return !board[row + 1][col + 1].equals("wpawn");
-        }
-        if (color == 'b' && row + 1 < 8 && col == 7) {
-            return !board[row + 1][col - 1].equals("wpawn");
-        }
-        if (color == 'w' && row - 1 >= 0 && col == 0) {
-            return !board[row - 1][col + 1].equals("bpawn");
-        }
-        if (color == 'w' && row - 1 >= 0 && col == 7) {
-            return !board[row - 1][col - 1].equals("bpawn");
-        }
-        return true;
-    }
-
+    //Makes sure that kings have at least 1 square between them
     private boolean isNotSteppingToKingCheck(int row, int col) {
         int[] offsets = {-1, 0, 1};
         for (int i = 0; i < 3; i++) {

@@ -68,6 +68,7 @@ public class Board {
         return 'w';
     }
 
+    //Generic swap methods for turn and board
     public void swapTurn() {
         if (turn == 'w') {
             turn = 'b';
@@ -225,7 +226,7 @@ public class Board {
                 return queen.getValidMoves(coords);
             }
             case "king" -> {
-                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode, this, playAgainstBot);
+                King king = new King(color, board, castlingList, opponentColor, isCheck, gameMode, playAgainstBot);
                 return king.getValidMoves(coords);
             }
             default -> {
@@ -241,7 +242,7 @@ public class Board {
         int col = kingCoordinates[1];
         char color = getTurn();
         char oppColor = getOpponentColor();
-        King k = new King(color, board, castlingList, oppColor, false, gameMode, this, playAgainstBot);
+        King k = new King(color, board, castlingList, oppColor, false, gameMode, playAgainstBot);
         isCheck = k.isKingInCheck(row, col);
     }
 

@@ -7,9 +7,12 @@ public class VeryBadBot {
     private char color;
     private String eatenPiece = "-";
 
+    //bot's color is always b because of the inverted pawns folder
     public VeryBadBot(){
         this.color = 'b';
     }
+
+    //makes a random valid move when called
     public void makeMove(String[][] board, Board gameState){
         Map<int[], List<int []>> piecesAndMoves = new HashMap<>();
         for(int i = 0; i < 8; i++){
@@ -51,6 +54,7 @@ public class VeryBadBot {
         return Math.abs(from[1]-to[1]) == 2;
     }
 
+    //For boardinformation grid in checccontroller
     private void setEatenPiece(String piece){
         this.eatenPiece = piece;
     }
