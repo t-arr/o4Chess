@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -32,6 +33,11 @@ public class MainMenuController {
 
     @FXML
     public void initialize(){
+        Label chessLabel = new Label("Chess");
+        chessLabel.getStyleClass().add("header-label");
+        GridPane.setHalignment(chessLabel, HPos.CENTER);
+        menuGrid.add(chessLabel, 0, 0);
+        menuGrid.setAlignment(Pos.CENTER);
         Button playButton = new Button("Play");
         playButton.setId("play");
         Button helpButton = new Button("Help");

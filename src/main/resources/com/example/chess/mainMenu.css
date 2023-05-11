@@ -5,6 +5,10 @@
     -fx-hgap: 0;
 }
 
+.header-label{
+    -fx-font: bold 70px "Times New Roman";
+}
+
 .buttons{
     -fx-pref-width: 300px;
     -fx-pref-height: 60px;
