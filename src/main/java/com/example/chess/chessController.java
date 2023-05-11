@@ -165,7 +165,7 @@ public class chessController {
         currentStage.close();
     }
 
-
+    //Draws images on board based on gamemode, inverted pawns used when human plays with black
     private void drawImages(Button button, int row, int col) {
 
         String[][] state = board.getBoard();
@@ -261,6 +261,7 @@ public class chessController {
         }
     }
 
+    //returns true if king tries to castle
     private boolean isMoveCastling(int[] from, int [] to){
         return Math.abs(from[1]-to[1]) == 2;
     }
@@ -276,6 +277,7 @@ public class chessController {
         }
     }
 
+    //draws images of eaten pieces
     private void addImageToBoardInformation(String piece){
         if(!piece.equalsIgnoreCase("-")){
             String imageUrl;
@@ -310,6 +312,8 @@ public class chessController {
         }
     }
 
+
+    //clears sidepanel
     private void clearBoardInformation() {
         List<Node> nodesToRemove = new ArrayList<>();
         for (Node node : boardInformation.getChildren()) {

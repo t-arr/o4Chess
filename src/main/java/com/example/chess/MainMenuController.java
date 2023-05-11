@@ -63,6 +63,8 @@ public class MainMenuController {
         }
         this.instance = GameSetupForBot.getInstance("White", false);
     }
+
+    //Handles all main menu button clicks
     @FXML
     public void switchScreen(ActionEvent event) throws IOException {
         String btnId = ((Button) event.getSource()).getId();
@@ -134,6 +136,8 @@ public class MainMenuController {
     public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
     }
+
+    //Displays game options and adds event listeners for buttons
     public void showGameOptions(){
         VBox buttonBox = new VBox();
         buttonBox.setAlignment(Pos.CENTER);
@@ -161,6 +165,7 @@ public class MainMenuController {
         menuGrid.add(sidebarContainer, 0, 0, 10, 10);
     }
 
+    //Screen for bot setup
     public void setupAgainstBot() {
         StackPane container = new StackPane();
         container.getStyleClass().add("helpBoxContainer");
@@ -241,6 +246,7 @@ public class MainMenuController {
         menuGrid.add(container, 0, 0, 10, 10);
     }
 
+    //screen for two players setup
     public void setupTwoPlayers() {
         StackPane container = new StackPane();
         container.getStyleClass().add("helpBoxContainer");
@@ -308,6 +314,7 @@ public class MainMenuController {
         menuGrid.add(container, 0, 0, 10, 10);
     }
 
+    //Launches game
     public void launchGame() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("play-view.fxml"));
         Parent root = loader.load();
