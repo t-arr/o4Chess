@@ -65,6 +65,10 @@ public class MainMenuController {
             alert.setTitle("Confirm Exit");
             alert.setHeaderText("Are you sure you want to quit the game?");
             alert.setContentText("Press OK to exit, or Cancel to go back.");
+
+            Stage stage = (Stage) menuGrid.getScene().getWindow();
+            alert.initOwner(stage);
+
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK){
                 Platform.exit();

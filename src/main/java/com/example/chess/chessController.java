@@ -120,6 +120,8 @@ public class chessController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Do you want to restart the game?");
         alert.setTitle("restart?");
+        Stage stage = (Stage) boardGrid.getScene().getWindow();
+        alert.initOwner(stage);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             board = new Board(gameMode, playAgainstBot);
@@ -148,6 +150,8 @@ public class chessController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Do you want to go back to menu?");
         alert.setTitle("Back to menu");
+        Stage stage = (Stage) boardGrid.getScene().getWindow();
+        alert.initOwner(stage);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             executeMenuCommand();
@@ -370,6 +374,8 @@ public class chessController {
             alert.setY(event1.getScreenY() - event.getSceneY());
         }));
 
+        Stage stage = (Stage) boardGrid.getScene().getWindow();
+        alert.initOwner(stage);
         Optional<ButtonType> result = alert.showAndWait();
 
         result.ifPresent(buttonType -> {
@@ -393,10 +399,10 @@ public class chessController {
         char playerWon = board.getOpponentColor();
         String playerColor;
         if(playerWon == 'w' && state.equals("checkmate")){
-            playerColor = gameMode.equalsIgnoreCase("black") ? "black" : "white";
+            playerColor = gameMode.equalsIgnoreCase("black") ? blackPlayerName : whitePlayerName;
             alert.setHeaderText(playerColor + " won by checkmate");
         }else if (playerWon == 'b' && state.equals("checkmate")){
-            playerColor = gameMode.equalsIgnoreCase("black") ? "white" : "black";
+            playerColor = gameMode.equalsIgnoreCase("black") ? whitePlayerName : blackPlayerName;
             alert.setHeaderText(playerColor + " won by checkmate");
         } else if (state.equals("insufficient material") || state.equals("stalemate")) {
             alert.setHeaderText("Draw by " + state);
@@ -420,7 +426,8 @@ public class chessController {
             alert.setX(event1.getScreenX() - event.getSceneX());
             alert.setY(event1.getScreenY() - event.getSceneY());
         }));
-
+        Stage stage = (Stage) boardGrid.getScene().getWindow();
+        alert.initOwner(stage);
         Optional<ButtonType> result = alert.showAndWait();
 
         result.ifPresent(buttonType -> {
